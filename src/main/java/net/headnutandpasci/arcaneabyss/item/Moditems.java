@@ -20,6 +20,8 @@ public class Moditems {
 
     public static final Item TOMATO = registerItem("tomato", new Item(new FabricItemSettings().food(ModFoodComponents.TOMATO)));
 
+    public static final Item RUBY_STAFF = registerItem("ruby_staff", new Item(new FabricItemSettings().rarity(EPIC).maxCount(1)));
+
     public static final Item RUBY_SWORD = registerItem("ruby_sword", new RubySwordItem(new FabricItemSettings().rarity(EPIC)));
     public static final Item RUBY_PICKAXE = registerItem("ruby_pickaxe", new PickaxeItem(ModToolMaterial.RUBY,1,1,new FabricItemSettings()));
     public static final Item RUBY_AXE = registerItem("ruby_axe", new AxeItem(ModToolMaterial.RUBY,4,1,new FabricItemSettings()));

@@ -19,7 +19,10 @@ public class ModItemGroups {
 
                         entries.add(Moditems.RAW_RUBY);
                         entries.add(Moditems.RUBY);
+
+
                         entries.add(Moditems.TOMATO);
+
 
                         entries.add(ModBlocks.RUBY_BLOCK);
                         entries.add(ModBlocks.RAW_RUBY_BLOCK);
@@ -29,6 +32,8 @@ public class ModItemGroups {
                         entries.add(Moditems.RUBY_PICKAXE);
                         entries.add(Moditems.RUBY_AXE);
                         entries.add(Moditems.RUBY_HOE);
+                        entries.add(Moditems.RUBY_STAFF);
+
 
                         entries.add(Moditems.RUBY_HELMET);
                         entries.add(Moditems.RUBY_CHESTPLATE);

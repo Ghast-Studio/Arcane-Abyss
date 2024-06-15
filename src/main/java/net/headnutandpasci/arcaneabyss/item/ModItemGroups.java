@@ -19,7 +19,7 @@ public class ModItemGroups {
 
                         entries.add(Moditems.RAW_RUBY);
                         entries.add(Moditems.RUBY);
-
+                        entries.add(Moditems.TOMATO);
 
                         entries.add(ModBlocks.RUBY_BLOCK);
                         entries.add(ModBlocks.RAW_RUBY_BLOCK);

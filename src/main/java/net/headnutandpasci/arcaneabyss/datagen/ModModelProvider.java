@@ -30,5 +30,9 @@ public class ModModelProvider extends FabricModelProvider {
         //Item Models
         itemModelGenerator.register(Moditems.RUBY, Models.GENERATED);
         itemModelGenerator.register(Moditems.RAW_RUBY, Models.GENERATED);
+        itemModelGenerator.register(Moditems.RUBY_SWORD, Models.GENERATED);
+        itemModelGenerator.register(Moditems.RUBY_AXE, Models.GENERATED);
+        itemModelGenerator.register(Moditems.RUBY_PICKAXE, Models.GENERATED);
+        itemModelGenerator.register(Moditems.RUBY_HOE, Models.GENERATED);
     }
 }

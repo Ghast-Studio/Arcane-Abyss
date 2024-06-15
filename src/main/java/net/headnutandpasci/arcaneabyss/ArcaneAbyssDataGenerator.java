@@ -2,8 +2,11 @@ package net.headnutandpasci.arcaneabyss;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.headnutandpasci.arcaneabyss.datagen.*;
+import net.headnutandpasci.arcaneabyss.world.dimension.ModDimensions;
+import net.minecraft.registry.RegistryBuilder;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 
 public class ArcaneAbyssDataGenerator implements DataGeneratorEntrypoint {
 	@Override
@@ -14,5 +17,10 @@ public class ArcaneAbyssDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ModLootTableProvider::new);
 		pack.addProvider(ModModelProvider::new);
 		pack.addProvider(ModRecipeProvider::new);
+	}
+
+	@Override
+	public void buildRegistry(RegistryBuilder registryBuilder) {
+		registryBuilder.addRegistry(RegistryKeys.DIMENSION_TYPE, ModDimensions::bootstrapType);
 	}
 }

@@ -5,6 +5,8 @@ import net.fabricmc.api.ModInitializer;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
+import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,5 +21,11 @@ public class ArcaneAbyss implements ModInitializer {
 
 		Moditems.registerModItems();
 		ModBlocks.registerModBlocks();
+		CustomPortalBuilder.beginPortal()
+				.frameBlock(ModBlocks.RUBY_BLOCK)
+				.lightWithItem(Moditems.RUBY)
+				.destDimID(new Identifier(ArcaneAbyss.MOD_ID, "kaupendim"))
+				.tintColor(0xFFB71C1C)
+				.registerPortal();
 	}
 }

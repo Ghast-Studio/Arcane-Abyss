@@ -27,15 +27,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         offerBlasting(exporter, RUBY_SMELTABLES, RecipeCategory.MISC, Moditems.RUBY, 0.7f, 100, "ruby");
         offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, Moditems.RUBY, RecipeCategory.DECORATIONS, ModBlocks.RUBY_BLOCK);
 
-        //ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, Moditems.RAW_RUBY,1)
-        //        .pattern("SSS")
-        //        .pattern("SRS")
-        //        .pattern("SSS")
-        //        .input('S', Items.STONE)
-        //            .input('R', Moditems.RUBY)
-        //            .criterion(hasItem(Items.STONE), conditionsFromItem(Items.STONE))
-        //            .criterion(hasItem(Moditems.RUBY), conditionsFromItem(Moditems.RUBY))
-        //            .offerTo(exporter, new Identifier(getRecipeName(Moditems.RAW_RUBY)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, Moditems.RUBY_SWORD,1)
+                .pattern("S")
+                .pattern("S")
+                .pattern("R")
+                .input('S', Moditems.RUBY)
+                .input('R', Items.STICK)
+                .criterion(hasItem(Items.STICK), conditionsFromItem(Items.STICK))
+                .criterion(hasItem(Moditems.RUBY), conditionsFromItem(Moditems.RUBY))
+                .offerTo(exporter, new Identifier(getRecipeName(Moditems.RUBY_SWORD)));
         }
     }
 

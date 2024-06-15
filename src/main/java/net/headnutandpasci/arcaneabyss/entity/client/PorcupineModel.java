@@ -1,73 +1,19 @@
+package net.headnutandpasci.arcaneabyss.entity.client;
+
+import net.minecraft.client.model.*;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
+
+
 // Made with Blockbench 4.8.3
 // Exported for Minecraft version 1.17+ for Yarn
 // Paste this class into your mod and generate all required imports
-public class porcupine-vanilla extends EntityModel<Entity> {
+public class PorcupineModel extends EntityModel<Entity> {
 	private final ModelPart porcupine;
-	private final ModelPart body;
-	private final ModelPart torso;
-	private final ModelPart tail;
-	private final ModelPart cube_r1;
-	private final ModelPart cube_r2;
-	private final ModelPart head;
-	private final ModelPart skull;
-	private final ModelPart hair;
-	private final ModelPart cube_r3;
-	private final ModelPart cube_r4;
-	private final ModelPart left_eyelid;
-	private final ModelPart right_eyelid;
-	private final ModelPart spikes;
-	private final ModelPart spike;
-	private final ModelPart spike2;
-	private final ModelPart spike5;
-	private final ModelPart spike3;
-	private final ModelPart spike4;
-	private final ModelPart spikes2;
-	private final ModelPart spike6;
-	private final ModelPart spike7;
-	private final ModelPart spike8;
-	private final ModelPart spike9;
-	private final ModelPart spike10;
-	private final ModelPart spikes3;
-	private final ModelPart spike11;
-	private final ModelPart spike12;
-	private final ModelPart spike13;
-	private final ModelPart spike14;
-	private final ModelPart spike15;
-	private final ModelPart spikes4;
-	private final ModelPart spike16;
-	private final ModelPart spike17;
-	private final ModelPart spike18;
-	private final ModelPart spike19;
-	private final ModelPart spike20;
-	private final ModelPart spikes5;
-	private final ModelPart spike21;
-	private final ModelPart spike22;
-	private final ModelPart spike23;
-	private final ModelPart spike24;
-	private final ModelPart spike25;
-	private final ModelPart spikes6;
-	private final ModelPart spike26;
-	private final ModelPart spike27;
-	private final ModelPart spike28;
-	private final ModelPart spike29;
-	private final ModelPart spike30;
-	private final ModelPart spikes7;
-	private final ModelPart spike31;
-	private final ModelPart spike32;
-	private final ModelPart spike33;
-	private final ModelPart spike34;
-	private final ModelPart spike35;
-	private final ModelPart spikes8;
-	private final ModelPart spike36;
-	private final ModelPart spike37;
-	private final ModelPart spike38;
-	private final ModelPart spike39;
-	private final ModelPart spike40;
-	private final ModelPart left_front_leg;
-	private final ModelPart right_front_leg;
-	private final ModelPart right_back_leg;
-	private final ModelPart left_back_leg;
-	public porcupine-vanilla(ModelPart root) {
+
+	public PorcupineModel(ModelPart root) {
 		this.porcupine = root.getChild("porcupine");
 	}
 	public static TexturedModelData getTexturedModelData() {

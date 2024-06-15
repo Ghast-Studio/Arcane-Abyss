@@ -1,14 +1,13 @@
 package net.headnutandpasci.arcaneabyss.entity.client;
 
-import net.headnutandpasci.arcaneabyss.entity.animation.ModAnimations;
+import net.headnutandpasci.arcaneabyss.entity.animation.PorcupineAnimations;
 import net.headnutandpasci.arcaneabyss.entity.custom.PorcupineEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 
 
 // Made with Blockbench 4.8.3
@@ -161,14 +160,18 @@ public class PorcupineModel<T extends PorcupineEntity> extends SinglePartEntityM
 		ModelPartData left_back_leg = body.addChild("left_back_leg", ModelPartBuilder.create().uv(0, 0).cuboid(-1.0F, -1.0F, -1.0F, 2.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(3.0F, 0.0F, 2.5F));
 		return TexturedModelData.of(modelData, 32, 32);
 	}
+
+
+
+
 	@Override
 	public void setAngles(PorcupineEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.getPart().traverse().forEach(ModelPart::resetTransform);
 
 		this.setHeadAngles(netHeadYaw, headPitch);
 
-	this.animateMovement(ModAnimations.PORCUPINE_WALK, limbSwing, limbSwingAmount, 2f,2.5f);
-	this.updateAnimation(entity.idleAnimationState, ModAnimations.PORCUPINE_IDLE, ageInTicks, 1f);
+	this.animateMovement(PorcupineAnimations.PORCUPINE_WALK, limbSwing, limbSwingAmount, 2f,2.5f);
+	this.updateAnimation(entity.idleAnimationState, PorcupineAnimations.PORCUPINE_IDLE, ageInTicks, 1f);
 
 
 	}

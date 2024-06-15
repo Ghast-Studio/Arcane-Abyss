@@ -7,4 +7,7 @@ import net.minecraft.util.Identifier;
 public class ModModelLayers {
     public static final EntityModelLayer PORCUPINE = new EntityModelLayer(
             new Identifier(ArcaneAbyss.MOD_ID, "porcupine"), "main");
+
+    public static final EntityModelLayer cyanslime = new EntityModelLayer(
+            new Identifier(ArcaneAbyss.MOD_ID, "cyanslime"), "main");
 }

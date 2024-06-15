@@ -5,6 +5,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.entity.custom.CyanSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.custom.PorcupineEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
@@ -33,5 +34,6 @@ public class ArcaneAbyss implements ModInitializer {
 				.registerPortal();
 
 		FabricDefaultAttributeRegistry.register(ModEntities.PORCUPINE, PorcupineEntity.createPorcupineAttributes());
+		FabricDefaultAttributeRegistry.register(ModEntities.Cyanslime, CyanSlimeEntity.createCyanSlimeAttributes());
 	}
 }

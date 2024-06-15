@@ -30,6 +30,11 @@ public class ModItemGroups {
                         entries.add(Moditems.RUBY_AXE);
                         entries.add(Moditems.RUBY_HOE);
 
+                        entries.add(Moditems.RUBY_HELMET);
+                        entries.add(Moditems.RUBY_CHESTPLATE);
+                        entries.add(Moditems.RUBY_LEGGING);
+                        entries.add(Moditems.RUBY_BOOTS);
+
                     }).build());
     public static final ItemGroup DUNGEON_GROUP = Registry.register(Registries.ITEM_GROUP,
             new Identifier(ArcaneAbyss.MOD_ID,"dungeon"),

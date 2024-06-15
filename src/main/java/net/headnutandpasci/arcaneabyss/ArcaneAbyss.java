@@ -21,6 +21,7 @@ public class ArcaneAbyss implements ModInitializer {
 
 		Moditems.registerModItems();
 		ModBlocks.registerModBlocks();
+
 		CustomPortalBuilder.beginPortal()
 				.frameBlock(ModBlocks.RUBY_BLOCK)
 				.lightWithItem(Moditems.RUBY)

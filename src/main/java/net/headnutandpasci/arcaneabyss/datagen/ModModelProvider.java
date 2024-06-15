@@ -6,7 +6,11 @@ import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
+import net.minecraft.data.client.Model;
 import net.minecraft.data.client.Models;
+import net.minecraft.util.Identifier;
+
+import java.util.Optional;
 
 public class ModModelProvider extends FabricModelProvider {
     public ModModelProvider(FabricDataOutput output) {
@@ -34,5 +38,9 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(Moditems.RUBY_AXE, Models.GENERATED);
         itemModelGenerator.register(Moditems.RUBY_PICKAXE, Models.GENERATED);
         itemModelGenerator.register(Moditems.RUBY_HOE, Models.GENERATED);
+
+
+        itemModelGenerator.register(Moditems.PORCUPINE_SPAWN_EGG,
+            new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
     }
 }

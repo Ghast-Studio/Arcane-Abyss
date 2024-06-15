@@ -2,7 +2,10 @@ package net.headnutandpasci.arcaneabyss;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
+import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.entity.custom.PorcupineEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
@@ -28,5 +31,7 @@ public class ArcaneAbyss implements ModInitializer {
 				.destDimID(new Identifier(ArcaneAbyss.MOD_ID, "kaupendim"))
 				.tintColor(0xFFB71C1C)
 				.registerPortal();
+
+		FabricDefaultAttributeRegistry.register(ModEntities.PORCUPINE, PorcupineEntity.createPorcupineAttributes());
 	}
 }

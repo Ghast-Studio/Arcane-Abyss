@@ -2,6 +2,9 @@ package net.headnutandpasci.arcaneabyss;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.headnutandpasci.arcaneabyss.block.ModBlocks;
+import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
+import net.headnutandpasci.arcaneabyss.item.Moditems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +15,9 @@ public class ArcaneAbyss implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		LOGGER.info("Hello Fabric world!");
+		ModItemGroups.registerItemGroups();
+
+		Moditems.registerModItems();
+		ModBlocks.registerModBlocks();
 	}
 }

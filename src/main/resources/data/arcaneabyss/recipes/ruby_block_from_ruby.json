@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "arcaneabyss:ruby"
+  }
+  },
+  "result": {
+    "item": "arcaneabyss:ruby_block"
+  }
+}

@@ -13,6 +13,7 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
 
         EntityRendererRegistry.register(ModEntities.Test, TestRenderer::new);
         EntityRendererRegistry.register(ModEntities.BlueSlimeEntity, BlueSlimeRenderer::new);
+        EntityRendererRegistry.register(ModEntities.RedSlimeEntity, RedSlimeRenderer::new);
 
 
     }

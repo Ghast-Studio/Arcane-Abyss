@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.custom.BlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
@@ -36,5 +37,6 @@ public class ArcaneAbyss implements ModInitializer {
 
 		FabricDefaultAttributeRegistry.register(ModEntities.Test, TestEntity.setAttributesTest());
 		FabricDefaultAttributeRegistry.register(ModEntities.BlueSlimeEntity, BlueSlimeEntity.setAttributesBlueSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.RedSlimeEntity, RedSlimeEntity.setAttributesRedSlime());
 	}
 }

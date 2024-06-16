@@ -19,11 +19,7 @@ public class Moditems {
     public static final Item RUBY_AXE = registerItem("ruby_axe", new AxeItem(ModToolMaterial.RUBY,4,1,new FabricItemSettings()));
     public static final Item RUBY_HOE = registerItem("ruby_hoe", new HoeItem(ModToolMaterial.RUBY,1,1,new FabricItemSettings()));
 
-    public static final Item PORCUPINE_SPAWN_EGG = registerItem("porcupine_spawn_egg",
-    new SpawnEggItem(ModEntities.PORCUPINE, 0xa86518, 0x3b260f, new FabricItemSettings()));
 
-    public static final Item Cyanslime_SPAWN_EGG = registerItem("cyanslime_spawn_egg",
-            new SpawnEggItem(ModEntities.Cyanslime, 0xa86518, 0x3b260f, new FabricItemSettings()));
 
    private static void addItemsToIngredientTabItemGroup(FabricItemGroupEntries entries) {
         entries.add(RUBY);

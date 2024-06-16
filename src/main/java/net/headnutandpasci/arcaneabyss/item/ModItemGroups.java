@@ -29,8 +29,7 @@ public class ModItemGroups {
                         entries.add(Moditems.RUBY_PICKAXE);
                         entries.add(Moditems.RUBY_AXE);
                         entries.add(Moditems.RUBY_HOE);
-                        entries.add(Moditems.PORCUPINE_SPAWN_EGG);
-                        entries.add(Moditems.Cyanslime_SPAWN_EGG);
+
 
 
                     }).build());

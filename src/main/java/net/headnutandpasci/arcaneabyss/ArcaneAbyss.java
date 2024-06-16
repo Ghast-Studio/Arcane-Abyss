@@ -5,8 +5,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.headnutandpasci.arcaneabyss.entity.custom.CyanSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.PorcupineEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.BlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
@@ -33,7 +33,8 @@ public class ArcaneAbyss implements ModInitializer {
 				.tintColor(0xFFB71C1C)
 				.registerPortal();
 
-		FabricDefaultAttributeRegistry.register(ModEntities.PORCUPINE, PorcupineEntity.createPorcupineAttributes());
-		FabricDefaultAttributeRegistry.register(ModEntities.Cyanslime, CyanSlimeEntity.createCyanSlimeAttributes());
+
+		FabricDefaultAttributeRegistry.register(ModEntities.Test, TestEntity.setAttributesTest());
+		FabricDefaultAttributeRegistry.register(ModEntities.BlueSlimeEntity, BlueSlimeEntity.setAttributesBlueSlime());
 	}
 }

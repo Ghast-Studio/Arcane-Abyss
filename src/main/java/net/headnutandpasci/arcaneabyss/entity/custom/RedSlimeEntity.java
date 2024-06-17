@@ -51,7 +51,7 @@ public class RedSlimeEntity extends HostileEntity implements RangedAttackMob {
         this.goalSelector.add(2, new SlimeProjectileAttackGoal(this, 1.0, 20, 15.0F));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
         this.goalSelector.add(4, new RandomLookGoal(this));
-        this.goalSelector.add(5, new MoveGoal(this));
+        this.goalSelector.add(5, new MoveGoal(this, 1.0));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
@@ -310,9 +310,11 @@ public class RedSlimeEntity extends HostileEntity implements RangedAttackMob {
 
     static class MoveGoal extends Goal {
         private final RedSlimeEntity slime;
+        private final double speed;
 
-        public MoveGoal(RedSlimeEntity slime) {
+        public MoveGoal(RedSlimeEntity slime, double speed) {
             this.slime = slime;
+            this.speed = speed;
             this.setControls(EnumSet.of(Control.JUMP, Control.MOVE));
         }
 
@@ -323,7 +325,7 @@ public class RedSlimeEntity extends HostileEntity implements RangedAttackMob {
         public void tick() {
             MoveControl control = this.slime.getMoveControl();
             if (control instanceof RedSlimeEntity.RedSlimeMoveControl slimeMoveControl) {
-                slimeMoveControl.move(1.0);
+                slimeMoveControl.move(speed);
             }
 
         }

@@ -109,9 +109,8 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
         collection.add(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 200, 2));
 
         AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.getWorld(), this.getX(), this.getY(), this.getZ());
-        areaEffectCloudEntity.setRadius(4.0F);
-        areaEffectCloudEntity.setRadiusOnUse(-0.5F);
-        areaEffectCloudEntity.setWaitTime(10);
+        areaEffectCloudEntity.setRadius(4.0f);
+        areaEffectCloudEntity.setWaitTime(0);
         areaEffectCloudEntity.setDuration(areaEffectCloudEntity.getDuration());
         areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float) areaEffectCloudEntity.getDuration() / 2);
 
@@ -146,7 +145,7 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
 
         public boolean canStart() {
             LivingEntity livingEntity = this.creeper.getTarget();
-            return this.creeper.getFuseSpeed() > 0 || livingEntity != null && this.creeper.squaredDistanceTo(livingEntity) < 9.0;
+            return this.creeper.getFuseSpeed() > 0 || livingEntity != null && this.creeper.squaredDistanceTo(livingEntity) < 4.0;
         }
 
         public void start() {

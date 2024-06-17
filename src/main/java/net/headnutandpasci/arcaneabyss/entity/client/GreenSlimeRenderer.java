@@ -10,6 +10,7 @@ import net.minecraft.client.render.entity.feature.SlimeOverlayFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -26,13 +27,18 @@ public class GreenSlimeRenderer extends MobEntityRenderer<GreenSlimeEntity, Slim
         super.render(slimeEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
+    protected float getAnimationCounter(GreenSlimeEntity creeperEntity, float f) {
+        float g = creeperEntity.getClientFuseTime(f);
+        return (int)(g * 10.0F) % 2 == 0 ? 0.0F : MathHelper.clamp(g, 0.5F, 1.0F);
+    }
+
     @Override
     public Identifier getTexture(GreenSlimeEntity entity) {
         return TEXTURE;
     }
 
     protected void scale(GreenSlimeEntity slimeEntity, MatrixStack matrixStack, float f) {
-        float g = 0.999F + slimeEntity.getClientFuseTime(f);
+        float g = 0.999F + (slimeEntity.getClientFuseTime(f) / 2f);
         matrixStack.scale(g, g, g);
         matrixStack.translate(0.0F, 0.001F, 0.0F);
         float h = 2.0f;

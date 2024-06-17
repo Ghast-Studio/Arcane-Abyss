@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.GreenSlimeEntity;
 
 public class ArcaneAbyss implements ModInitializer {
 	public static final String MOD_ID = "arcaneabyss";

@@ -38,7 +38,7 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributesBlueSlime() {
+    public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0D)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0f)

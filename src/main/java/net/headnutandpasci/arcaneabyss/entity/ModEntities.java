@@ -1,10 +1,10 @@
 package net.headnutandpasci.arcaneabyss.entity;
 
-import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.GreenSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.RedSlimeEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.custom.BlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -25,9 +25,15 @@ public class ModEntities {
             new Identifier(ArcaneAbyss.MOD_ID, "blueslime"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
                     .dimensions(EntityDimensions.fixed(1f,1f)).build());
+
     public static final EntityType<RedSlimeEntity> RedSlimeEntity = Registry.register(Registries.ENTITY_TYPE,
             new Identifier(ArcaneAbyss.MOD_ID, "redslime"),
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeEntity::new)
+                    .dimensions(EntityDimensions.fixed(1f,1f)).build());
+
+    public static final EntityType<GreenSlimeEntity> GreenlimeEntity = Registry.register(Registries.ENTITY_TYPE,
+            new Identifier(ArcaneAbyss.MOD_ID, "greenslime"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreenSlimeEntity::new)
                     .dimensions(EntityDimensions.fixed(1f,1f)).build());
 
 

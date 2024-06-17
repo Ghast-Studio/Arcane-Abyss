@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.block;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.block.custom.SlimeSteelMaschineBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -24,6 +25,9 @@ public class ModBlocks {
 
     public static final Block DUNGEON_WALL_BLOCK = registerBlock("dungeon_wall_block",
             new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
+
+    public static final Block SlIMESTEEL_MASCHINE = registerBlock("slimesteel_maschine",
+            new SlimeSteelMaschineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
 
 

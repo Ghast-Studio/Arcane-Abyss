@@ -26,6 +26,7 @@ public class ModItemGroups {
 
                         entries.add(ModBlocks.RUBY_BLOCK);
                         entries.add(ModBlocks.RAW_RUBY_BLOCK);
+                        entries.add(ModBlocks.SlIMESTEEL_MASCHINE);
 
 
                         entries.add(Moditems.RUBY_SWORD);

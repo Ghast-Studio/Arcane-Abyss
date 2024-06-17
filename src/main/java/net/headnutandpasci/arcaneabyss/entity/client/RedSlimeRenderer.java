@@ -1,8 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.client;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.custom.BlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.RedSlimeEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;

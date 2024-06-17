@@ -5,15 +5,15 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.headnutandpasci.arcaneabyss.entity.custom.BlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.*;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.GreenSlimeEntity;
 
 public class ArcaneAbyss implements ModInitializer {
 	public static final String MOD_ID = "arcaneabyss";
@@ -38,5 +38,8 @@ public class ArcaneAbyss implements ModInitializer {
 		FabricDefaultAttributeRegistry.register(ModEntities.Test, TestEntity.setAttributesTest());
 		FabricDefaultAttributeRegistry.register(ModEntities.BlueSlimeEntity, BlueSlimeEntity.setAttributesBlueSlime());
 		FabricDefaultAttributeRegistry.register(ModEntities.RedSlimeEntity, RedSlimeEntity.setAttributesRedSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.GreenSlimeEntity, GreenSlimeEntity.setAttributesGreenSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.DarkBlueSlimeEntity, DarkBlueSlimeEntity.setAttributesDarkBlueSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.DarkRedSlimeEntity, DarkRedSlimeEntity.setAttributesDarkRedSlime());
 	}
 }

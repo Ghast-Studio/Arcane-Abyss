@@ -55,11 +55,10 @@ public class DarkRedSlimeEntity extends ArcaneSlimeEntity implements RangedAttac
         double e = target.getBodyY(0.3333333333333333) - magmaBallEntity.getY();
         double f = target.getZ() - this.getZ();
         double g = Math.sqrt(d * d + f * f);
-        magmaBallEntity.setVelocity(d, e + g * 0.20000000298023224, f, 2.5F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
+        magmaBallEntity.setVelocity(d, e + g * 0.1, f, 2.5F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
         this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.getWorld().spawnEntity(magmaBallEntity);
     }
-
 
     public static class SlimeProjectileAttackGoal extends Goal {
         private final MobEntity mob;

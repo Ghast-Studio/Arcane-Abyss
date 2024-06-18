@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity;
 
+import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeMagmaBallEntity;
 import net.headnutandpasci.arcaneabyss.entity.custom.slime.*;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
@@ -41,5 +42,9 @@ public class ModEntities {
                     .dimensions(EntityDimensions.fixed(1f,1f)).build());
 
 
+    public static final EntityType<RedSlimeMagmaBallEntity> MAGMA_BALL_ENTITY_ENTITY_TYPE = Registry.register(Registries.ENTITY_TYPE,
+            new Identifier(ArcaneAbyss.MOD_ID, "dice_projectile"),
+            FabricEntityTypeBuilder.<RedSlimeMagmaBallEntity>create(SpawnGroup.MISC, RedSlimeMagmaBallEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
 
 }

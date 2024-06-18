@@ -1,11 +1,15 @@
 package net.headnutandpasci.arcaneabyss.entity.custom;
 
+import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.hit.EntityHitResult;
@@ -14,18 +18,15 @@ import net.minecraft.world.World;
 
 public class RedSlimeMagmaBallEntity extends ThrownItemEntity {
 
+    public RedSlimeMagmaBallEntity(LivingEntity livingEntity, World world) {
+        super(ModEntities.MAGMA_BALL_ENTITY_ENTITY_TYPE, livingEntity, world);
+    }
+
     public RedSlimeMagmaBallEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public RedSlimeMagmaBallEntity(EntityType<? extends ThrownItemEntity> entityType, double d, double e, double f, World world) {
-        super(entityType, d, e, f, world);
-    }
-
-    public RedSlimeMagmaBallEntity(LivingEntity livingEntity, World world) {
-        super(EntityType.SNOWBALL, livingEntity, world);
-    }
-
+    @Override
     protected Item getDefaultItem() {
         return Items.MAGMA_CREAM;
     }
@@ -34,6 +35,12 @@ public class RedSlimeMagmaBallEntity extends ThrownItemEntity {
         return ParticleTypes.ITEM_SLIME;
     }
 
+    @Override
+    public Packet<ClientPlayPacketListener> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this);
+    }
+
+    @Override
     public void handleStatus(byte status) {
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
@@ -44,6 +51,7 @@ public class RedSlimeMagmaBallEntity extends ThrownItemEntity {
         }
     }
 
+    @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
@@ -51,6 +59,7 @@ public class RedSlimeMagmaBallEntity extends ThrownItemEntity {
         entity.setFireTicks(100);
     }
 
+    @Override
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {

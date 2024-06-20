@@ -1,6 +1,6 @@
 package net.headnutandpasci.arcaneabyss.screen;
 
-import net.headnutandpasci.arcaneabyss.block.entity.SlimeSteelMaschineBlockEntity;
+import net.headnutandpasci.arcaneabyss.block.entity.SlimeSteelMachineBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -10,33 +10,31 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import org.jetbrains.annotations.Nullable;
 
 public class SlimeSteelMaschineScreenHandler extends ScreenHandler {
 
+    public final SlimeSteelMachineBlockEntity blockEntity;
     private final Inventory inventory;
     private final PropertyDelegate propertyDelegate;
-    public final SlimeSteelMaschineBlockEntity blockEntity;
 
     public SlimeSteelMaschineScreenHandler(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
         this(syncId, inventory, inventory.player.getWorld().getBlockEntity(buf.readBlockPos()),
-            new ArrayPropertyDelegate(2));
+                new ArrayPropertyDelegate(2));
     }
 
     public SlimeSteelMaschineScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate arrayPropertyDelegate) {
-        super(ModScreenHandlers.SLIME_STEEL_MASCHINE_SCREEN_HANDLER_SCREEN_HANDLER_TYPE,syncId);
-        checkSize(((Inventory) blockEntity), 2);
-        this.inventory = ((Inventory)blockEntity);
+        super(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, syncId);
+        checkSize(((Inventory) blockEntity), 4);
+        this.inventory = ((Inventory) blockEntity);
         playerInventory.onOpen(playerInventory.player);
         this.propertyDelegate = arrayPropertyDelegate;
-        this.blockEntity = ((SlimeSteelMaschineBlockEntity) blockEntity);
+        this.blockEntity = ((SlimeSteelMachineBlockEntity) blockEntity);
 
-        this.addSlot(new Slot(inventory, 0, 80,11));
-        this.addSlot(new Slot(inventory, 1, 50,11));
-        this.addSlot(new Slot(inventory, 2, 100,11));
-        this.addSlot(new Slot(inventory, 3, 80,59));
+        this.addSlot(new Slot(inventory, 0, 80, 11));
+        this.addSlot(new Slot(inventory, 1, 50, 11));
+        this.addSlot(new Slot(inventory, 2, 110, 11));
+        this.addSlot(new Slot(inventory, 3, 80, 59));
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -44,7 +42,7 @@ public class SlimeSteelMaschineScreenHandler extends ScreenHandler {
         addProperties(arrayPropertyDelegate);
     }
 
-    public boolean isCrafting(){
+    public boolean isCrafting() {
         return propertyDelegate.get(0) > 0;
     }
 
@@ -60,7 +58,7 @@ public class SlimeSteelMaschineScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack()) {
+        if (slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
             if (invSlot < this.inventory.size()) {
@@ -85,6 +83,7 @@ public class SlimeSteelMaschineScreenHandler extends ScreenHandler {
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
     }
+
     private void addPlayerInventory(PlayerInventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {

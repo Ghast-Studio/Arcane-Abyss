@@ -9,23 +9,17 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class SlimeSteelMaschineScreen extends HandledScreen<SlimeSteelMaschineScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID, "textures/gui/slimesteel_maschine_gui.png");
-    public SlimeSteelMaschineScreen(SlimeSteelMaschineScreenHandler handler, PlayerInventory inventory, Text title) {
-        super(handler, inventory, title);
-    }
+public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMaschineScreenHandler> {
+    private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID, "textures/gui/slimesteel_machine_gui.png");
 
-    @Override
-    protected void init() {
-        super.init();
-        //titleY = 1000;
-        //playerInventoryTitleY = 1000;
+    public SlimeSteelMachineScreen(SlimeSteelMaschineScreenHandler handler, PlayerInventory inventory, Text title) {
+        super(handler, inventory, title);
     }
 
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
@@ -41,7 +35,7 @@ public class SlimeSteelMaschineScreen extends HandledScreen<SlimeSteelMaschineSc
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderProgressArrow(context, mouseX, mouseY);
+        renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         drawMouseoverTooltip(context, mouseX, mouseY);
     }

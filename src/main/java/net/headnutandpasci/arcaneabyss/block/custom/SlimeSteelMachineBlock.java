@@ -1,7 +1,7 @@
 package net.headnutandpasci.arcaneabyss.block.custom;
 
-import net.headnutandpasci.arcaneabyss.block.entity.ModBlockEntities;
-import net.headnutandpasci.arcaneabyss.block.entity.SlimeSteelMaschineBlockEntity;
+import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
+import net.headnutandpasci.arcaneabyss.block.entity.SlimeSteelMachineBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -18,11 +18,11 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class SlimeSteelMaschineBlock extends BlockWithEntity implements BlockEntityProvider{
+public class SlimeSteelMachineBlock extends BlockWithEntity implements BlockEntityProvider {
 
-    public static final VoxelShape SHAPE = Block.createCuboidShape(0,0,0,16,12,16);
+    public static final VoxelShape SHAPE = Block.createCuboidShape(0, 0, 0, 16, 12, 16);
 
-    public SlimeSteelMaschineBlock(Settings settings) {
+    public SlimeSteelMachineBlock(Settings settings) {
         super(settings);
     }
 
@@ -36,21 +36,19 @@ public class SlimeSteelMaschineBlock extends BlockWithEntity implements BlockEnt
         return BlockRenderType.MODEL;
     }
 
-
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new SlimeSteelMaschineBlockEntity(pos, state){
-        };
+        return new SlimeSteelMachineBlockEntity(pos, state);
     }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof SlimeSteelMaschineBlockEntity) {
-                ItemScatterer.spawn(world, pos, (SlimeSteelMaschineBlockEntity)blockEntity);
-                world.updateComparators(pos,this);
+            if (blockEntity instanceof SlimeSteelMachineBlockEntity) {
+                ItemScatterer.spawn(world, pos, (SlimeSteelMachineBlockEntity) blockEntity);
+                world.updateComparators(pos, this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
@@ -59,7 +57,7 @@ public class SlimeSteelMaschineBlock extends BlockWithEntity implements BlockEnt
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (!world.isClient) {
-            NamedScreenHandlerFactory screenHandlerFactory = ((SlimeSteelMaschineBlockEntity) world.getBlockEntity(pos));
+            NamedScreenHandlerFactory screenHandlerFactory = ((SlimeSteelMachineBlockEntity) world.getBlockEntity(pos));
 
             if (screenHandlerFactory != null) {
                 player.openHandledScreen(screenHandlerFactory);
@@ -72,6 +70,7 @@ public class SlimeSteelMaschineBlock extends BlockWithEntity implements BlockEnt
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return null;
+        return checkType(type, ModBlockEntities.SLIMESTEEL_MACHINE_ENTITY, SlimeSteelMachineBlockEntity::tick);
     }
+
 }

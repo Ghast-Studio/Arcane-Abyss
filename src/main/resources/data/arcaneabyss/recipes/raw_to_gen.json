@@ -1,0 +1,17 @@
+{
+    "type": "arcaneabyss:slime_steel",
+    "ingredients": [
+        {
+            "item": "arcaneabyss:raw_ruby"
+        },
+        {
+            "item": "arcaneabyss:raw_ruby"
+        },
+        {
+            "item": "arcaneabyss:raw_ruby"
+        }
+    ],
+    "output": {
+        "item": "arcaneabyss:ruby"
+    }
+}

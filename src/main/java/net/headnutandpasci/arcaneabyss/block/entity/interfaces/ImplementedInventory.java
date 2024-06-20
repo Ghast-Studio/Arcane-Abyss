@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.block.entity;
+package net.headnutandpasci.arcaneabyss.block.entity.interfaces;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;

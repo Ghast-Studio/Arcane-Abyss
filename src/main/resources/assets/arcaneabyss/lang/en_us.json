@@ -22,5 +22,7 @@
   "block.arcaneabyss.dungeon_wall_block": "Dungeon Wall",
 
   "itemgroup.ruby": "Ruby Menu",
-  "itemgroup.dungeon": "ArcaneAbyss Blocks"
+  "itemgroup.dungeon": "ArcaneAbyss Blocks",
+  "item.arcaneabyss.porcupine": "porcupine"
+
 }

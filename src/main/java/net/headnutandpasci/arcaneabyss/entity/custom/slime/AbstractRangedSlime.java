@@ -1,19 +1,12 @@
 package net.headnutandpasci.arcaneabyss.entity.custom.slime;
 
-import net.headnutandpasci.arcaneabyss.entity.custom.RedSlimeMagmaBallEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.MagmaBallProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.RangedWeaponItem;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -21,36 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public class DarkRedSlimeEntity extends ArcaneSlimeEntity implements RangedAttackMob{
-    public DarkRedSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
+public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements RangedAttackMob {
+
+    public AbstractRangedSlime(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public static DefaultAttributeContainer.Builder setAttributesDarkRedSlime() {
-        return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0D)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0f)
-                .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f);
-    }
-
-    @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new SwimmingGoal(this));
-        this.goalSelector.add(2, new SlimeProjectileAttackGoal(this, 1.0, 13, 15.0F));
-        this.goalSelector.add(3, new FaceTowardTargetGoal(this));
-        this.goalSelector.add(4, new RandomLookGoal(this));
-        this.goalSelector.add(5, new MoveGoal(this, 1.0));
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
-    }
-
-    public boolean canUseRangedWeapon(RangedWeaponItem weapon) {
-        return true;
-    }
-
     public void attack(LivingEntity target, float pullProgress) {
-        RedSlimeMagmaBallEntity magmaBallEntity = new RedSlimeMagmaBallEntity(this, this.getWorld());
+        MagmaBallProjectile magmaBallEntity = new MagmaBallProjectile(this, this.getWorld());
         double d = target.getX() - this.getX();
         double e = target.getBodyY(0.3333333333333333) - magmaBallEntity.getY();
         double f = target.getZ() - this.getZ();
@@ -60,24 +31,24 @@ public class DarkRedSlimeEntity extends ArcaneSlimeEntity implements RangedAttac
         this.getWorld().spawnEntity(magmaBallEntity);
     }
 
-    public static class SlimeProjectileAttackGoal extends Goal {
+    public static class ProjectileAttackGoal extends Goal {
         private final MobEntity mob;
         private final RangedAttackMob owner;
-        @Nullable
-        private LivingEntity target;
-        private int updateCountdownTicks;
         private final double mobSpeed;
-        private int seenTargetTicks;
         private final int minIntervalTicks;
         private final int maxIntervalTicks;
         private final float maxShootRange;
         private final float squaredMaxShootRange;
+        @Nullable
+        private LivingEntity target;
+        private int updateCountdownTicks;
+        private int seenTargetTicks;
 
-        public SlimeProjectileAttackGoal(RangedAttackMob mob, double mobSpeed, int intervalTicks, float maxShootRange) {
+        public ProjectileAttackGoal(RangedAttackMob mob, double mobSpeed, int intervalTicks, float maxShootRange) {
             this(mob, mobSpeed, intervalTicks, intervalTicks, maxShootRange);
         }
 
-        public SlimeProjectileAttackGoal(RangedAttackMob mob, double mobSpeed, int minIntervalTicks, int maxIntervalTicks, float maxShootRange) {
+        public ProjectileAttackGoal(RangedAttackMob mob, double mobSpeed, int minIntervalTicks, int maxIntervalTicks, float maxShootRange) {
             this.updateCountdownTicks = -1;
             if (!(mob instanceof LivingEntity)) {
                 throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
@@ -118,6 +89,8 @@ public class DarkRedSlimeEntity extends ArcaneSlimeEntity implements RangedAttac
         }
 
         public void tick() {
+            if (this.target == null) return;
+
             double d = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
             boolean bl = this.mob.getVisibilityCache().canSee(this.target);
             if (bl) {
@@ -142,10 +115,9 @@ public class DarkRedSlimeEntity extends ArcaneSlimeEntity implements RangedAttac
                 this.owner.attack(this.target, g);
                 this.updateCountdownTicks = MathHelper.floor(f * (float) (this.maxIntervalTicks - this.minIntervalTicks) + (float) this.minIntervalTicks);
             } else if (this.updateCountdownTicks < 0) {
-                this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double) this.maxShootRange, (double) this.minIntervalTicks, (double) this.maxIntervalTicks));
+                this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double) this.maxShootRange, this.minIntervalTicks, this.maxIntervalTicks));
             }
 
         }
     }
-
 }

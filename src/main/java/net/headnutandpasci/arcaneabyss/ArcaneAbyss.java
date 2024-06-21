@@ -5,7 +5,11 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.*;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.blue.BlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.blue.DarkBlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.green.GreenSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.DarkRedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.Moditems;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
@@ -23,6 +27,7 @@ public class ArcaneAbyss implements ModInitializer {
 
 		ModItemGroups.registerItemGroups();
 
+		ModEntities.registerModEntities();
 		Moditems.registerModItems();
 		ModBlocks.registerModBlocks();
 
@@ -35,10 +40,10 @@ public class ArcaneAbyss implements ModInitializer {
 
 
 		FabricDefaultAttributeRegistry.register(ModEntities.Test, TestEntity.setAttributesTest());
-		FabricDefaultAttributeRegistry.register(ModEntities.BlueSlimeEntity, BlueSlimeEntity.setAttributesBlueSlime());
-		FabricDefaultAttributeRegistry.register(ModEntities.RedSlimeEntity, RedSlimeEntity.setAttributesRedSlime());
-		FabricDefaultAttributeRegistry.register(ModEntities.GreenSlimeEntity, GreenSlimeEntity.setAttributesGreenSlime());
-		FabricDefaultAttributeRegistry.register(ModEntities.DarkBlueSlimeEntity, DarkBlueSlimeEntity.setAttributesDarkBlueSlime());
-		FabricDefaultAttributeRegistry.register(ModEntities.DarkRedSlimeEntity, DarkRedSlimeEntity.setAttributesDarkRedSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.BLUE_SLIME, BlueSlimeEntity.setAttributesBlueSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.RED_SLIME, RedSlimeEntity.setAttributesRedSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.GREEN_SLIME, GreenSlimeEntity.setAttributesGreenSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.DARK_BLUE_SLIME, DarkBlueSlimeEntity.setAttributesDarkBlueSlime());
+		FabricDefaultAttributeRegistry.register(ModEntities.DARK_RED_SLIME, DarkRedSlimeEntity.setAttributesDarkRedSlime());
 	}
 }

@@ -1,9 +1,7 @@
-package net.headnutandpasci.arcaneabyss.entity.client;
+package net.headnutandpasci.arcaneabyss.entity.client.slime.blue;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.DarkBlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.DarkRedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.blue.BlueSlimeEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -14,27 +12,25 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-public class DarkRedSlimeRenderer extends MobEntityRenderer<DarkRedSlimeEntity, SlimeEntityModel<DarkRedSlimeEntity>> {
-    private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID,"textures/entity/slime/darkredslime.png");
+public class BlueSlimeRenderer extends MobEntityRenderer<BlueSlimeEntity, SlimeEntityModel<BlueSlimeEntity>> {
+    private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID, "textures/entity/slime/blueslime.png");
 
-    public DarkRedSlimeRenderer(EntityRendererFactory.Context context) {
+    public BlueSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel<>(context.getPart(EntityModelLayers.SLIME)), 0.25F);
         this.addFeature(new SlimeOverlayFeatureRenderer<>(this, context.getModelLoader()));
     }
 
-    public void render(DarkRedSlimeEntity slimeEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
+    public void render(BlueSlimeEntity slimeEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         this.shadowRadius = 0.5f;
         super.render(slimeEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
     @Override
-    public Identifier getTexture(DarkRedSlimeEntity entity) {
+    public Identifier getTexture(BlueSlimeEntity entity) {
         return TEXTURE;
     }
 
-    @Override
-    protected void scale(DarkRedSlimeEntity slimeEntity, MatrixStack matrixStack, float f) {
-        float g = 0.999F;
+    protected void scale(BlueSlimeEntity slimeEntity, MatrixStack matrixStack, float f) {
         matrixStack.scale(0.999F, 0.999F, 0.999F);
         matrixStack.translate(0.0F, 0.001F, 0.0F);
         float h = 2.0f;
@@ -42,4 +38,6 @@ public class DarkRedSlimeRenderer extends MobEntityRenderer<DarkRedSlimeEntity, 
         float j = 1.0F / (i + 1.0F);
         matrixStack.scale(j * h, 1.0F / j * h, j * h);
     }
+
+
 }

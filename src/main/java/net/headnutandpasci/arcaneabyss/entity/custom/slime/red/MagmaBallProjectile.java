@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.entity.custom;
+package net.headnutandpasci.arcaneabyss.entity.custom.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.minecraft.entity.Entity;
@@ -16,13 +16,13 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 
-public class RedSlimeMagmaBallEntity extends ThrownItemEntity {
+public class MagmaBallProjectile extends ThrownItemEntity {
 
-    public RedSlimeMagmaBallEntity(LivingEntity livingEntity, World world) {
-        super(ModEntities.MAGMA_BALL_ENTITY_ENTITY_TYPE, livingEntity, world);
+    public MagmaBallProjectile(LivingEntity livingEntity, World world) {
+        super(ModEntities.MAGMA_BALL_PROJECTILE, livingEntity, world);
     }
 
-    public RedSlimeMagmaBallEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
+    public MagmaBallProjectile(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 

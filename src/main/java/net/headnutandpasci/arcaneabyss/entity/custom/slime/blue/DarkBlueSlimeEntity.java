@@ -1,6 +1,6 @@
-package net.headnutandpasci.arcaneabyss.entity.custom.slime;
+package net.headnutandpasci.arcaneabyss.entity.custom.slime.blue;
 
-import net.minecraft.entity.Entity;
+import net.headnutandpasci.arcaneabyss.entity.custom.slime.ArcaneSlimeEntity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -17,7 +17,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class DarkBlueSlimeEntity extends ArcaneSlimeEntity {

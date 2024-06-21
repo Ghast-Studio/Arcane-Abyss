@@ -1,8 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.custom;
 
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.minecraft.entity.passive.AnimalEntity;
-import software.bernie.geckolib.animatable.GeoEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -22,7 +20,7 @@ import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInst
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
-
+@Deprecated
 public class TestEntity extends AnimalEntity implements GeoEntity {
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
@@ -63,11 +61,11 @@ public class TestEntity extends AnimalEntity implements GeoEntity {
     }
 
     private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState) {
-        if(tAnimationState.isMoving()) {
+        if (tAnimationState.isMoving()) {
             tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.test.walk", Animation.LoopType.LOOP));
-        }else{
+        } else {
 
-        tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.test.idle", Animation.LoopType.LOOP));
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.test.idle", Animation.LoopType.LOOP));
 
 
         }

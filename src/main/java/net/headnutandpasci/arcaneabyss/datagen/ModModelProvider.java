@@ -9,7 +9,6 @@ import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Model;
 import net.minecraft.data.client.Models;
 import net.minecraft.util.Identifier;
-
 import java.util.Optional;
 
 public class ModModelProvider extends FabricModelProvider {
@@ -38,8 +37,5 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(Moditems.RUBY_AXE, Models.GENERATED);
         itemModelGenerator.register(Moditems.RUBY_PICKAXE, Models.GENERATED);
         itemModelGenerator.register(Moditems.RUBY_HOE, Models.GENERATED);
-
-
-
     }
 }

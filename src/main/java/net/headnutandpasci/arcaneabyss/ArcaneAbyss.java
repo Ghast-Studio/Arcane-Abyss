@@ -11,7 +11,7 @@ import net.headnutandpasci.arcaneabyss.entity.custom.slime.green.GreenSlimeEntit
 import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
-import net.headnutandpasci.arcaneabyss.item.Moditems;
+import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -28,12 +28,12 @@ public class ArcaneAbyss implements ModInitializer {
 		ModItemGroups.registerItemGroups();
 
 		ModEntities.registerModEntities();
-		Moditems.registerModItems();
+		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
 
 		CustomPortalBuilder.beginPortal()
 				.frameBlock(ModBlocks.RUBY_BLOCK)
-				.lightWithItem(Moditems.RUBY)
+				.lightWithItem(ModItems.RUBY)
 				.destDimID(new Identifier(ArcaneAbyss.MOD_ID, "kaupendim"))
 				.tintColor(0xFFB71C1C)
 				.registerPortal();

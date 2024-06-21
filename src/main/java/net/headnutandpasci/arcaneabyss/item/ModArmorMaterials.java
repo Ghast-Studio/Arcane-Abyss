@@ -4,14 +4,13 @@ import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RepairItemRecipe;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    RUBY("ruby",25,new int[]{4,8,6,3},19, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN,2f,0.1f, () -> Ingredient.ofItems(Moditems.RUBY))
+    RUBY("ruby",25,new int[]{4,8,6,3},19, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN,2f,0.1f, () -> Ingredient.ofItems(ModItems.RUBY))
     ;
 
     private final String name;

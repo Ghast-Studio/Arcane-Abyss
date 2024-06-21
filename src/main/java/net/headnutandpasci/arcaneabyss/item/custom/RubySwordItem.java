@@ -1,10 +1,7 @@
 package net.headnutandpasci.arcaneabyss.item.custom;
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.headnutandpasci.arcaneabyss.item.ModToolMaterial;
-import net.headnutandpasci.arcaneabyss.item.Moditems;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.text.Text;

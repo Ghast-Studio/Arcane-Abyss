@@ -19,6 +19,7 @@ public class ModItemGroups {
 
                         entries.add(Moditems.RAW_RUBY);
                         entries.add(Moditems.RUBY);
+                        entries.add(Moditems.SLIMESTEEL_INGOT);
 
 
                         entries.add(Moditems.TOMATO);

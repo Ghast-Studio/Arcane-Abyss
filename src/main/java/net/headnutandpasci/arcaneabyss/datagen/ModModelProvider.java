@@ -28,6 +28,7 @@ public class ModModelProvider extends FabricModelProvider {
         //Item Models
         itemModelGenerator.register(Moditems.RUBY, Models.GENERATED);
         itemModelGenerator.register(Moditems.RAW_RUBY, Models.GENERATED);
+        itemModelGenerator.register(Moditems.SLIMESTEEL_INGOT, Models.GENERATED);
 
         itemModelGenerator.register(Moditems.TOMATO, Models.GENERATED);
 

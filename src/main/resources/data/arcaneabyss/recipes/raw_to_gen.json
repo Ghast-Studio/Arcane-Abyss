@@ -2,16 +2,16 @@
     "type": "arcaneabyss:slime_steel",
     "ingredients": [
         {
-            "item": "arcaneabyss:raw_ruby"
+            "item": "minecraft:slime_ball"
         },
         {
-            "item": "arcaneabyss:raw_ruby"
+            "item": "minecraft:iron_ingot"
         },
         {
             "item": "arcaneabyss:raw_ruby"
         }
     ],
     "output": {
-        "item": "arcaneabyss:ruby"
+        "item": "arcaneabyss:slimesteel_ingot"
     }
 }

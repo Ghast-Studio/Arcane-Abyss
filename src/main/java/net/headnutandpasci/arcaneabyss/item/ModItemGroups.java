@@ -11,37 +11,36 @@ import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+import java.io.*;
+
 public class ModItemGroups {
-    public static final ItemGroup RUBY_GROUP = Registry.register(Registries.ITEM_GROUP,
-            new Identifier(ArcaneAbyss.MOD_ID,"ruby"),
-            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ruby"))
-                    .icon(() -> new ItemStack(Moditems.RUBY)).entries((displayContext, entries) -> {
+    public static ItemGroup RUBY_GROUP;
+    public static ItemGroup DUNGEON_GROUP;
 
-                        entries.add(Moditems.RAW_RUBY);
-                        entries.add(Moditems.RUBY);
-
-
-                        entries.add(ModBlocks.RUBY_BLOCK);
-                        entries.add(ModBlocks.RAW_RUBY_BLOCK);
-
-
-                        entries.add(Moditems.RUBY_SWORD);
-                        entries.add(Moditems.RUBY_PICKAXE);
-                        entries.add(Moditems.RUBY_AXE);
-                        entries.add(Moditems.RUBY_HOE);
-
-
-
-                    }).build());
-    public static final ItemGroup DUNGEON_GROUP = Registry.register(Registries.ITEM_GROUP,
-            new Identifier(ArcaneAbyss.MOD_ID,"dungeon"),
-            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.dungeon"))
-                    .icon(() -> new ItemStack(Items.NETHER_STAR)).entries((displayContext, entries) -> {
-
-                        entries.add(ModBlocks.DUNGEON_WALL_BLOCK);
-
-                    }).build());
     public static void registerItemGroups() {
+        RUBY_GROUP  = Registry.register(Registries.ITEM_GROUP,
+                new Identifier(ArcaneAbyss.MOD_ID,"ruby"),
+                FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ruby"))
+                        .icon(() -> new ItemStack(Moditems.RUBY)).entries((displayContext, entries) -> {
+                            entries.add(Moditems.RAW_RUBY);
+                            entries.add(Moditems.RUBY);
+
+                            entries.add(ModBlocks.RUBY_BLOCK);
+                            entries.add(ModBlocks.RAW_RUBY_BLOCK);
+
+                            entries.add(Moditems.RUBY_SWORD);
+                            entries.add(Moditems.RUBY_PICKAXE);
+                            entries.add(Moditems.RUBY_AXE);
+                            entries.add(Moditems.RUBY_HOE);
+                        }).build());
+
+        DUNGEON_GROUP = Registry.register(Registries.ITEM_GROUP,
+                new Identifier(ArcaneAbyss.MOD_ID,"dungeon"),
+                FabricItemGroup.builder().displayName(Text.translatable("itemgroup.dungeon"))
+                        .icon(() -> new ItemStack(Items.NETHER_STAR)).entries((displayContext, entries) -> {
+                            entries.add(ModBlocks.DUNGEON_WALL_BLOCK);
+                        }).build());
+
         ArcaneAbyss.LOGGER.info("Registering Item Groups for" + ArcaneAbyss.MOD_ID);
     }
 }

@@ -1,9 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.client.slime.boss.black;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -20,6 +18,7 @@ public class BlackSlimeRenderer extends MobEntityRenderer<BlackSlimeEntity, Slim
     public BlackSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel<>(context.getPart(EntityModelLayers.SLIME)), 0.25F);
         this.addFeature(new SlimeOverlayFeatureRenderer<>(this, context.getModelLoader()));
+        this.addFeature(new BlackSlimeShieldFeatureRenderer(this, context.getModelLoader()));
     }
 
     @Override
@@ -29,7 +28,6 @@ public class BlackSlimeRenderer extends MobEntityRenderer<BlackSlimeEntity, Slim
 
     public void render(BlackSlimeEntity slimeEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         this.shadowRadius = 0.5f;
-        matrixStack.scale(2.0f, 2.0f, 2.0f);
         super.render(slimeEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

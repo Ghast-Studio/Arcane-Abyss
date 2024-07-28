@@ -64,7 +64,7 @@ public class ModEntities {
         BLACK_SLIME = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "black_slime"),
                 FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlackSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1.3f, 1.3f)).build());
+                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
 
         MAGMA_BALL_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "magma_ball_projectile"),

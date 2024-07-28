@@ -16,20 +16,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SummonSlimesGoal extends Goal {
+public class SlimeSummonGoal extends Goal {
     private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
             Direction.SOUTH,
             Direction.NORTH,
             Direction.EAST,
             Direction.WEST
     );
+
     private final BlackSlimeEntity blackSlimeEntity;
+    private final List<HostileEntity> mobList;
     private int maxSummonLimit;
 
-    public SummonSlimesGoal(BlackSlimeEntity blackSlimeEntity) {
+    public SlimeSummonGoal(BlackSlimeEntity blackSlimeEntity) {
         this.blackSlimeEntity = blackSlimeEntity;
+        this.mobList = new ArrayList<>();
     }
 
     @Override
@@ -69,7 +73,7 @@ public class SummonSlimesGoal extends Goal {
                 WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
                 mobWeightBag.addEntry(1, 2);
                 mobWeightBag.addEntry(2, 1.5);
-                mobWeightBag.addEntry(2, 1);
+                mobWeightBag.addEntry(3, 1);
                 summonMob(mobWeightBag.getRandom(), blackSlimeEntity.getBlockPos().offset(MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1))));
             }
         }

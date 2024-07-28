@@ -192,11 +192,18 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity {
         return this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE);
     }
 
+    public void triggerRangeAttackAnimation() {
+    }
+
+
+
     public enum State {
         IDLE(0),
         SUMMON(1),
         PUSH(2),
-        DEATH(3);
+        SHOOT_SLIME_BULLET(3),
+        DEATH(4);
+
 
         private final int value;
 
@@ -208,4 +215,12 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity {
             return value;
         }
     }
+
+    public State getState() {
+        return State.values()[this.dataTracker.get(DATA_STATE)];
+
+
+    }
+
+
 }

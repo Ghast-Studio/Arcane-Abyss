@@ -31,6 +31,8 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOwner {
 
     private static final TrackedData<Integer> DATA_STATE = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
@@ -39,6 +41,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     private static final int DEFAULT_INVUL_TIMER = 200;
 
     private final ServerBossBar bossBar;
+    private final CopyOnWriteArrayList<Integer> summonedMobIds;
 
     protected int attackTimer;
     /*private List<PlayerEntity> pushTargets;*/
@@ -50,6 +53,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                 .setDragonMusic(true)
                 .setThickenFog(true)
                 .setDarkenSky(true);
+        this.summonedMobIds = new CopyOnWriteArrayList<>();
 
         this.bossBar.setPercent(0.0F);
         this.experiencePoints = 500;
@@ -73,7 +77,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(DATA_STATE, State.IDLE.getValue());
+        this.dataTracker.startTracking(DATA_STATE, State.SPAWNING.getValue());
         this.dataTracker.startTracking(INVUL_TIMER, 0);
     }
 
@@ -175,7 +179,6 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                 attackPool.addEntry(State.SUMMON, 1);
                 attackPool.addEntry(State.PUSH, 1);
                 attackPool.addEntry(State.SHOOT_SLIME_BULLET, 1);
-                /*}*/
                 this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
             }
         }
@@ -199,16 +202,29 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     }
 
     public void tick() {
+        super.tick();
+        this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
+
+        if (!this.summonedMobIds.isEmpty()) {
+            ArcaneAbyss.LOGGER.info("applying invul timer to black slime");
+            this.setInvulTimer(40);
+        }
+
         if (this.getInvulnerableTimer() > 0) {
-            int i = this.getInvulnerableTimer() - 1;
+            ArcaneAbyss.LOGGER.info("Invul Timer: " + this.getInvulnerableTimer());
+            this.setInvulTimer(this.getInvulnerableTimer() - 1);
+            int i = this.getInvulnerableTimer();
 
             if (i > 0) {
-                this.bossBar.setPercent(1.0F - (float) i / DEFAULT_INVUL_TIMER);
-                this.setInvulTimer(i);
-                if (this.age % 10 == 0) {
-                    this.heal(10.0f);
+                if (this.getState().equals(State.SPAWNING)) {
+                    this.bossBar.setPercent(1.0F - (float) i / DEFAULT_INVUL_TIMER);
+                    this.setInvulTimer(i);
+                    if (this.age % 10 == 0) {
+                        this.heal(10.0f);
+                    }
                 }
             } else {
+                this.dataTracker.set(DATA_STATE, State.IDLE.getValue());
                 this.setAttackTimer(40);
                 this.setInvulTimer(0);
             }
@@ -216,8 +232,6 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             this.abilitySelectionTick();
             this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
         }
-
-        super.tick();
     }
 
     public double getAttackDamage() {
@@ -240,12 +254,21 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         return this.getInvulnerableTimer() > 0;
     }
 
+    public CopyOnWriteArrayList<Integer> getSummonedMobIds() {
+        return summonedMobIds;
+    }
+
+    public State getState() {
+        return State.values()[this.dataTracker.get(DATA_STATE)];
+    }
+
     public enum State {
-        IDLE(0),
-        SUMMON(1),
-        PUSH(2),
-        SHOOT_SLIME_BULLET(3),
-        DEATH(4);
+        SPAWNING(0),
+        IDLE(1),
+        SUMMON(2),
+        PUSH(3),
+        SHOOT_SLIME_BULLET(4),
+        DEATH(5);
 
 
         private final int value;
@@ -258,12 +281,4 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             return value;
         }
     }
-
-    public State getState() {
-        return State.values()[this.dataTracker.get(DATA_STATE)];
-
-
-    }
-
-
 }

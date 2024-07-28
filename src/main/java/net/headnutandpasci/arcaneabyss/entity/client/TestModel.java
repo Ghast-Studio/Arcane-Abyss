@@ -2,7 +2,6 @@ package net.headnutandpasci.arcaneabyss.entity.client;
 
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib.constant.DataTickets;

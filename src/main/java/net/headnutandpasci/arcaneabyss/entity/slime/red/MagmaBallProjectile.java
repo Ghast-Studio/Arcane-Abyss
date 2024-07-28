@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.entity.custom.slime.red;
+package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.minecraft.entity.Entity;

@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.entity.custom.slime;
+package net.headnutandpasci.arcaneabyss.entity.slime;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.MoveControl;

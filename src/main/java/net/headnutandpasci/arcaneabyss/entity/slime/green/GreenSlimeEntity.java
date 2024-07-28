@@ -1,6 +1,6 @@
-package net.headnutandpasci.arcaneabyss.entity.custom.slime.green;
+package net.headnutandpasci.arcaneabyss.entity.slime.green;
 
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

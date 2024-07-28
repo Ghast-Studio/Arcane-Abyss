@@ -1,6 +1,6 @@
-package net.headnutandpasci.arcaneabyss.entity.custom.slime.blue;
+package net.headnutandpasci.arcaneabyss.entity.slime.blue;
 
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;

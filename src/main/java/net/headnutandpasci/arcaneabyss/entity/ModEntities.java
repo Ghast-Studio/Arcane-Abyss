@@ -2,24 +2,20 @@ package net.headnutandpasci.arcaneabyss.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.custom.TestEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.blue.BlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.blue.DarkBlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.green.GreenSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.DarkRedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.MagmaBallProjectile;
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ModEntities {
 
@@ -30,6 +26,7 @@ public class ModEntities {
     public static EntityType<GreenSlimeEntity> GREEN_SLIME;
     public static EntityType<DarkBlueSlimeEntity> DARK_BLUE_SLIME;
     public static EntityType<DarkRedSlimeEntity> DARK_RED_SLIME;
+    public static EntityType<BlackSlimeEntity> BLACK_SLIME;
 
     public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
 
@@ -63,6 +60,11 @@ public class ModEntities {
                 new Identifier(ArcaneAbyss.MOD_ID, "dark_red_slime"),
                 FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DarkRedSlimeEntity::new)
                         .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+
+        BLACK_SLIME = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "black_slime"),
+                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlackSlimeEntity::new)
+                        .dimensions(EntityDimensions.fixed(1.3f, 1.3f)).build());
 
         MAGMA_BALL_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "magma_ball_projectile"),

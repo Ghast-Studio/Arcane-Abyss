@@ -1,6 +1,6 @@
-package net.headnutandpasci.arcaneabyss.entity.custom.slime;
+package net.headnutandpasci.arcaneabyss.entity.slime;
 
-import net.headnutandpasci.arcaneabyss.entity.custom.slime.red.MagmaBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;

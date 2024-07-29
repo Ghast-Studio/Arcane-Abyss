@@ -9,11 +9,15 @@ import net.minecraft.client.render.entity.feature.SlimeOverlayFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
+import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class BlackSlimeRenderer extends MobEntityRenderer<BlackSlimeEntity, SlimeEntityModel<BlackSlimeEntity>> {
-    private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID, "textures/entity/slime/blueslime.png");
+    private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID, "textures/entity/slime/boss/blackslime.png");
 
     public BlackSlimeRenderer(EntityRendererFactory.Context context) {
         super(context, new SlimeEntityModel<>(context.getPart(EntityModelLayers.SLIME)), 0.25F);
@@ -28,6 +32,7 @@ public class BlackSlimeRenderer extends MobEntityRenderer<BlackSlimeEntity, Slim
 
     public void render(BlackSlimeEntity slimeEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
         this.shadowRadius = 0.5f;
+        this.scale(slimeEntity, matrixStack, 3.0f);
         super.render(slimeEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 

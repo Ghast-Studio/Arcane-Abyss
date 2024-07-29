@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public class BlackSlimeShieldFeatureRenderer extends EnergySwirlOverlayFeatureRenderer<BlackSlimeEntity, SlimeEntityModel<BlackSlimeEntity>> {
-    private static final Identifier SKIN = new Identifier(ArcaneAbyss.MOD_ID, "textures/entity/blue.png");
+    private static final Identifier SKIN = new Identifier(ArcaneAbyss.MOD_ID, "textures/entity/slime/boss/armor.png");
     private final SlimeEntityModel<BlackSlimeEntity> model;
 
     public BlackSlimeShieldFeatureRenderer(FeatureRendererContext<BlackSlimeEntity, SlimeEntityModel<BlackSlimeEntity>> context, EntityModelLoader loader) {

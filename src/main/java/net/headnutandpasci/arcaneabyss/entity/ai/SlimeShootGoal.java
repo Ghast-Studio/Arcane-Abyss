@@ -1,12 +1,11 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
-import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class SlimeShootGoal extends Goal {
@@ -30,7 +29,19 @@ public class SlimeShootGoal extends Goal {
         WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
         if (blackSlimeEntity.getState() == BlackSlimeEntity.State.SHOOT_SLIME_BULLET) {
             blackSlimeEntity.triggerRangeAttackAnimation();
-            bulletPatterns.addEntry("Single", 1);
+
+            if (blackSlimeEntity.getPhase() == 1) {
+                bulletPatterns.addEntry("Single", 1);
+            }
+            if (blackSlimeEntity.getPhase() == 1) {
+                bulletPatterns.addEntry("MultiShot", 1);
+            }
+            if (blackSlimeEntity.getPhase() == 2) {
+                bulletPatterns.addEntry("RapidSingle", 1);
+            }
+            if (blackSlimeEntity.getPhase() == 2) {
+                bulletPatterns.addEntry("RapidMultiShot", 1);
+            }
 
             /**if (blackSlimeEntity.getPhase() == 1) {
              bulletPatterns.addEntry("Single", 1);
@@ -53,15 +64,31 @@ public class SlimeShootGoal extends Goal {
     @Override
     public void tick() {
         if (type.equals("Single")) {
-            for (int i = 0; i < 5; i++) {
-                if (blackSlimeEntity.getAttackTimer() == 100 - i * 20) {
-                    performArcShot();
+            for (int i = 0; i < 10; i++) {
+                if (blackSlimeEntity.getAttackTimer() == 150 - i * 15) {
+                    performSingleShot();
                 }
             }
-        } else if (type.equals("Arc")) {
-            for (int i = 0; i < 5; i++) {
-                if (blackSlimeEntity.getAttackTimer() == 100 - i * 20) {
-                    performArcShot();
+        }
+        if (type.equals("RapidSingle")) {
+            for (int i = 0; i < 20; i++) {
+                if (blackSlimeEntity.getAttackTimer() == 100 - i * 3) { //Für zweite Phase
+                    performSingleShot();
+                }
+            }
+        }
+
+        if (type.equals("MultiShot")) {
+            for (int i = 0; i < 10; i++) {
+                if (blackSlimeEntity.getAttackTimer() == 100 - i * 15) { //Für zweite Phase
+                    performMultiShot();
+                }
+            }
+        }
+        if (type.equals("RapidMultiShot")) {
+            for (int i = 0; i < 20; i++) {
+                if (blackSlimeEntity.getAttackTimer() == 100 - i * 3) { //Für zweite Phase
+                    performMultiShot();
                 }
             }
         }
@@ -75,20 +102,22 @@ public class SlimeShootGoal extends Goal {
         double g = direction.x - spawn.x;
         double h = direction.y - spawn.y - 4.0f;
         double i = direction.z - spawn.z;
-        WitherSkullEntity witherSkullEntity = new WitherSkullEntity(this.blackSlimeEntity.getWorld(), this.blackSlimeEntity, g, h, i);
+        BlackSlimeProjectileEntity witherSkullEntity = new BlackSlimeProjectileEntity(this.blackSlimeEntity.getWorld(), this.blackSlimeEntity, g, h, i);
         witherSkullEntity.setOwner(this.blackSlimeEntity);
         witherSkullEntity.setPos(spawn.x, spawn.y + 4.0f, spawn.z);
         this.blackSlimeEntity.getWorld().spawnEntity(witherSkullEntity);
     }
 
-    private void performArcShot() {
+
+
+    private void performMultiShot() {
         LivingEntity target = blackSlimeEntity.getTarget();
         if (target == null) return;
 
         Vec3d spawn = this.blackSlimeEntity.getRotationVector();
         spawn = VectorUtils.addRight(spawn, 3.0f);
 
-        int bulletCount = 8;
+        int bulletCount = 2;
         for (int i = 0; i < bulletCount; i++) {
             spawn = VectorUtils.rotateVectorCC(spawn, this.blackSlimeEntity.getRotationVector(), (float) Math.toRadians((double) 360 / bulletCount) * i);
             Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
@@ -96,7 +125,7 @@ public class SlimeShootGoal extends Goal {
         }
     }
 
-    private void performArcTimedShot(float angle) {
+    /**private void performArcTimedShot(float angle) {
         LivingEntity target = blackSlimeEntity.getTarget();
         if (target == null) return;
 
@@ -107,6 +136,7 @@ public class SlimeShootGoal extends Goal {
         Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
         this.shootSkullAt(this.blackSlimeEntity.getPos().add(spawn), direction);
     }
+    **/
 
     private void performSingleShot() {
         LivingEntity target = blackSlimeEntity.getTarget();

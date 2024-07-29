@@ -34,7 +34,7 @@ public class SlimePushGoal extends Goal {
     public void tick() {
         if (this.slime.getAttackTimer() == 66) { // Only even number tick works for some reason
             ArcaneAbyss.LOGGER.info("SlimePushGoal push tick");
-            this.slime.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 3.0F, 1.0F);
+            this.slime.playSound(SoundEvents.ENTITY_ENDER_DRAGON_GROWL, 3.0F, 1.0F);
             ((ServerWorld) this.slime.getWorld()).spawnParticles(ParticleTypes.POOF, this.slime.getX(), this.slime.getY(), this.slime.getZ(), 50, 3.0D, 0.0D, 3.0D, 0.0D);
             Box box = (new Box(this.slime.getBlockPos())).expand(8);
             List<PlayerEntity> targets = this.slime.getWorld().getEntitiesByClass(PlayerEntity.class, box, (entity) -> true);

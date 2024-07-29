@@ -6,6 +6,7 @@ import net.headnutandpasci.arcaneabyss.entity.ai.SlimeShootGoal;
 import net.headnutandpasci.arcaneabyss.entity.ai.SlimeSummonGoal;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
+import net.minecraft.client.render.entity.WitherEntityRenderer;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -31,10 +32,12 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOwner {
 
+    private static final TrackedData<Integer> PHASE = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> DATA_STATE = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Integer> INVUL_TIMER = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
@@ -42,6 +45,8 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     private final ServerBossBar bossBar;
     private final CopyOnWriteArrayList<Integer> summonedMobIds;
+
+
 
     protected int attackTimer;
     /*private List<PlayerEntity> pushTargets;*/
@@ -57,7 +62,12 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
         this.bossBar.setPercent(0.0F);
         this.experiencePoints = 500;
+        this.dataTracker.startTracking(PHASE, 1);
+
     }
+
+
+
 
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
@@ -83,8 +93,8 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SlimeSummonGoal(this));
-        this.goalSelector.add(1, new SlimePushGoal(this));
+        /**this.goalSelector.add(1, new SlimeSummonGoal(this));
+        this.goalSelector.add(1, new SlimePushGoal(this));**/
         this.goalSelector.add(1, new SlimeShootGoal(this));
         this.goalSelector.add(2, new SwimmingGoal(this));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
@@ -226,7 +236,10 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         } else if (this.isAlive()) {
             this.abilitySelectionTick();
             this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+            this.phaseUpdateTick();
+
         }
+
     }
 
     public double getAttackDamage() {
@@ -276,4 +289,15 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             return value;
         }
     }
+
+    private void phaseUpdateTick() {
+        if (this.getHealth() < (this.getMaxHealth() * 0.5)) {
+            this.setPhase(2);
+        }
+    }
+
+    public int getPhase() { return this.dataTracker.get(PHASE); }
+
+    public void setPhase(int phase) { this.dataTracker.set(PHASE, phase); }
+
 }

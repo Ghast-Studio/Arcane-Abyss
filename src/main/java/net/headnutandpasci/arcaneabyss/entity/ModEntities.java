@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
+import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
@@ -29,6 +30,7 @@ public class ModEntities {
     public static EntityType<BlackSlimeEntity> BLACK_SLIME;
 
     public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
+    public static EntityType<BlackSlimeProjectileEntity> BLACK_SLIME_PROJECTILE;
 
     public static void registerModEntities() {
         Test = Registry.register(Registries.ENTITY_TYPE,
@@ -70,6 +72,11 @@ public class ModEntities {
                 new Identifier(ArcaneAbyss.MOD_ID, "magma_ball_projectile"),
                 FabricEntityTypeBuilder.<MagmaBallProjectile>create(SpawnGroup.MISC, MagmaBallProjectile::new)
                         .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
+        BLACK_SLIME_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "black_slime_projectile"),
+                FabricEntityTypeBuilder.<BlackSlimeProjectileEntity>create(SpawnGroup.MISC, BlackSlimeProjectileEntity::new)
+                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
+
 
         ArcaneAbyss.LOGGER.info("Registering Entities");
     }

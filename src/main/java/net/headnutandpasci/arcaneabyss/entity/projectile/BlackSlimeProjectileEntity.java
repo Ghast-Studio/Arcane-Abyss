@@ -1,16 +1,10 @@
-package net.headnutandpasci.arcaneabyss.entity.slime.red;
+package net.headnutandpasci.arcaneabyss.entity.projectile;
 
-import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.headnutandpasci.arcaneabyss.item.ModItems;
-import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
+import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
@@ -20,21 +14,18 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 
-public class MagmaBallProjectile extends ThrownItemEntity {
+public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
 
-    public MagmaBallProjectile(LivingEntity livingEntity, World world) {
-        super(ModEntities.MAGMA_BALL_PROJECTILE, livingEntity, world);
-
+    public BlackSlimeProjectileEntity(EntityType<? extends BlackSlimeProjectileEntity> entityType, World world) {
+        super((EntityType<? extends BlackSlimeProjectileEntity>)entityType, world);
     }
 
-    public MagmaBallProjectile(EntityType<? extends ThrownItemEntity> entityType, World world) {
-        super(entityType, world);
+    public BlackSlimeProjectileEntity(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
+        super(ModEntities.BLACK_SLIME_PROJECTILE, owner, directionX, directionY, directionZ, world);
     }
 
-    @Override
-    protected Item getDefaultItem() {
-        return Items.WITHER_SKELETON_SKULL;
-    }
+
+
 
     private ParticleEffect getParticleParameters() {
         return ParticleTypes.ITEM_SLIME;
@@ -68,10 +59,16 @@ public class MagmaBallProjectile extends ThrownItemEntity {
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
+            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 2F, false, World.ExplosionSourceType.MOB);
             this.getWorld().sendEntityStatus(this, (byte) 3);
             this.discard();
         }
 
+    }
+
+    @Override
+    public boolean isOnFire() {
+        return false;
     }
 }
 

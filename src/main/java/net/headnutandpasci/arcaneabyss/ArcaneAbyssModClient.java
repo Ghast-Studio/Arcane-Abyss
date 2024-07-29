@@ -10,6 +10,7 @@ import net.headnutandpasci.arcaneabyss.entity.client.slime.boss.black.BlackSlime
 import net.headnutandpasci.arcaneabyss.entity.client.slime.green.GreenSlimeRenderer;
 import net.headnutandpasci.arcaneabyss.entity.client.slime.red.DarkRedSlimeRenderer;
 import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeRenderer;
+import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileRenderer;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 
 public class ArcaneAbyssModClient implements ClientModInitializer {
@@ -24,6 +25,7 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeRenderer::new);
 
         EntityRendererRegistry.register(ModEntities.MAGMA_BALL_PROJECTILE, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.BLACK_SLIME_PROJECTILE, BlackSlimeProjectileRenderer::new);
     }
 
 

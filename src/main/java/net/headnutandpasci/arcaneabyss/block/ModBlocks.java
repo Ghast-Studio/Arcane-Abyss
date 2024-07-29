@@ -16,6 +16,7 @@ public class ModBlocks {
     public static Block RUBY_BLOCK;
     public static Block RAW_RUBY_BLOCK;
     public static Block DUNGEON_WALL_BLOCK;
+    public static Block eee;
 
 
     private static Block registerBlock(String name, Block block){

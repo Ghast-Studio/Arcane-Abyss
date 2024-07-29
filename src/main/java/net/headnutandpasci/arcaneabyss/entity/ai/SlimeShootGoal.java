@@ -1,12 +1,12 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
+import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class SlimeShootGoal extends Goal {
@@ -31,6 +31,7 @@ public class SlimeShootGoal extends Goal {
         if (blackSlimeEntity.getState() == BlackSlimeEntity.State.SHOOT_SLIME_BULLET) {
             blackSlimeEntity.triggerRangeAttackAnimation();
             bulletPatterns.addEntry("Single", 1);
+
             /**if (blackSlimeEntity.getPhase() == 1) {
              bulletPatterns.addEntry("Single", 1);
              bulletPatterns.addEntry("Arc", 1);
@@ -54,36 +55,67 @@ public class SlimeShootGoal extends Goal {
         if (type.equals("Single")) {
             for (int i = 0; i < 5; i++) {
                 if (blackSlimeEntity.getAttackTimer() == 100 - i * 20) {
-                    performSingleShot(30.0f);
+                    performArcShot();
+                }
+            }
+        } else if (type.equals("Arc")) {
+            for (int i = 0; i < 5; i++) {
+                if (blackSlimeEntity.getAttackTimer() == 100 - i * 20) {
+                    performArcShot();
                 }
             }
         }
+
         if (blackSlimeEntity.getAttackTimer() == 0) {
             blackSlimeEntity.stopAttacking(60);
         }
     }
 
+    private void shootSkullAt(Vec3d spawn, Vec3d direction) {
+        double g = direction.x - spawn.x;
+        double h = direction.y - spawn.y - 4.0f;
+        double i = direction.z - spawn.z;
+        WitherSkullEntity witherSkullEntity = new WitherSkullEntity(this.blackSlimeEntity.getWorld(), this.blackSlimeEntity, g, h, i);
+        witherSkullEntity.setOwner(this.blackSlimeEntity);
+        witherSkullEntity.setPos(spawn.x, spawn.y + 4.0f, spawn.z);
+        this.blackSlimeEntity.getWorld().spawnEntity(witherSkullEntity);
+    }
 
-    private void performSingleShot(float angle) {
-        float offset = (float) Math.toRadians(angle);
-        Vec3d vec3 = blackSlimeEntity.getRotationVec(0.0F);
-        vec3 = vec3.rotateY(offset);
-        blackSlimeEntity.getWorld().playSound(null, blackSlimeEntity.getX(), blackSlimeEntity.getY(), blackSlimeEntity.getZ(), SoundEvents.ENTITY_SKELETON_SHOOT, blackSlimeEntity.getSoundCategory(), 3.0F, 1.0F + (blackSlimeEntity.getRandom().nextFloat() - blackSlimeEntity.getRandom().nextFloat()) * 0.2F);
+    private void performArcShot() {
         LivingEntity target = blackSlimeEntity.getTarget();
-        if(target == null) return;
+        if (target == null) return;
 
-        for (int i = 0; i < 8; i++) {
-            vec3 = vec3.rotateY((float) Math.toRadians(45) * i);
-            MagmaBallProjectile magmaBallEntity = new MagmaBallProjectile(this.blackSlimeEntity, this.blackSlimeEntity.getWorld());
+        Vec3d spawn = this.blackSlimeEntity.getRotationVector();
+        spawn = VectorUtils.addRight(spawn, 3.0f);
 
-            double dstX = target.getX() - this.blackSlimeEntity.getX();
-            double dstY = target.getBodyY(0.3333333333333333) - magmaBallEntity.getY();
-            double dstZ = target.getZ() - this.blackSlimeEntity.getZ();
-            double distance = Math.sqrt(dstX * dstX + dstZ * dstZ);
-            magmaBallEntity.setVelocity(dstX, dstY + (distance * 0.1), dstZ, 2.0f, (float) (14 - this.blackSlimeEntity.getWorld().getDifficulty().getId() * 4));
-            magmaBallEntity.setPos(magmaBallEntity.getX() + vec3.x, magmaBallEntity.getY() + vec3.y, magmaBallEntity.getZ() + vec3.z);
-            blackSlimeEntity.getWorld().spawnEntity(magmaBallEntity);
+        int bulletCount = 8;
+        for (int i = 0; i < bulletCount; i++) {
+            spawn = VectorUtils.rotateVectorCC(spawn, this.blackSlimeEntity.getRotationVector(), (float) Math.toRadians((double) 360 / bulletCount) * i);
+            Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
+            this.shootSkullAt(this.blackSlimeEntity.getPos().add(spawn), direction);
         }
+    }
+
+    private void performArcTimedShot(float angle) {
+        LivingEntity target = blackSlimeEntity.getTarget();
+        if (target == null) return;
+
+        Vec3d spawn = this.blackSlimeEntity.getRotationVector();
+        spawn = VectorUtils.addRight(spawn, 3.0f);
+        spawn = VectorUtils.rotateVectorCC(spawn, this.blackSlimeEntity.getRotationVector(), angle);
+
+        Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
+        this.shootSkullAt(this.blackSlimeEntity.getPos().add(spawn), direction);
+    }
+
+    private void performSingleShot() {
+        LivingEntity target = blackSlimeEntity.getTarget();
+        if (target == null) return;
+
+        Vec3d spawn = this.blackSlimeEntity.getPos();
+        Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
+
+        this.shootSkullAt(spawn, direction);
     }
 }
 

@@ -204,14 +204,9 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     public void tick() {
         super.tick();
         this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-
-        if (!this.summonedMobIds.isEmpty()) {
-            ArcaneAbyss.LOGGER.info("applying invul timer to black slime");
-            this.setInvulTimer(40);
-        }
+        if (!this.summonedMobIds.isEmpty()) this.setInvulTimer(40);
 
         if (this.getInvulnerableTimer() > 0) {
-            ArcaneAbyss.LOGGER.info("Invul Timer: " + this.getInvulnerableTimer());
             this.setInvulTimer(this.getInvulnerableTimer() - 1);
             int i = this.getInvulnerableTimer();
 

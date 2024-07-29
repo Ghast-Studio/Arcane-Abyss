@@ -1,7 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
 import com.google.common.collect.ImmutableList;
-import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
@@ -10,7 +9,6 @@ import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -18,10 +16,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SlimeSummonGoal extends Goal {
     private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
@@ -32,12 +26,9 @@ public class SlimeSummonGoal extends Goal {
     );
 
     private final BlackSlimeEntity entity;
-    private final CopyOnWriteArrayList<Integer> aliveMobIds;
-    private int maxSummonLimit;
 
     public SlimeSummonGoal(BlackSlimeEntity entity) {
         this.entity = entity;
-        this.aliveMobIds = new CopyOnWriteArrayList<>();
     }
 
     @Override
@@ -69,7 +60,6 @@ public class SlimeSummonGoal extends Goal {
         if (entity.getAttackTimer() == 100) {
             entity.setAttackTimer(99);
             /*blackSlimeEntity.playSound(blackSlimeEntity.getScreechSound(), 2.0F, 1.0F);*/
-            int summonCount = Math.max(0, maxSummonLimit);
             double d = entity.getX();
             double e = entity.getY();
             double f = entity.getZ();
@@ -91,9 +81,7 @@ public class SlimeSummonGoal extends Goal {
     }
 
     private boolean canSummonSlimes() {
-        List<ArcaneSlimeEntity> entitiesInBox = entity.getWorld().getEntitiesByClass(ArcaneSlimeEntity.class, entity.getBoundingBox().expand(35.0D / 2), (mob) -> true);
-        maxSummonLimit = 10;
-        return (entitiesInBox.size() < maxSummonLimit) && this.aliveMobIds.isEmpty();
+        return this.entity.getSummonedMobIds().isEmpty();
     }
 
     private void summonMob(int mobIndex, BlockPos summonPos) {
@@ -102,32 +90,18 @@ public class SlimeSummonGoal extends Goal {
         double e = (double) summonPos.getY() + 1;
         double f = summonPos.getZ();
         ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.CLOUD, d, e, f, 10, 0.5D, 0.5D, 0.5D, 0.0D);
-        ArcaneSlimeEntity slime = null;
-        switch (mobIndex) {
-            case 1: {
-                slime = new BlueSlimeEntity(ModEntities.BLUE_SLIME, world);
-                slime.teleport(summonPos.getX(), summonPos.getY(), summonPos.getZ());
-                disableDrops(slime);
-                world.spawnEntity(slime);
-                break;
-            }
-            case 2: {
-                slime = new GreenSlimeEntity(ModEntities.GREEN_SLIME, world);
-                slime.teleport(summonPos.getX(), summonPos.getY(), summonPos.getZ());
-                disableDrops(slime);
-                world.spawnEntity(slime);
-                break;
-            }
-            case 3: {
-                slime = new RedSlimeEntity(ModEntities.RED_SLIME, world);
-                slime.teleport(summonPos.getX(), summonPos.getY(), summonPos.getZ());
-                disableDrops(slime);
-                world.spawnEntity(slime);
-                break;
-            }
-        }
+        ArcaneSlimeEntity slime = switch (mobIndex) {
+            case 1 -> new BlueSlimeEntity(ModEntities.BLUE_SLIME, world);
+            case 2 -> new GreenSlimeEntity(ModEntities.GREEN_SLIME, world);
+            case 3 -> new RedSlimeEntity(ModEntities.RED_SLIME, world);
+            default -> null;
+        };
 
-        assert slime != null;
+        if (slime == null) return;
+        slime.teleport(summonPos.getX(), summonPos.getY(), summonPos.getZ());
+        disableDrops(slime);
+        world.spawnEntity(slime);
+
         this.entity.getSummonedMobIds().add(slime.getId());
     }
 

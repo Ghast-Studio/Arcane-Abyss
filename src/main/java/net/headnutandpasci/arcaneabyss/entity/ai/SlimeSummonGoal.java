@@ -16,6 +16,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 
 public class SlimeSummonGoal extends Goal {
     private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
@@ -57,26 +58,38 @@ public class SlimeSummonGoal extends Goal {
 
     @Override
     public void tick() {
-        if (entity.getAttackTimer() == 100) {
-            entity.setAttackTimer(99);
-            /*blackSlimeEntity.playSound(blackSlimeEntity.getScreechSound(), 2.0F, 1.0F);*/
-            double d = entity.getX();
-            double e = entity.getY();
-            double f = entity.getZ();
-            ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.FLAME, d, e, f, 20, 3.0D, 3.0D, 3.0D, 0.0D);
-            for (int i = 0; i < 5; i++) {
-                WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
-                mobWeightBag.addEntry(1, 1);
-                mobWeightBag.addEntry(2, 1);
-                mobWeightBag.addEntry(3, 1);
-                Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-                BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
-                summonMob(mobWeightBag.getRandom(), summonPos);
+
+            if (entity.getAttackTimer() == 100) {
+                entity.setAttackTimer(99);
+                /*blackSlimeEntity.playSound(blackSlimeEntity.getScreechSound(), 2.0F, 1.0F);*/
+                double d = entity.getX();
+                double e = entity.getY();
+                double f = entity.getZ();
+                ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.FLAME, d, e, f, 20, 3.0D, 3.0D, 3.0D, 0.0D);
+
+
+                int s = 5;
+
+                if(entity.getPhase() == 2) {
+                    s = 10;
+                }
+
+                for (int i = 0; i < s; i++) {
+                    WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
+                    mobWeightBag.addEntry(1, 1);
+                    mobWeightBag.addEntry(2, 1);
+                    mobWeightBag.addEntry(3, 1);
+                    Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
+                    BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
+                    summonMob(mobWeightBag.getRandom(), summonPos);
+
+
+                }
             }
-        }
+
 
         if (entity.getAttackTimer() == 0) {
-            entity.stopAttacking(60);
+            entity.stopAttacking(0);
         }
     }
 

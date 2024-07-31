@@ -2,12 +2,15 @@ package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
+import net.minecraft.entity.projectile.WitherSkullEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -20,24 +23,21 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 
-public class MagmaBallProjectile extends ThrownItemEntity {
+public class MagmaBallProjectile extends ExplosiveProjectileEntity {
 
-    public MagmaBallProjectile(LivingEntity livingEntity, World world) {
-        super(ModEntities.MAGMA_BALL_PROJECTILE, livingEntity, world);
-
+    public MagmaBallProjectile(EntityType<? extends MagmaBallProjectile> entityType, World world) {
+        super((EntityType<? extends MagmaBallProjectile>)entityType, world);
     }
 
-    public MagmaBallProjectile(EntityType<? extends ThrownItemEntity> entityType, World world) {
-        super(entityType, world);
+    public MagmaBallProjectile(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
+        super(ModEntities.MAGMA_BALL_PROJECTILE, owner, directionX, directionY, directionZ, world);
     }
 
-    @Override
-    protected Item getDefaultItem() {
-        return Items.WITHER_SKELETON_SKULL;
-    }
+
+
 
     private ParticleEffect getParticleParameters() {
-        return ParticleTypes.ITEM_SLIME;
+        return ParticleTypes.ASH;
     }
 
     @Override
@@ -73,5 +73,11 @@ public class MagmaBallProjectile extends ThrownItemEntity {
         }
 
     }
+
+    @Override
+    public boolean isOnFire() {
+        return false;
+    }
 }
+
 

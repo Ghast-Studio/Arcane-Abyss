@@ -98,13 +98,18 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
         this.targetStretch *= 0.6F;
     }
 
+    protected void defineSynchedData() {
+
+    }
+
     /* AI Goals & Movement Controllers */
 
-    protected static class ArcaneSlimeMoveControl extends MoveControl {
+    public static class ArcaneSlimeMoveControl extends MoveControl {
         private float targetYaw;
         private int ticksUntilJump;
         private final ArcaneSlimeEntity slime;
         private boolean jumpOften;
+        private boolean disabled;
 
         public ArcaneSlimeMoveControl(ArcaneSlimeEntity slime) {
             super(slime);
@@ -118,6 +123,8 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
         }
 
         public void move(double speed) {
+            if(this.disabled) return;
+
             this.speed = speed;
             this.state = State.MOVE_TO;
         }
@@ -155,6 +162,16 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
                 }
 
             }
+
+
+        }
+
+        public void setDisabled(boolean disabled) {
+            this.disabled = disabled;
+        }
+
+        public boolean isDisabled() {
+            return disabled;
         }
     }
 

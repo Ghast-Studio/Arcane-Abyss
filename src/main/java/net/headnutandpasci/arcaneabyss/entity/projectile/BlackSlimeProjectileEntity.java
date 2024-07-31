@@ -4,6 +4,9 @@ import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -28,7 +31,7 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
 
 
     private ParticleEffect getParticleParameters() {
-        return ParticleTypes.ITEM_SLIME;
+        return ParticleTypes.ASH;
     }
 
     @Override
@@ -51,8 +54,12 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 4.0f);
+
+
+        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 8.0f);
         entity.setFireTicks(100);
+
+
     }
 
     @Override

@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ExampleMixin {
 	@Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
 	private void init(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(true);
+		cir.setReturnValue(false);
 	}
 }

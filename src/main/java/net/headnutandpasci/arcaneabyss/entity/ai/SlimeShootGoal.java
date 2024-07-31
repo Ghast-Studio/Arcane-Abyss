@@ -6,6 +6,7 @@ import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Vec3d;
 
 public class SlimeShootGoal extends Goal {
@@ -94,7 +95,7 @@ public class SlimeShootGoal extends Goal {
         }
 
         if (blackSlimeEntity.getAttackTimer() == 0) {
-            blackSlimeEntity.stopAttacking(60);
+            blackSlimeEntity.stopAttacking(0);
         }
     }
 
@@ -114,6 +115,8 @@ public class SlimeShootGoal extends Goal {
         LivingEntity target = blackSlimeEntity.getTarget();
         if (target == null) return;
 
+
+
         Vec3d spawn = this.blackSlimeEntity.getRotationVector();
         spawn = VectorUtils.addRight(spawn, 3.0f);
 
@@ -122,6 +125,7 @@ public class SlimeShootGoal extends Goal {
             spawn = VectorUtils.rotateVectorCC(spawn, this.blackSlimeEntity.getRotationVector(), (float) Math.toRadians((double) 360 / bulletCount) * i);
             Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
             this.shootSkullAt(this.blackSlimeEntity.getPos().add(spawn), direction);
+
         }
     }
 

@@ -42,18 +42,21 @@ public class SlimePushGoal extends Goal {
         }
 
         if (this.slime.getAttackTimer() == 0) {
-            this.slime.stopAttacking(60);
+            this.slime.stopAttacking(0);
         }
     }
 
     private void pushNearbyPlayers(PlayerEntity player) {
         double knockbackStrength = 12.0D;
         int damageAmount;
+
+
+
         if (player.isBlocking()) {
             player.disableShield(true);
-            damageAmount = (int) (this.slime.getAttackDamage() * 0.45F);
+            damageAmount = (int) (this.slime.getAttackDamage() * 1F);
         } else {
-            damageAmount = (int) (this.slime.getAttackDamage() * 0.9F);
+            damageAmount = (int) (this.slime.getAttackDamage() * 2F);
         }
         double x = player.getX() - this.slime.getX();
         double z = player.getZ() - this.slime.getZ();

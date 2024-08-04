@@ -43,9 +43,9 @@ public class SlimeResetGoal extends Goal{
     @Override
     public void start() {
         World world = blackSlimeEntity.getWorld();
-        if (world instanceof ServerWorld) {
+        if (world instanceof ServerWorld serverWorld) {
             for (int i = 0; i < 50; ++i) {
-                ((ServerWorld) world).spawnParticles(
+                serverWorld.spawnParticles(
                         ParticleTypes.POOF,
                         blackSlimeEntity.getX() + (world.random.nextDouble() * 2 - 1),
                         blackSlimeEntity.getY() + world.random.nextDouble(),

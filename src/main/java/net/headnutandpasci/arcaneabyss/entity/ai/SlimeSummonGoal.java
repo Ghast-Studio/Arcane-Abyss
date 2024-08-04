@@ -1,22 +1,21 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
 import com.google.common.collect.ImmutableList;
-import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
+import net.headnutandpasci.arcaneabyss.util.random.WeightedBag;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class SlimeSummonGoal extends Goal {
     private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
@@ -27,15 +26,17 @@ public class SlimeSummonGoal extends Goal {
     );
 
     private final BlackSlimeEntity entity;
+    private final List<EntityType<? extends ArcaneSlimeEntity>> slimesToSummon;
 
-    public SlimeSummonGoal(BlackSlimeEntity entity) {
+    public SlimeSummonGoal(BlackSlimeEntity entity, List<EntityType<? extends ArcaneSlimeEntity>> slimesToSummon) {
         this.entity = entity;
+        this.slimesToSummon = slimesToSummon;
     }
 
     @Override
     public boolean canStart() {
         if (entity.isAttacking(BlackSlimeEntity.State.SUMMON) && entity.getTarget() != null) {
-            if (canSummonSlimes()) {
+            if (this.canSummonSlimes()) {
                 return true;
             } else {
                 entity.stopAttacking(0);
@@ -58,35 +59,29 @@ public class SlimeSummonGoal extends Goal {
 
     @Override
     public void tick() {
+        if (!(this.entity.getWorld() instanceof ServerWorld world)) return;
 
-            if (entity.getAttackTimer() == 100) {
-                entity.setAttackTimer(99);
-                /*blackSlimeEntity.playSound(blackSlimeEntity.getScreechSound(), 2.0F, 1.0F);*/
-                double d = entity.getX();
-                double e = entity.getY();
-                double f = entity.getZ();
-                ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.FLAME, d, e, f, 20, 3.0D, 3.0D, 3.0D, 0.0D);
+        if (entity.getAttackTimer() == 100) {
+            entity.setAttackTimer(99);
+            world.spawnParticles(ParticleTypes.FLAME,
+                    entity.getX(),
+                    entity.getY(),
+                    entity.getZ(),
+                    20,
+                    3.0D,
+                    3.0D,
+                    3.0D,
+                    0.0D);
 
-
-                int s = 5;
-
-                if(entity.getPhase() == 2) {
-                    s = 10;
-                }
-
-                for (int i = 0; i < s; i++) {
-                    WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
-                    mobWeightBag.addEntry(1, 1);
-                    mobWeightBag.addEntry(2, 1);
-                    mobWeightBag.addEntry(3, 1);
-                    Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-                    BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
-                    summonMob(mobWeightBag.getRandom(), summonPos);
-
-
-                }
-            }
-
+            int amount = entity.getPhase() == 1 ? 5 : 10;
+            IntStream.range(0, amount).forEach(i -> {
+                WeightedBag<EntityType<? extends ArcaneSlimeEntity>> bag = new WeightedBag<>();
+                this.slimesToSummon.forEach(type -> bag.addEntry(type, 1));
+                Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
+                BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
+                summonMob(bag.getRandom(), summonPos, world);
+            });
+        }
 
         if (entity.getAttackTimer() == 0) {
             entity.stopAttacking(0);
@@ -97,21 +92,13 @@ public class SlimeSummonGoal extends Goal {
         return this.entity.getSummonedMobIds().isEmpty();
     }
 
-    private void summonMob(int mobIndex, BlockPos summonPos) {
-        World world = entity.getWorld();
-        double d = summonPos.getX();
-        double e = (double) summonPos.getY() + 1;
-        double f = summonPos.getZ();
-        ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.CLOUD, d, e, f, 10, 0.5D, 0.5D, 0.5D, 0.0D);
-        ArcaneSlimeEntity slime = switch (mobIndex) {
-            case 1 -> new BlueSlimeEntity(ModEntities.BLUE_SLIME, world);
-            case 2 -> new GreenSlimeEntity(ModEntities.GREEN_SLIME, world);
-            case 3 -> new RedSlimeEntity(ModEntities.RED_SLIME, world);
-            default -> null;
-        };
+    private void summonMob(EntityType<? extends ArcaneSlimeEntity> type, BlockPos pos, ServerWorld world) {
+        pos = pos.add(0, 1, 0);
+        world.spawnParticles(ParticleTypes.CLOUD, pos.getX(), pos.getY(), pos.getZ(), 10, 0.5D, 0.5D, 0.5D, 0.0D);
+        ArcaneSlimeEntity slime = type.spawn(world, pos, SpawnReason.MOB_SUMMONED);
 
         if (slime == null) return;
-        slime.teleport(summonPos.getX(), summonPos.getY(), summonPos.getZ());
+        slime.teleport(pos.getX(), pos.getY(), pos.getZ());
         disableDrops(slime);
         world.spawnEntity(slime);
 

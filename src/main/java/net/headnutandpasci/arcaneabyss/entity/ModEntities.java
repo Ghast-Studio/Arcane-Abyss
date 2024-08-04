@@ -7,6 +7,7 @@ import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEnt
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.WhiteSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
@@ -76,7 +77,6 @@ public class ModEntities {
                 new Identifier(ArcaneAbyss.MOD_ID, "black_slime_projectile"),
                 FabricEntityTypeBuilder.<BlackSlimeProjectileEntity>create(SpawnGroup.MISC, BlackSlimeProjectileEntity::new)
                         .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
-
 
         ArcaneAbyss.LOGGER.info("Registering Entities");
     }

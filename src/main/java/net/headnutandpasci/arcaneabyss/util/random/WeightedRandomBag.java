@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WeightedBag<T> {
+public class WeightedRandomBag<T> {
     private final List<Entry> entries = new ArrayList<>();
     private final Random rand = new Random();
     private double accumulatedWeight;

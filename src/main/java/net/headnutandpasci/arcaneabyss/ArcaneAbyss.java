@@ -8,6 +8,7 @@ import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;

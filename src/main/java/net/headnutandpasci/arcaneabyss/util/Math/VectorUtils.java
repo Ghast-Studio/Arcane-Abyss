@@ -1,6 +1,5 @@
 package net.headnutandpasci.arcaneabyss.util.Math;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class VectorUtils {
@@ -30,9 +29,5 @@ public class VectorUtils {
         Vec3d right = new Vec3d(-spawn.z, spawn.y, spawn.x);
         right = right.normalize().multiply(distance);
         return spawn.add(right);
-    }
-
-    public static Vec3d blockPosToVec3d(BlockPos pos) {
-        return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
     }
 }

@@ -1,18 +1,11 @@
-package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
+package net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimePushGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimeResetGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimeShootGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimeSummonGoal;
+import net.headnutandpasci.arcaneabyss.entity.ai.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
-import net.minecraft.client.render.entity.WitherEntityRenderer;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -22,6 +15,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
@@ -31,37 +26,36 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.jar.Attributes;
 
-public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOwner {
-
-    private static final TrackedData<Integer> PHASE = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> DATA_STATE = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Integer> INVUL_TIMER = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<BlockPos> SPAWN_POINT = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
-    private static final TrackedData<Integer> AWAKENING_TICKS = DataTracker.registerData(BlackSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
+public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlayOwner {
+    private static final TrackedData<Integer> PHASE = DataTracker.registerData(SlimeviathanEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> DATA_STATE = DataTracker.registerData(SlimeviathanEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> INVUL_TIMER = DataTracker.registerData(SlimeviathanEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<BlockPos> SPAWN_POINT = DataTracker.registerData(SlimeviathanEntity.class, TrackedDataHandlerRegistry.BLOCK_POS);
+    private static final TrackedData<Integer> AWAKENING_TICKS = DataTracker.registerData(SlimeviathanEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     private static final int DEFAULT_INVUL_TIMER = 200;
 
     private final ServerBossBar bossBar;
     private final CopyOnWriteArrayList<Integer> summonedMobIds;
-
-
+    private final CopyOnWriteArrayList<Integer> summonedPillarIds;
+    private int x = 0;
+    private List<PlayerEntity> playerNearby;
+    private EntityDimensions customDimensions;
     protected int attackTimer;
     protected int playerUpdateTimer;
+
     /*private List<PlayerEntity> pushTargets;*/
 
 
-    public BlackSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public SlimeviathanEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
         this.setPersistent();
         this.bossBar = (ServerBossBar) (new ServerBossBar(this.getDisplayName(), BossBar.Color.PURPLE, BossBar.Style.PROGRESS))
@@ -69,22 +63,26 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                 .setThickenFog(true)
                 .setDarkenSky(true);
         this.summonedMobIds = new CopyOnWriteArrayList<>();
-
+        this.summonedPillarIds = new CopyOnWriteArrayList<>();
         this.bossBar.setPercent(0.0F);
         this.experiencePoints = 500;
         this.dataTracker.startTracking(PHASE, 1);
-        this.attackTimer = 20*2;
+        this.attackTimer = 20 * 2;
+        this.customDimensions = EntityDimensions.fixed(1.0F, 2.0F); // Default 1x2 hitbox
+        this.updateBoundingBox();
     }
 
 
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 300.0f)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 8.0f)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 800.0f)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
-                .add(EntityAttributes.GENERIC_ARMOR, 10)
+                .add(EntityAttributes.GENERIC_ARMOR, 30)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
+
+
     }
 
     @Nullable
@@ -98,21 +96,23 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(DATA_STATE, State.SPAWNING.getValue());
+        this.dataTracker.startTracking(DATA_STATE, SlimeviathanEntity.State.SPAWNING.getValue());
         this.dataTracker.startTracking(INVUL_TIMER, 0);
         this.dataTracker.startTracking(AWAKENING_TICKS, 0);
     }
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
-        this.goalSelector.add(1, new SlimeShootGoal(this));
-        this.goalSelector.add(2, new SlimeSummonGoal(this));
-        this.goalSelector.add(2, new SlimePushGoal(this));
-        this.goalSelector.add(3, new SwimmingGoal(this));
-        this.goalSelector.add(4, new FaceTowardTargetGoal(this));
-        this.goalSelector.add(5, new RandomLookGoal(this));
-        this.goalSelector.add(6, new MoveGoal(this, 1.0));
+        //this.goalSelector.add(1, new SlimeviathanResetGoal(this, getFollowDistance()));
+        //this.goalSelector.add(1, new SlimeviathanBlastGoal(this));
+        //this.goalSelector.add(1, new SlimeviathanStrikeGoal(this));
+        this.goalSelector.add(1, new SlimeviathanSummonPillerGoal(this));
+        //this.goalSelector.add(1, new SlimeviathanGrandSummonGoal(this));
+        //this.goalSelector.add(1, new SlimeviathanSuperPushGoal(this));
+        this.goalSelector.add(3, new ArcaneSlimeEntity.SwimmingGoal(this));
+        this.goalSelector.add(4, new ArcaneSlimeEntity.FaceTowardTargetGoal(this));
+        this.goalSelector.add(5, new ArcaneSlimeEntity.RandomLookGoal(this));
+        this.goalSelector.add(6, new ArcaneSlimeEntity.MoveGoal(this, 1.0));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
@@ -156,7 +156,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     }
 
     public void startBossFight() {
-        if (this.isAlive() && this.dataTracker.get(PHASE) < 1 && this.getState() != State.AWAKENING) {
+        if (this.isAlive() && this.dataTracker.get(PHASE) < 1 && this.getState() != SlimeviathanEntity.State.AWAKENING) {
             Box bossArena = new Box(this.getBlockPos()).expand(getFollowDistance());
 
             /*List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, bossArena);
@@ -169,7 +169,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             this.dataTracker.set(PLAYER_COUNT, playerCount);*/
 
             this.dataTracker.set(AWAKENING_TICKS, 160);
-            this.dataTracker.set(DATA_STATE, State.AWAKENING.getValue());
+            this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.AWAKENING.getValue());
 
             if (this.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
                 moveControl.setDisabled(false);
@@ -181,12 +181,12 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     public void checkDespawn() {
     }
 
-    public boolean isAttacking(State attackState) {
+    public boolean isAttacking(SlimeviathanEntity.State attackState) {
         return this.dataTracker.get(DATA_STATE) == attackState.getValue();
     }
 
     public void stopAttacking(int cooldown) {
-        this.dataTracker.set(DATA_STATE, State.IDLE.getValue());
+        this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.IDLE.getValue());
         this.setAttackTimer(cooldown);
     }
 
@@ -203,7 +203,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         super.onStartedTrackingBy(player);
 
         this.bossBar.addPlayer(player);
-        if (this.getState().equals(State.SPAWNING))
+        if (this.getState().equals(SlimeviathanEntity.State.SPAWNING))
             this.startBossFight();
     }
 
@@ -218,7 +218,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             if (attackTimer > 0) {
                 --this.attackTimer;
             } else {
-                WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
+                WeightedRandomBag<SlimeviathanEntity.State> attackPool = new WeightedRandomBag<>();
                 /*Box aabb = (new Box(this.getBlockPos())).expand(10);
                 pushTargets = this.getWorld().getEntitiesByType(EntityType.PLAYER, aabb, (player) -> !player.isCreative());*/
                 /*if (!pushTargets.isEmpty()) {
@@ -227,9 +227,10 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                     attackPool.addEntry(State.SHOOT_GHOST_BULLET_BURST, 2);
                     attackPool.addEntry(State.SUMMON_MOB, 1);
                 } else {*/
-                attackPool.addEntry(State.SUMMON, 1);
-                attackPool.addEntry(State.PUSH, 1);
-                attackPool.addEntry(State.SHOOT_SLIME_BULLET, 1);
+                attackPool.addEntry(SlimeviathanEntity.State.SUMMON, 1);
+                attackPool.addEntry(SlimeviathanEntity.State.PILLARSUMMON, 1);
+                attackPool.addEntry(SlimeviathanEntity.State.PUSH, 1);
+                attackPool.addEntry(SlimeviathanEntity.State.SHOOT_SLIME_BULLET, 1);
                 this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
             }
         }
@@ -237,8 +238,8 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     public void kill() {
-        ArcaneAbyss.LOGGER.info("Black Slime Killed");
-        this.dataTracker.set(DATA_STATE, State.DEATH.getValue());
+        ArcaneAbyss.LOGGER.info("Slimeviathan Killed");
+        this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.DEATH.getValue());
         this.bossBar.clearPlayers();
         this.bossBar.setPercent(0.0F);
         super.kill();
@@ -246,7 +247,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     protected void updatePostDeath() {
-        this.dataTracker.set(DATA_STATE, State.DEATH.getValue());
+        this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.DEATH.getValue());
         this.bossBar.clearPlayers();
         this.bossBar.setPercent(0.0F);
         super.updatePostDeath();
@@ -254,22 +255,44 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     public void tick() {
         super.tick();
+        this.setDimensions(1F, 1F);
 
+        this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
         this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-        if (!this.summonedMobIds.isEmpty()) this.setInvulTimer(40);
+
+        if (!this.summonedMobIds.isEmpty() || !this.summonedPillarIds.isEmpty()) this.setInvulTimer(40);
 
 
-        if(--this.playerUpdateTimer < 1) {
+        if (this.summonedPillarIds.isEmpty()) {
+            if (this.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+                moveControl.setDisabled(false);
+            }
+        }
+        if (this.isInState(State.PILLARSUMMON)) {
+            x++;
+            System.out.println(x);
+
+            if (!this.summonedPillarIds.isEmpty() && x >= 1800) { //1800 == ~1:30min
+
+                for (PlayerEntity player : playerNearby) {
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 99999, 20));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 99999, 10));
+                }
+                x = 0;
+            }
+        }
+
+        if (--this.playerUpdateTimer < 1) {
             System.out.println("playerupdate");
-            this.playerUpdateTimer = 20*2;
+            this.playerUpdateTimer = 20 * 2;
+            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> true);
 
-            if(this.isInState(State.SPAWNING)) {
-                List<PlayerEntity> playerNearby = this.getWorld().getEntitiesByClass (PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> true);
 
-                if(!playerNearby.isEmpty()) {
+            if (this.isInState(SlimeviathanEntity.State.SPAWNING)) {
+                if (!playerNearby.isEmpty()) {
                     this.startBossFight();
 
-                    if(!this.getWorld().isClient()) {
+                    if (!this.getWorld().isClient()) {
                         playerNearby.forEach(player -> {
                             ServerPlayerEntity serverPlayer = this.getServer().getPlayerManager().getPlayer(player.getUuid());
                             this.getBossBar().addPlayer(serverPlayer);
@@ -284,7 +307,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             int i = this.getInvulnerableTimer();
 
             if (i > 0) {
-                if (this.getState().equals(State.SPAWNING)) {
+                if (this.getState().equals(SlimeviathanEntity.State.SPAWNING)) {
                     this.bossBar.setPercent(1.0F - (float) i / DEFAULT_INVUL_TIMER);
                     this.setInvulTimer(i);
                     if (this.age % 10 == 0) {
@@ -292,7 +315,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                     }
                 }
             } else {
-                this.dataTracker.set(DATA_STATE, State.IDLE.getValue());
+                this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.IDLE.getValue());
                 this.setAttackTimer(40);
                 this.setInvulTimer(0);
             }
@@ -305,7 +328,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     }
 
-    public boolean isInState(State state) {
+    public boolean isInState(SlimeviathanEntity.State state) {
         return this.getState().equals(state);
     }
 
@@ -316,7 +339,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     public void triggerRangeAttackAnimation() {
     }
 
-    public void setState(State state) {
+    public void setState(SlimeviathanEntity.State state) {
         this.dataTracker.set(DATA_STATE, state.getValue());
     }
 
@@ -341,7 +364,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     }
 
     public boolean isAwakening() {
-        return this.dataTracker.get(DATA_STATE) == State.AWAKENING.getValue();
+        return this.dataTracker.get(DATA_STATE) == SlimeviathanEntity.State.AWAKENING.getValue();
     }
 
     public int getAwakeningTick() {
@@ -369,8 +392,12 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         return summonedMobIds;
     }
 
-    public State getState() {
-        return State.values()[this.dataTracker.get(DATA_STATE)];
+    public CopyOnWriteArrayList<Integer> getSummonedPillarIds() {
+        return summonedPillarIds;
+    }
+
+    public SlimeviathanEntity.State getState() {
+        return SlimeviathanEntity.State.values()[this.dataTracker.get(DATA_STATE)];
     }
 
     public enum State {
@@ -380,7 +407,8 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         SHOOT_SLIME_BULLET(3),
         SUMMON(4),
         PUSH(5),
-        DEATH(6);
+        DEATH(6),
+        PILLARSUMMON(7);
 
 
         private final int value;
@@ -395,8 +423,11 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     }
 
     private void phaseUpdateTick() {
-        if (this.getHealth() < (this.getMaxHealth() * 0.5)) {
+        if (this.getHealth() < (this.getMaxHealth() * 0.66)) {
             this.setPhase(2);
+        }
+        if (this.getHealth() < (this.getMaxHealth() * 0.33)) {
+            this.setPhase(3);
         }
     }
 
@@ -406,6 +437,30 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     public void setPhase(int phase) {
         this.dataTracker.set(PHASE, phase);
+    }
+
+    public void setDimensions(float width, float height) {
+        this.customDimensions = EntityDimensions.fixed(width, height); // Set new dimensions
+        this.updateBoundingBox();
+    }
+
+    @Override
+    public EntityDimensions getDimensions(EntityPose pose) {
+        // Return the custom dimensions
+        return this.customDimensions;
+    }
+
+    private void updateBoundingBox() {
+        // Calculate the new bounding box based on current position and dimensions
+        float halfWidth = this.customDimensions.width / 2.0F;
+        this.setBoundingBox(new Box(
+                this.getX() - halfWidth,
+                this.getY(),
+                this.getZ() - halfWidth,
+                this.getX() + halfWidth,
+                this.getY() + this.customDimensions.height,
+                this.getZ() + halfWidth
+        ));
     }
 
 }

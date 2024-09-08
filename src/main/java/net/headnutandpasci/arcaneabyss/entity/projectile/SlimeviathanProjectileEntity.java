@@ -4,9 +4,6 @@ import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ExplosiveProjectileEntity;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -15,16 +12,17 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
+public class SlimeviathanProjectileEntity extends ExplosiveProjectileEntity {
 
-    public BlackSlimeProjectileEntity(EntityType<? extends BlackSlimeProjectileEntity> entityType, World world) {
-        super((EntityType<? extends BlackSlimeProjectileEntity>)entityType, world);
+    public SlimeviathanProjectileEntity(EntityType<? extends SlimeviathanProjectileEntity> entityType, World world) {
+        super((EntityType<? extends SlimeviathanProjectileEntity>)entityType, world);
     }
 
-    public BlackSlimeProjectileEntity(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
-        super(ModEntities.BLACK_SLIME_PROJECTILE, owner, directionX, directionY, directionZ, world);
+    public SlimeviathanProjectileEntity(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
+        super(ModEntities.SLIMEVIATHAN_PROJECTLE, owner, directionX, directionY, directionZ, world);
     }
 
 
@@ -53,7 +51,7 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
 
     public boolean collidesWith(Entity entity) {
 
-        if (entity instanceof BlackSlimeProjectileEntity) {
+        if (entity instanceof SlimeviathanProjectileEntity) {
             return false;
         }
         return super.collidesWith(entity);
@@ -65,8 +63,8 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
         Entity entity = entityHitResult.getEntity();
 
 
-        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 8.0f);
-        entity.setFireTicks(100);
+        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 13.0f);
+
 
 
     }
@@ -75,11 +73,14 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
-            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 3F, false, World.ExplosionSourceType.MOB);
+            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 5F, false, World.ExplosionSourceType.MOB);
             this.getWorld().sendEntityStatus(this, (byte) 3);
             this.discard();
         }
 
+    }
+    public void setSlowVelocity(Vec3d velocity) {
+        this.setVelocity(velocity.multiply(0.5));
     }
 
     @Override

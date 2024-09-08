@@ -4,9 +4,12 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeviathanProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
@@ -23,14 +26,16 @@ public class ModEntities {
     public static EntityType<TestEntity> Test;
 
     public static EntityType<BlueSlimeEntity> BLUE_SLIME;
+    public static EntityType<SlimePillarEntity> SLIME_PILLAR;
     public static EntityType<RedSlimeEntity> RED_SLIME;
     public static EntityType<GreenSlimeEntity> GREEN_SLIME;
     public static EntityType<DarkBlueSlimeEntity> DARK_BLUE_SLIME;
     public static EntityType<DarkRedSlimeEntity> DARK_RED_SLIME;
     public static EntityType<BlackSlimeEntity> BLACK_SLIME;
-
+    public static EntityType<SlimeviathanEntity> SLIMEVIATHAN;
     public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
     public static EntityType<BlackSlimeProjectileEntity> BLACK_SLIME_PROJECTILE;
+    public static EntityType<SlimeviathanProjectileEntity> SLIMEVIATHAN_PROJECTLE;
 
     public static void registerModEntities() {
         Test = Registry.register(Registries.ENTITY_TYPE,
@@ -41,6 +46,10 @@ public class ModEntities {
         BLUE_SLIME = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "blue_slime"),
                 FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
+                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        SLIME_PILLAR = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "slime_pillar"),
+                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SlimePillarEntity::new)
                         .dimensions(EntityDimensions.fixed(1f, 1f)).build());
 
         RED_SLIME = Registry.register(Registries.ENTITY_TYPE,
@@ -75,6 +84,14 @@ public class ModEntities {
         BLACK_SLIME_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "black_slime_projectile"),
                 FabricEntityTypeBuilder.<BlackSlimeProjectileEntity>create(SpawnGroup.MISC, BlackSlimeProjectileEntity::new)
+                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
+        SLIMEVIATHAN_PROJECTLE = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "slimeviathan_projectile"),
+                FabricEntityTypeBuilder.<SlimeviathanProjectileEntity>create(SpawnGroup.MISC, SlimeviathanProjectileEntity::new)
+                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
+        SLIMEVIATHAN = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "slimeviathan"),
+                FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
                         .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
 
 

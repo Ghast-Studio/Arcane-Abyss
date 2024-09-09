@@ -12,9 +12,10 @@ import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 
-public class SlimeviathanResetGoal extends Goal{
+public class SlimeviathanResetGoal extends Goal {
     private final SlimeviathanEntity slimeviathanEntity;
     private final double range;
 
@@ -30,12 +31,9 @@ public class SlimeviathanResetGoal extends Goal{
             BlockPos blockPos = slimeviathanEntity.getBlockPos();
             Box box = new Box(blockPos).expand(range);
 
-            // Get a list of PlayerEntity instances within the Box
             List<PlayerEntity> playerList = world.getEntitiesByClass(PlayerEntity.class, box, player -> true);
-            // Remove players that are not alive
             playerList.removeIf(player -> !player.isAlive());
 
-            // Return true if the list is empty, false otherwise
             return playerList.isEmpty();
         }
         return false;
@@ -44,30 +42,28 @@ public class SlimeviathanResetGoal extends Goal{
     @Override
     public void start() {
         World world = slimeviathanEntity.getWorld();
-        if (world instanceof ServerWorld) {
-            for (int i = 0; i < 50; ++i) {
-                ((ServerWorld) world).spawnParticles(
-                        ParticleTypes.POOF,
-                        slimeviathanEntity.getX() + (world.random.nextDouble() * 2 - 1),
-                        slimeviathanEntity.getY() + world.random.nextDouble(),
-                        slimeviathanEntity.getZ() + (world.random.nextDouble() * 2 - 1),
-                        1,
-                        0.0D, 0.0D, 0.0D,
-                        0.0D
-                );
-            }
+        if (world instanceof ServerWorld serverWorld) {
+            IntStream.range(0, 50).forEach(i -> serverWorld.spawnParticles(
+                    ParticleTypes.POOF,
+                    slimeviathanEntity.getX() + (serverWorld.random.nextDouble() * 2 - 1),
+                    slimeviathanEntity.getY() + serverWorld.random.nextDouble(),
+                    slimeviathanEntity.getZ() + (serverWorld.random.nextDouble() * 2 - 1),
+                    1,
+                    0.0D, 0.0D, 0.0D,
+                    0.0D
+            ));
         }
+
         slimeviathanEntity.setState(SlimeviathanEntity.State.SPAWNING);
-        slimeviathanEntity.setAwakeningTick(0);
         slimeviathanEntity.getBossBar().clearPlayers();
+        slimeviathanEntity.setAwakeningTick(0);
         slimeviathanEntity.setAttackTick(0);
         slimeviathanEntity.setPhase(0);
         slimeviathanEntity.setTarget(null);
         slimeviathanEntity.setHealth(slimeviathanEntity.getMaxHealth());
-        if(slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+
+        if (slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
             moveControl.setDisabled(true);
         }
-
-
     }
 }

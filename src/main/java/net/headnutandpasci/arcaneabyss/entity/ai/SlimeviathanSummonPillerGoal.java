@@ -38,7 +38,7 @@ public class SlimeviathanSummonPillerGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (entity.isAttacking(SlimeviathanEntity.State.PILLARSUMMON) && entity.getTarget() != null) {
+        if (entity.isAttacking(SlimeviathanEntity.State.PILLAR_SUMMON) && entity.getTarget() != null) {
             if (canSummonSlimes()) {
                 return true;
             } else {
@@ -51,7 +51,7 @@ public class SlimeviathanSummonPillerGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        return entity.isAttacking(SlimeviathanEntity.State.PILLARSUMMON) && entity.getTarget() != null;
+        return entity.isAttacking(SlimeviathanEntity.State.PILLAR_SUMMON) && entity.getTarget() != null;
     }
 
     @Override

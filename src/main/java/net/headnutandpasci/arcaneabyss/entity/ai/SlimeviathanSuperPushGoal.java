@@ -32,28 +32,18 @@ public class SlimeviathanSuperPushGoal extends Goal {
 
     @Override
     public void tick() {
-        // Check if the attack timer is at the correct point to push players (tick 66)
         if (this.slime.getAttackTimer() == 66) {
-
-            // Create a 5-block radius box around the slime's position
             Box box = new Box(this.slime.getPos().add(-10, -10, -10), this.slime.getPos().add(10, 10, 10));
 
-
-
-
-            // Get all PlayerEntities in the box
             List<PlayerEntity> targets = this.slime.getWorld().getEntitiesByClass(PlayerEntity.class, box, (entity) -> true);
 
-            // Log the number of players found
             System.out.println("Found " + targets.size() + " players within the box.");
 
-            // Push players within the range
             targets.forEach(player -> {
-                // Ensure the player is within the push range (5 blocks)
                 if (this.slime.squaredDistanceTo(player) <= 60) {
                     System.out.println("Pushing player: " + player.getName().getString());
                     this.slime.playSound(SoundEvents.ENTITY_WITHER_DEATH, 3.0F, 1.0F);
-                    ((ServerWorld) this.slime.getWorld()).spawnParticles(ParticleTypes.ASH, this.slime.getX(), this.slime.getY(), this.slime.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D); // Reduced particle spread
+                    ((ServerWorld) this.slime.getWorld()).spawnParticles(ParticleTypes.ASH, this.slime.getX(), this.slime.getY(), this.slime.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D);
                     pushPlayer(player);
 
                 }
@@ -61,10 +51,8 @@ public class SlimeviathanSuperPushGoal extends Goal {
         }
     }
 
-    // Method to apply the push to the player
     private void pushPlayer(PlayerEntity player) {
         double knockbackStrength = 20.0D;
-
         int damageAmount;
 
         if (player.isBlocking()) {
@@ -74,10 +62,8 @@ public class SlimeviathanSuperPushGoal extends Goal {
             damageAmount = (int) (this.slime.getAttackDamage() * 1.75F);
         }
 
-        // Calculate the knockback direction
         Vec3d direction = new Vec3d(player.getX() - slime.getX(), 0, player.getZ() - slime.getZ()).normalize();
 
-        // Apply knockback velocity
         player.addVelocity(direction.x * knockbackStrength, 0.2, direction.z * knockbackStrength);
         player.velocityModified = true;
         player.damage(this.slime.getDamageSources().mobAttack(this.slime), damageAmount);

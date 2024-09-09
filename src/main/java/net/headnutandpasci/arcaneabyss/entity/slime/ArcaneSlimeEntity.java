@@ -123,7 +123,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
         }
 
         public void move(double speed) {
-            if(this.disabled) return;
+            if (this.disabled) return;
 
             this.speed = speed;
             this.state = State.MOVE_TO;

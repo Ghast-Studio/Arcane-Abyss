@@ -5,31 +5,42 @@ import java.util.List;
 import java.util.Random;
 
 public class WeightedRandomBag<T> {
-    private final List<Entry> entries = new ArrayList<>();
-    private final Random rand = new Random();
-    private double accumulatedWeight;
+    private final List<Entry<T>> entries;
+
+    public WeightedRandomBag() {
+        entries = new ArrayList<>();
+    }
 
     public void addEntry(T object, double weight) {
-        accumulatedWeight += weight;
-        Entry e = new Entry();
-        e.object = object;
-        e.accumulatedWeight = accumulatedWeight;
-        entries.add(e);
+        entries.add(new Entry<>(object, weight));
     }
 
     public T getRandom() {
-        double r = rand.nextDouble() * accumulatedWeight;
+        double totalWeight = 0;
+        for (Entry<T> entry : entries) {
+            totalWeight += entry.weight;
+        }
 
-        for (Entry entry : entries) {
-            if (entry.accumulatedWeight >= r) {
+        Random random = new Random();
+        double randomValue = random.nextDouble() * totalWeight;
+
+        for (Entry<T> entry : entries) {
+            randomValue -= entry.weight;
+            if (randomValue <= 0) {
                 return entry.object;
             }
         }
-        return null;
+
+        return null; // Should never happen if weights are correct
     }
 
-    private class Entry {
-        double accumulatedWeight;
+    private static class Entry<T> {
         T object;
+        double weight;
+
+        Entry(T object, double weight) {
+            this.object = object;
+            this.weight = weight;
+        }
     }
 }

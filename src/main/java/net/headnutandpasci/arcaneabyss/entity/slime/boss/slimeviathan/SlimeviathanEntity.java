@@ -46,11 +46,11 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     private final ServerBossBar bossBar;
     private final CopyOnWriteArrayList<Integer> summonedMobIds;
     private final CopyOnWriteArrayList<Integer> summonedPillarIds;
+    protected int attackTimer;
+    protected int playerUpdateTimer;
     private int x = 0;
     private List<PlayerEntity> playerNearby;
     private EntityDimensions customDimensions;
-    protected int attackTimer;
-    protected int playerUpdateTimer;
 
     /*private List<PlayerEntity> pushTargets;*/
 
@@ -60,8 +60,8 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         this.setPersistent();
         this.bossBar = (ServerBossBar) (new ServerBossBar(this.getDisplayName(), BossBar.Color.PURPLE, BossBar.Style.PROGRESS))
                 .setDragonMusic(true)
-                .setThickenFog(true)
-                .setDarkenSky(true);
+                //.setThickenFog(true)
+                /*.setDarkenSky(true)*/;
         this.summonedMobIds = new CopyOnWriteArrayList<>();
         this.summonedPillarIds = new CopyOnWriteArrayList<>();
         this.bossBar.setPercent(0.0F);
@@ -103,12 +103,12 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
     @Override
     protected void initGoals() {
-        //this.goalSelector.add(1, new SlimeviathanResetGoal(this, getFollowDistance()));
-        //this.goalSelector.add(1, new SlimeviathanBlastGoal(this));
-        //this.goalSelector.add(1, new SlimeviathanStrikeGoal(this));
+        this.goalSelector.add(1, new SlimeviathanResetGoal(this, getFollowDistance()));
+        this.goalSelector.add(1, new SlimeviathanBlastGoal(this));
+        this.goalSelector.add(1, new SlimeviathanStrikeGoal(this));
         this.goalSelector.add(1, new SlimeviathanSummonPillerGoal(this));
-        //this.goalSelector.add(1, new SlimeviathanGrandSummonGoal(this));
-        //this.goalSelector.add(1, new SlimeviathanSuperPushGoal(this));
+        this.goalSelector.add(1, new SlimeviathanGrandSummonGoal(this));
+        this.goalSelector.add(1, new SlimeviathanSuperPushGoal(this));
         this.goalSelector.add(3, new ArcaneSlimeEntity.SwimmingGoal(this));
         this.goalSelector.add(4, new ArcaneSlimeEntity.FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new ArcaneSlimeEntity.RandomLookGoal(this));
@@ -214,25 +214,24 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     }
 
     private void abilitySelectionTick() {
-        if (this.getTarget() != null) {
-            if (attackTimer > 0) {
-                --this.attackTimer;
-            } else {
-                WeightedRandomBag<SlimeviathanEntity.State> attackPool = new WeightedRandomBag<>();
-                /*Box aabb = (new Box(this.getBlockPos())).expand(10);
-                pushTargets = this.getWorld().getEntitiesByType(EntityType.PLAYER, aabb, (player) -> !player.isCreative());*/
-                /*if (!pushTargets.isEmpty()) {
-                    attackPool.addEntry(State.PUSH, 3);
-                    attackPool.addEntry(State.SHOOT_GHOST_BULLET_SINGLE, 3);
-                    attackPool.addEntry(State.SHOOT_GHOST_BULLET_BURST, 2);
-                    attackPool.addEntry(State.SUMMON_MOB, 1);
-                } else {*/
-                attackPool.addEntry(SlimeviathanEntity.State.SUMMON, 1);
-                attackPool.addEntry(SlimeviathanEntity.State.PILLARSUMMON, 1);
-                attackPool.addEntry(SlimeviathanEntity.State.PUSH, 1);
-                attackPool.addEntry(SlimeviathanEntity.State.SHOOT_SLIME_BULLET, 1);
-                this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
-            }
+        if (this.getTarget() == null)
+            return;
+
+        if (attackTimer <= 0) {
+            WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
+
+            attackPool.addEntry(State.STRIKE_SUMMON, 1);
+            /*if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
+                attackPool.addEntry(State.PUSH, 1);
+
+            attackPool.addEntry(State.SUMMON, 1);
+            attackPool.addEntry(State.PILLAR_SUMMON, 1);
+            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 1);
+            attackPool.addEntry(State.STRIKE_SUMMON, 1);*/
+
+            this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
+        } else {
+            --this.attackTimer;
         }
     }
 
@@ -255,7 +254,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
     public void tick() {
         super.tick();
-        this.setDimensions(1F, 1F);
+        //this.setDimensions(1F, 1F);
 
         this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
         this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
@@ -268,7 +267,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
                 moveControl.setDisabled(false);
             }
         }
-        if (this.isInState(State.PILLARSUMMON)) {
+        if (this.isInState(State.PILLAR_SUMMON)) {
             x++;
             System.out.println(x);
 
@@ -283,7 +282,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         }
 
         if (--this.playerUpdateTimer < 1) {
-            System.out.println("playerupdate");
             this.playerUpdateTimer = 20 * 2;
             playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> true);
 
@@ -337,10 +335,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     }
 
     public void triggerRangeAttackAnimation() {
-    }
-
-    public void setState(SlimeviathanEntity.State state) {
-        this.dataTracker.set(DATA_STATE, state.getValue());
     }
 
     public double getFollowDistance() {
@@ -400,26 +394,8 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         return SlimeviathanEntity.State.values()[this.dataTracker.get(DATA_STATE)];
     }
 
-    public enum State {
-        SPAWNING(0),
-        AWAKENING(1),
-        IDLE(2),
-        SHOOT_SLIME_BULLET(3),
-        SUMMON(4),
-        PUSH(5),
-        DEATH(6),
-        PILLARSUMMON(7);
-
-
-        private final int value;
-
-        State(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
+    public void setState(SlimeviathanEntity.State state) {
+        this.dataTracker.set(DATA_STATE, state.getValue());
     }
 
     private void phaseUpdateTick() {
@@ -461,6 +437,29 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
                 this.getY() + this.customDimensions.height,
                 this.getZ() + halfWidth
         ));
+    }
+
+    public enum State {
+        SPAWNING(0),
+        AWAKENING(1),
+        IDLE(2),
+        SHOOT_SLIME_BULLET(3),
+        SUMMON(4),
+        PUSH(5),
+        DEATH(6),
+        PILLAR_SUMMON(7),
+        STRIKE_SUMMON(8);
+
+
+        private final int value;
+
+        State(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
 }

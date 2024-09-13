@@ -1,94 +1,118 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import org.jetbrains.annotations.Nullable;
 
 public class SlimeviathanBlastGoal extends Goal {
     private final SlimeviathanEntity slimeviathanEntity;
-    private final int DURATION = 126; // Must be even duration since bullet are shot at even ticks
+
+    @Nullable
     private String type;
-    private final Timer timer = new Timer();
+
+    private int rotatedShootAmount = 0;
+
     public SlimeviathanBlastGoal(SlimeviathanEntity slimeviathanEntity) {
         this.slimeviathanEntity = slimeviathanEntity;
     }
 
     @Override
     public boolean canStart() {
-        return (slimeviathanEntity.isAttacking(SlimeviathanEntity.State.SHOOT_SLIME_BULLET)) && slimeviathanEntity.getTarget() != null;
+        int playerInArea = this.slimeviathanEntity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.slimeviathanEntity.getBlockPos()).expand(2), player -> !player.isInvulnerable()).size();
+        return (slimeviathanEntity.isAttacking(SlimeviathanEntity.State.SHOOT_SLIME_BULLET)) && slimeviathanEntity.getTarget() != null && playerInArea == 0;
     }
 
     @Override
     public void start() {
         super.start();
+        int DURATION = 200;
         slimeviathanEntity.setAttackTimer(DURATION);
+        if (slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+            moveControl.setDisabled(true);
+        }
+
+        this.type = this.rollType();
+        System.out.println(this.type);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        if (slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+            moveControl.setDisabled(false);
+        }
+    }
+
+    private String rollType() {
         WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
         if (slimeviathanEntity.getState() == SlimeviathanEntity.State.SHOOT_SLIME_BULLET) {
             slimeviathanEntity.triggerRangeAttackAnimation();
 
+            System.out.println(slimeviathanEntity.getPhase());
             if (slimeviathanEntity.getPhase() == 1) {
-                bulletPatterns.addEntry("FourShotKill", 1);
-            }
-            if (slimeviathanEntity.getPhase() == 1) {
-                bulletPatterns.addEntry("Deathplosion", 1);
-            }
-            if (slimeviathanEntity.getPhase() == 2) {
-                bulletPatterns.addEntry("BuffedEightShotKill", 1);
-            }
-            if (slimeviathanEntity.getPhase() == 2) {
-                bulletPatterns.addEntry("BuffedDeathplosion", 1);
-            }
-
-            if (slimeviathanEntity.getPhase() == 3) {
-                bulletPatterns.addEntry("RapidSingle", 1);
-            }
-            if (slimeviathanEntity.getPhase() == 3) {
+                bulletPatterns.addEntry("Single", 1);
+                bulletPatterns.addEntry("MultiShot", 1);
+            } else if (slimeviathanEntity.getPhase() == 2) {
+                bulletPatterns.addEntry("RapidDouble", 1);
                 bulletPatterns.addEntry("RapidMultiShot", 1);
             }
-
-            /**if (blackSlimeEntity.getPhase() == 1) {
-             bulletPatterns.addEntry("Single", 1);
-             bulletPatterns.addEntry("Arc", 1);
-             } else if (blackSlimeEntity.getPhase() == 2) {
-             bulletPatterns.addEntry("Rapid", 1);
-             bulletPatterns.addEntry("Strong Arc", 1);
-             }
-             } else {
-             blackSlimeEntity.triggerRangeBurstAttackAnimation();
-             /**if (blackSlimeEntity.getPhase() == 1) {
-             bulletPatterns.addEntry("Burst", 1);
-             } else if (blackSlimeEntity.getPhase() == 2) {
-             bulletPatterns.addEntry("Strong Burst", 1);
-             }**/
         }
-        type = bulletPatterns.getRandom();
+
+        return bulletPatterns.getRandom();
+        //return "RapidMultiShot";
     }
+
+    int counter = 0;
 
     @Override
     public void tick() {
-
-        if(this.type == null){
+        if (type == null) this.type = this.rollType();
+        if (type == null) return;
+        if (slimeviathanEntity.getAttackTimer() == 0) {
+            slimeviathanEntity.stopAttacking(100);
+            this.rotatedShootAmount = 0;
             return;
         }
 
-
-        if (type.equals("FourShotKill")) {
-            for (int i = 0; i < 10; i++) {
-                if (slimeviathanEntity.getAttackTimer() == 100 - i * 10) { //Für zweite Phase
-                    performFourShotKill();
+        switch (type) {
+            case "Single" -> {
+                if (slimeviathanEntity.getAttackTimer() % 5 == 0) performSingleShot();
+            }
+            case "RapidDouble" -> {
+                if (slimeviathanEntity.getAttackTimer() % 2.5 == 0){
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount)));
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 180));
+                    this.rotatedShootAmount++;
                 }
             }
-        }
-
-        if (slimeviathanEntity.getAttackTimer() == 0) {
-            slimeviathanEntity.stopAttacking(0);
+            case "MultiShot" -> {
+                if (slimeviathanEntity.getAttackTimer() % 6 == 0) {
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 120));
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 240));
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 360));
+                    this.rotatedShootAmount++;
+                }
+            }
+            case "RapidMultiShot" -> {
+                if (slimeviathanEntity.getAttackTimer() % 2.5 == 0) {
+                    performSingleRotatedShotOne((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount)));
+                    performSingleRotatedShotOne((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 180));
+                    this.rotatedShootAmount++;
+                    performSingleRotatedShotTwo((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount)));
+                    performSingleRotatedShotTwo((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 180));
+                    this.rotatedShootAmount++;
+                }
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + type);
         }
     }
 
@@ -102,53 +126,52 @@ public class SlimeviathanBlastGoal extends Goal {
         this.slimeviathanEntity.getWorld().spawnEntity(witherSkullEntity);
     }
 
-
-
-    private void performDeathplosion() {
+    private void performSingleRotatedShot(float angle) {
         LivingEntity target = slimeviathanEntity.getTarget();
         if (target == null) return;
 
-
-
         Vec3d spawn = this.slimeviathanEntity.getRotationVector();
-        spawn = VectorUtils.addRight(spawn, 3.0f);
+        spawn = VectorUtils.addRight(spawn, 4.0f);
+        spawn = VectorUtils.rotateVectorCC(spawn, this.slimeviathanEntity.getRotationVector(), angle);
 
-        int bulletCount = 1;
-        for (int i = 0; i < bulletCount; i++) {
-            spawn = VectorUtils.rotateVectorCC(spawn, this.slimeviathanEntity.getRotationVector(), (float) Math.toRadians((double) 360 / bulletCount) * i);
-            Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
-            this.shootSkullAt(this.slimeviathanEntity.getPos().add(spawn), direction);
-
-        }
+        this.performSingleShot(spawn.add(0, 8, 0));
     }
 
-    /**private void performArcTimedShot(float angle) {
-        LivingEntity target = blackSlimeEntity.getTarget();
+    private void performSingleRotatedShotOne(float angle) {
+        LivingEntity target = slimeviathanEntity.getTarget();
         if (target == null) return;
 
-        Vec3d spawn = this.blackSlimeEntity.getRotationVector();
-        spawn = VectorUtils.addRight(spawn, 3.0f);
-        spawn = VectorUtils.rotateVectorCC(spawn, this.blackSlimeEntity.getRotationVector(), angle);
+        Vec3d spawn = this.slimeviathanEntity.getRotationVector();
+        spawn = VectorUtils.addRight(spawn, 4.0f);
+        spawn = VectorUtils.rotateVectorCC(spawn, this.slimeviathanEntity.getRotationVector(), angle);
 
+        this.performSingleShot(spawn.add(-10, 8, 0));
+    }
+
+
+    private void performSingleRotatedShotTwo(float angle) {
+        LivingEntity target = slimeviathanEntity.getTarget();
+        if (target == null) return;
+
+        Vec3d spawn = this.slimeviathanEntity.getRotationVector();
+        spawn = VectorUtils.addRight(spawn, 4.0f);
+        spawn = VectorUtils.rotateVectorCC(spawn, this.slimeviathanEntity.getRotationVector(), angle);
+
+        this.performSingleShot(spawn.add(10, 8, 0));
+    }
+
+    private void performSingleShot() {
+        this.performSingleShot(new Vec3d(0, 0, 0));
+    }
+
+    private void performSingleShot(Vec3d offset) {
+        LivingEntity target = slimeviathanEntity.getTarget();
+        if (target == null) return;
+
+        Vec3d spawn = this.slimeviathanEntity.getPos();
         Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
-        this.shootSkullAt(this.blackSlimeEntity.getPos().add(spawn), direction);
-    }
-    **/
 
-    private void performFourShotKill() {
-        LivingEntity target = slimeviathanEntity.getTarget();
-        if (target == null) return;
-
-
-        Vec3d spawn = this.slimeviathanEntity.getRotationVector();
-        spawn = VectorUtils.addRight(spawn, 3.0f);
-
-        int bulletCount = 2;
-        for (int i = 0; i < bulletCount; i++) {
-            spawn = VectorUtils.rotateVectorCC(spawn, this.slimeviathanEntity.getRotationVector(), (float) Math.toRadians((double) 360 / bulletCount) * i);
-            Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
-            this.shootSkullAt(this.slimeviathanEntity.getPos().add(spawn), direction);
-        }
+        this.shootSkullAt(spawn.add(offset), direction);
     }
 }
 

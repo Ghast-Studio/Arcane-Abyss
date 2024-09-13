@@ -43,7 +43,9 @@ public class SlimeviathanSuperPushGoal extends Goal {
                 if (this.slime.squaredDistanceTo(player) <= 60) {
                     System.out.println("Pushing player: " + player.getName().getString());
                     this.slime.playSound(SoundEvents.ENTITY_WITHER_DEATH, 3.0F, 1.0F);
-                    ((ServerWorld) this.slime.getWorld()).spawnParticles(ParticleTypes.ASH, this.slime.getX(), this.slime.getY(), this.slime.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D);
+
+                    ((ServerWorld) this.slime.getWorld()).spawnParticles(ParticleTypes.POOF, this.slime.getX(), this.slime.getY(), this.slime.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D); // Reduced particle spread
+
                     pushPlayer(player);
 
                 }

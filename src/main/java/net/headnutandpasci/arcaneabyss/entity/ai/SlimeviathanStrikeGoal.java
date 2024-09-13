@@ -1,31 +1,23 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
-import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
-import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeviathanProjectileEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
-import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
-import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
-
-import java.util.List;
-import java.util.Timer;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
+import org.joml.Vector3f;
 
 public class SlimeviathanStrikeGoal extends Goal {
     private final SlimeviathanEntity slimeviathanEntity;
-    private int DURATION = 120; // Must be even duration since bullet are shot at even ticks
-    private String type;
-    private int timer = 0;
+    private int particleTimer = 0;
+    private LivingEntity targetAtStrike;
+    private Vec3d targetPosAtStrike;
 
     public SlimeviathanStrikeGoal(SlimeviathanEntity slimeviathanEntity) {
         this.slimeviathanEntity = slimeviathanEntity;
@@ -33,115 +25,93 @@ public class SlimeviathanStrikeGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return (slimeviathanEntity.isAttacking(SlimeviathanEntity.State.SHOOT_SLIME_BULLET)) && slimeviathanEntity.getTarget() != null;
+        return (slimeviathanEntity.isAttacking(SlimeviathanEntity.State.STRIKE_SUMMON)) && slimeviathanEntity.getTarget() != null;
     }
+
     @Override
     public void start() {
         super.start();
-        slimeviathanEntity.setAttackTimer(DURATION);
-        WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
-        if (slimeviathanEntity.getState() == SlimeviathanEntity.State.SHOOT_SLIME_BULLET) {
-            slimeviathanEntity.triggerRangeAttackAnimation();
-            if (slimeviathanEntity.getPhase() == 1) {
-                bulletPatterns.addEntry("Shot", 1);
-            }
+        this.targetAtStrike = slimeviathanEntity.getTarget();
+        if (this.targetAtStrike == null) this.stop();
+
+        System.out.println(this.slimeviathanEntity.getMoveControl());
+        if (this.slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+            moveControl.setDisabled(true);
+
         }
-        type = bulletPatterns.getRandom();
+
+        this.slimeviathanEntity.setAttackTimer(40);
+        this.targetPosAtStrike = targetAtStrike.getPos();
+        this.particleTimer = 50;
     }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.targetAtStrike = null;
+        this.targetPosAtStrike = null;
+        this.particleTimer = 0;
+
+        if (this.slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+            moveControl.setDisabled(false);
+        }
+    }
+
     @Override
     public void tick() {
+        if (particleTimer > 0) {
+            if (this.targetAtStrike != null && particleTimer % 5 == 0) {
+                ParticleEffect effect = ((this.particleTimer % 10) == 0) ?
+                        new DustParticleEffect(new Vector3f(18000000, 0, 0), 1.0f) :
+                        new DustParticleEffect(new Vector3f(18000000, 18000000, 18000000), 1.0f);
+                spawnCircleParticles(targetAtStrike.getWorld(), this.targetPosAtStrike, effect, 4, 200);
+            }
 
-        if(this.type == null){
-            return;
+            particleTimer--;
         }
+
         if (slimeviathanEntity.getAttackTimer() == 0) {
-           slimeviathanEntity.stopAttacking(0);
-        }
-
-
-
-        timer++;
-
-        ServerPlayerEntity player = (ServerPlayerEntity) slimeviathanEntity.getTarget();
-
-        if (player != null) {
-            Vec3d playerPos = player.getPos();
-
-            if(timer >= 20) {
-
-
-
-                new Thread(() -> {
-                    for (int i = 0; i < 15; i++) {
-                        try {
-                            spawnCircleParticles(player.getWorld(), playerPos, 4.0, 200);
-                            // Sleep for 1000 milliseconds (1 second)
-                            Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
-                performShot();
+            if (targetAtStrike != null) {
+                this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
                 slimeviathanEntity.setInvulTimer(40);
-
-                timer = 0;
-                    DURATION = DURATION - 20;
-                    slimeviathanEntity.setAttackTimer(DURATION);
-
+                slimeviathanEntity.stopAttacking(100);
             }
         }
-        assert player != null;
-
     }
 
-    public void spawnCircleParticles(World world, Vec3d center, double radius, int particleCount) {
-
+    public void spawnCircleParticles(World world, Vec3d center, ParticleEffect particle, double radius, int particleCount) {
         for (int i = 0; i < particleCount; i++) {
-
             double angle = 2 * Math.PI * i / particleCount;
-
-
             double x = center.x + radius * Math.cos(angle);
             double z = center.z + radius * Math.sin(angle);
-
-
-            double y = center.y;
-
+            double y = world.getTopY(Heightmap.Type.WORLD_SURFACE, (int) x, (int) z) + 0.2;
 
             if (world instanceof ServerWorld serverWorld) {
-                serverWorld.spawnParticles(ParticleTypes.END_ROD, x, y, z, 1, 0.0, 0.0, 0.0, 0.0);
+                serverWorld.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
             }
         }
     }
-    private void shootSkullAt(Vec3d spawn, Vec3d direction) {
-        double g = direction.x - spawn.x;
-        double h = direction.y - spawn.y - 3f;
-        double i = direction.z - spawn.z;
 
-        SlimeviathanProjectileEntity witherSkullEntity = new SlimeviathanProjectileEntity(this.slimeviathanEntity.getWorld(), this.slimeviathanEntity, g, h, i);
-        Vec3d velocity = new Vec3d(0, 0, 0);
-        witherSkullEntity.setSlowVelocity(velocity);
-        witherSkullEntity.setOwner(this.slimeviathanEntity);
-        witherSkullEntity.setPos(spawn.x + 3f, spawn.y + 10.0f, spawn.z);
-        this.slimeviathanEntity.getWorld().spawnEntity(witherSkullEntity);
+    private void shootStrike(Vec3d spawn, Vec3d target) {
+        Vec3d direction = target.subtract(spawn).normalize();
+
+        double arcHeight = 25.0;
+        double distance = spawn.distanceTo(target);
+        double initialVelocity = Math.sqrt(2 * distance * 23.31 / (arcHeight * 2));
+
+        initialVelocity *= 0.20;
+
+        double initialYVelocity = initialVelocity * Math.sin(Math.atan2(arcHeight, distance));
+
+        //BlueSlimeEntity entity = ModEntities.BLUE_SLIME.spawn((ServerWorld) this.slimeviathanEntity.getWorld(), BlockPos.ofFloored(spawn), SpawnReason.REINFORCEMENT);
+        TntEntity entity = new TntEntity(this.slimeviathanEntity.getWorld(), spawn.x, spawn.y, spawn.z, this.slimeviathanEntity);
+        this.slimeviathanEntity.getWorld().spawnEntity(entity);
+
+        entity.setFuse(40);
+        entity.setVelocity(
+                direction.x * initialVelocity,
+                initialYVelocity,
+                direction.z * initialVelocity
+        );
     }
-
-
-    private void performShot() {
-        LivingEntity target = slimeviathanEntity.getTarget();
-        if (target == null) return;
-
-
-        Vec3d spawn = this.slimeviathanEntity.getRotationVector();
-        spawn = VectorUtils.addRight(spawn, 3.0f);
-
-        int bulletCount = 1;
-        for (int i = 0; i < bulletCount; i++) {
-            spawn = VectorUtils.rotateVectorCC(spawn, this.slimeviathanEntity.getRotationVector(), (float) Math.toRadians((double) 360 / bulletCount) * i);
-            Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.0001 - 7.0, target.getZ());
-            this.shootSkullAt(this.slimeviathanEntity.getPos().add(spawn), direction);
-        }
-    }
-
 }

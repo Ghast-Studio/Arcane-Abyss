@@ -60,8 +60,8 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         this.setPersistent();
         this.bossBar = (ServerBossBar) (new ServerBossBar(this.getDisplayName(), BossBar.Color.PURPLE, BossBar.Style.PROGRESS))
                 .setDragonMusic(true)
-                //.setThickenFog(true)
-                /*.setDarkenSky(true)*/;
+                .setThickenFog(true)
+                .setDarkenSky(true);
         this.summonedMobIds = new CopyOnWriteArrayList<>();
         this.summonedPillarIds = new CopyOnWriteArrayList<>();
         this.bossBar.setPercent(0.0F);
@@ -106,7 +106,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         this.goalSelector.add(1, new SlimeviathanResetGoal(this, getFollowDistance()));
         this.goalSelector.add(1, new SlimeviathanBlastGoal(this));
         this.goalSelector.add(1, new SlimeviathanStrikeGoal(this));
-        this.goalSelector.add(1, new SlimeviathanSummonPillerGoal(this));
+        this.goalSelector.add(1, new SlimeviathanSummonPillarGoal(this));
         this.goalSelector.add(1, new SlimeviathanGrandSummonGoal(this));
         this.goalSelector.add(1, new SlimeviathanSuperPushGoal(this));
         this.goalSelector.add(3, new ArcaneSlimeEntity.SwimmingGoal(this));
@@ -220,14 +220,13 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         if (attackTimer <= 0) {
             WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
 
-            attackPool.addEntry(State.STRIKE_SUMMON, 1);
-            /*if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
+            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
                 attackPool.addEntry(State.PUSH, 1);
 
             attackPool.addEntry(State.SUMMON, 1);
             attackPool.addEntry(State.PILLAR_SUMMON, 1);
             attackPool.addEntry(State.SHOOT_SLIME_BULLET, 1);
-            attackPool.addEntry(State.STRIKE_SUMMON, 1);*/
+            attackPool.addEntry(State.STRIKE_SUMMON, 1);
 
             this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
         } else {
@@ -254,25 +253,18 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
     public void tick() {
         super.tick();
-        //this.setDimensions(1F, 1F);
+        this.setDimensions(1F, 1F);
 
-        this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-        this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-
+        if (!this.summonedPillarIds.isEmpty())
+            this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
+        if (!this.summonedMobIds.isEmpty())
+            this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
         if (!this.summonedMobIds.isEmpty() || !this.summonedPillarIds.isEmpty()) this.setInvulTimer(40);
 
-
-        if (this.summonedPillarIds.isEmpty()) {
-            if (this.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
-                moveControl.setDisabled(false);
-            }
-        }
         if (this.isInState(State.PILLAR_SUMMON)) {
             x++;
-            System.out.println(x);
 
             if (!this.summonedPillarIds.isEmpty() && x >= 1800) { //1800 == ~1:30min
-
                 for (PlayerEntity player : playerNearby) {
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 99999, 20));
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 99999, 10));
@@ -321,9 +313,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             this.abilitySelectionTick();
             this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
             this.phaseUpdateTick();
-
         }
-
     }
 
     public boolean isInState(SlimeviathanEntity.State state) {

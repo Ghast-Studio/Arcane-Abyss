@@ -13,55 +13,76 @@ import java.util.Objects;
 
 public class SlimePillarEntity extends ArcaneSlimeEntity {
 
+    private SlimePillarEntity parent; // The slime below this one
+    private SlimePillarEntity child;
+
     public SlimePillarEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
 
-        // Set knockback resistance to maximum (1.0 means 100% resistance)
+
         Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)).setBaseValue(1.0D);
     }
 
     public static DefaultAttributeContainer.Builder setAttributesSlimePillar() {
         return ArcaneSlimeEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 100.0D)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 40.0D)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
-                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0D); // Ensure knockback resistance is set here too
+                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0D);
     }
 
     @Override
     protected void initGoals() {
-        // Keeping basic swimming goal, but no movement-based goals
+
         this.goalSelector.add(1, new SwimmingGoal(this));
     }
 
     @Override
     public void tick() {
         super.tick();
-        // Set velocity to zero to ensure no movement every tick
+
         this.setVelocity(Vec3d.ZERO);
-        this.velocityDirty = true;  // Force Minecraft to treat the velocity as updated
+        this.velocityDirty = true;
     }
 
     @Override
     public void travel(Vec3d movementInput) {
-        // Override travel method to prevent any movement from AI or input
-        // Do nothing to prevent movement
+
     }
 
     @Override
     public boolean damage(DamageSource source, float amount) {
+        // Prevent damage if the slime above this one (child) is still alive
+        if (this.hasChild()) {
+            return false; // Cancel damage
+        }
+
+        // Allow damage otherwise
         boolean result = super.damage(source, amount);
 
-        // After taking damage, ensure no knockback is applied by resetting velocity to zero
-        this.setVelocity(Vec3d.ZERO);
-        this.velocityDirty = true;
+        // Notify parent slime if this one dies
+        if (!this.isAlive() && this.parent != null) {
+            this.parent.setChild(null);
+        }
 
         return result;
     }
 
     @Override
     protected void jump() {
-        // Override the jump method to prevent jumping
+
+    }
+
+    public void setParent(SlimePillarEntity parent) {
+        this.parent = parent;
+    }
+
+    public void setChild(SlimePillarEntity child) {
+        this.child = child;
+    }
+
+    public boolean hasChild() {
+        return this.child != null && this.child.isAlive();
     }
 }

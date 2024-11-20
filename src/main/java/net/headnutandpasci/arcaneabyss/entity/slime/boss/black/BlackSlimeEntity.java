@@ -6,6 +6,7 @@ import net.headnutandpasci.arcaneabyss.entity.ai.SlimeResetGoal;
 import net.headnutandpasci.arcaneabyss.entity.ai.SlimeShootGoal;
 import net.headnutandpasci.arcaneabyss.entity.ai.SlimeSummonGoal;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.client.render.entity.WitherEntityRenderer;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
@@ -227,9 +228,13 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                     attackPool.addEntry(State.SHOOT_GHOST_BULLET_BURST, 2);
                     attackPool.addEntry(State.SUMMON_MOB, 1);
                 } else {*/
-                attackPool.addEntry(State.SUMMON, 1);
-                attackPool.addEntry(State.PUSH, 1);
-                attackPool.addEntry(State.SHOOT_SLIME_BULLET, 1);
+
+                if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty())
+                    attackPool.addEntry(State.PUSH, 200);
+
+
+                attackPool.addEntry(State.SUMMON, 5);
+                attackPool.addEntry(State.SHOOT_SLIME_BULLET, 20);
                 this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
             }
         }
@@ -277,6 +282,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                     }
                 }
             }
+
         }
 
         if (this.getInvulnerableTimer() > 0) {

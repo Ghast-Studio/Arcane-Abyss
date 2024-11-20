@@ -69,12 +69,25 @@ public class SlimeviathanStrikeGoal extends Goal {
 
             particleTimer--;
         }
-
-        if (slimeviathanEntity.getAttackTimer() == 0) {
-            if (targetAtStrike != null) {
-                this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
-                slimeviathanEntity.setInvulTimer(40);
-                slimeviathanEntity.stopAttacking(100);
+        if(slimeviathanEntity.getPhase() == 1) {
+            if (slimeviathanEntity.getAttackTimer() == 0) {
+                if (targetAtStrike != null) {
+                    this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
+                    slimeviathanEntity.setInvulTimer(60);
+                    slimeviathanEntity.stopAttacking(100);
+                }
+            }
+        }
+        if(slimeviathanEntity.getPhase() == 2) {
+            if (slimeviathanEntity.getAttackTimer() == 0) {
+                if (targetAtStrike != null) {
+                    this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
+                    this.shootStrike(this.slimeviathanEntity.getPos().add(3, 3, 8), targetPosAtStrike);
+                    this.shootStrike(this.slimeviathanEntity.getPos().add(-6, 3, -8), targetPosAtStrike);
+                    this.shootStrike(this.slimeviathanEntity.getPos().add(9, 4, -12), targetPosAtStrike);
+                    slimeviathanEntity.setInvulTimer(60);
+                    slimeviathanEntity.stopAttacking(33);
+                }
             }
         }
     }
@@ -114,4 +127,6 @@ public class SlimeviathanStrikeGoal extends Goal {
                 direction.z * initialVelocity
         );
     }
+
+
 }

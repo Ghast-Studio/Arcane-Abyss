@@ -221,17 +221,18 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
 
             if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
-                attackPool.addEntry(State.PUSH, 1);
+                attackPool.addEntry(State.PUSH, 200);
 
-            attackPool.addEntry(State.SUMMON, 1);
-            attackPool.addEntry(State.PILLAR_SUMMON, 1);
-            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 1);
-            attackPool.addEntry(State.STRIKE_SUMMON, 1);
+            attackPool.addEntry(State.SUMMON, 10);
+            attackPool.addEntry(State.PILLAR_SUMMON, 14);
+            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 40);
+            attackPool.addEntry(State.STRIKE_SUMMON, 30);
 
             this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
         } else {
             --this.attackTimer;
         }
+
     }
 
     @Override
@@ -263,14 +264,18 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
         if (this.isInState(State.PILLAR_SUMMON)) {
             x++;
-
+            System.out.println(x);
             if (!this.summonedPillarIds.isEmpty() && x >= 1800) { //1800 == ~1:30min
                 for (PlayerEntity player : playerNearby) {
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 99999, 20));
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 99999, 10));
+                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 5, 200));
                 }
                 x = 0;
             }
+
+        }
+        if(!this.isInState(State.PILLAR_SUMMON)){
+            x = 0;
         }
 
         if (--this.playerUpdateTimer < 1) {
@@ -392,9 +397,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         if (this.getHealth() < (this.getMaxHealth() * 0.66)) {
             this.setPhase(2);
         }
-        if (this.getHealth() < (this.getMaxHealth() * 0.33)) {
-            this.setPhase(3);
-        }
+
     }
 
     public int getPhase() {

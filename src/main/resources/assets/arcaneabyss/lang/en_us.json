@@ -1,6 +1,7 @@
 {
   "item.arcaneabyss.ruby": "Ruby",
   "item.arcaneabyss.raw_ruby": "Raw Ruby",
+  "item.arcaneabyss.slimesteel_ingot": "Slimesteel Ingot",
 
   "item.arcaneabyss.tomato": "Tomato",
 
@@ -20,6 +21,9 @@
   "block.arcaneabyss.ruby_block": "Block of Ruby",
   "block.arcaneabyss.raw_ruby_block": "Raw Block of Ruby",
   "block.arcaneabyss.dungeon_wall_block": "Dungeon Wall",
+
+  "block.arcaneabyss.slimesteel_machine": "Slime Steel Producer",
+  "displayname.arcaneabyss.slimesteel_machine.displayname": "Slime Steel Producer",
 
   "itemgroup.ruby": "Ruby Menu",
   "itemgroup.dungeon": "ArcaneAbyss Blocks",

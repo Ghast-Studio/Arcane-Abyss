@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.block;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.block.custom.SlimeSteelMachineBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -11,23 +12,23 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
+
 public class ModBlocks {
 
     public static Block RUBY_BLOCK;
     public static Block RAW_RUBY_BLOCK;
     public static Block DUNGEON_WALL_BLOCK;
-    public static Block eee;
+    public static Block SLIMESTEEL_MACHINE;
 
-
-    private static Block registerBlock(String name, Block block){
+    private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(Registries.BLOCK, new Identifier(ArcaneAbyss.MOD_ID, name), block);
     }
-    private static void registerBlockItem(String name, Block block){
+
+    private static void registerBlockItem(String name, Block block) {
         Registry.register(Registries.ITEM, new Identifier(ArcaneAbyss.MOD_ID, name),
                 new BlockItem(block, new FabricItemSettings()));
     }
-
 
     public static void registerModBlocks() {
         RUBY_BLOCK = registerBlock("ruby_block",
@@ -38,6 +39,9 @@ public class ModBlocks {
 
         DUNGEON_WALL_BLOCK = registerBlock("dungeon_wall_block",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
+
+        SLIMESTEEL_MACHINE = registerBlock("slimesteel_machine",
+                new SlimeSteelMachineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 
         ArcaneAbyss.LOGGER.info("Registering ModBlocks for" + ArcaneAbyss.MOD_ID);
     }

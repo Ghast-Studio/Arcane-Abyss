@@ -54,7 +54,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
     /*private List<PlayerEntity> pushTargets;*/
 
-
     public SlimeviathanEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
         this.setPersistent();
@@ -104,12 +103,12 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SlimeviathanResetGoal(this, getFollowDistance()));
-        this.goalSelector.add(1, new TargetSwitchGoal(this, 10000));
-        this.goalSelector.add(1, new SlimeviathanBlastGoal(this));
-        this.goalSelector.add(1, new SlimeviathanStrikeGoal(this));
-        this.goalSelector.add(1, new SlimeviathanSummonPillarGoal(this));
-        this.goalSelector.add(1, new SlimeviathanGrandSummonGoal(this));
-        this.goalSelector.add(1, new SlimeviathanSuperPushGoal(this));
+        this.goalSelector.add(2, new TargetSwitchGoal(this, 10000));
+        this.goalSelector.add(2, new SlimeviathanBlastGoal(this));
+        this.goalSelector.add(2, new SlimeviathanStrikeGoal(this));
+        this.goalSelector.add(2, new SlimeviathanSummonPillarGoal(this));
+        this.goalSelector.add(2, new SlimeviathanGrandSummonGoal(this));
+        this.goalSelector.add(2, new SlimeviathanSuperPushGoal(this));
         this.goalSelector.add(3, new ArcaneSlimeEntity.SwimmingGoal(this));
         this.goalSelector.add(4, new ArcaneSlimeEntity.FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new ArcaneSlimeEntity.RandomLookGoal(this));
@@ -417,6 +416,10 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     public EntityDimensions getDimensions(EntityPose pose) {
         // Return the custom dimensions
         return this.customDimensions;
+    }
+
+    public List<PlayerEntity> getPlayerNearby() {
+        return playerNearby;
     }
 
     private void updateBoundingBox() {

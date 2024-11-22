@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
@@ -17,6 +18,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
+import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.recipe.ModRecipes;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
@@ -59,6 +61,11 @@ public class ArcaneAbyss implements ModInitializer {
         FabricDefaultAttributeRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeEntity.setAttributesGreenSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanEntity.setAttributesGreenSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.Test, TestEntity.setAttributesTest());
+
+        ServerPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, (server, player, handler, buf, responseSender) -> {
+            // No-op, handled client-side
+        });
+
         //Registry.register(Registry., new Identifier("mymod", "my_custom_particle"), SlimeviathanParticle);
     }
 }

@@ -24,7 +24,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 
 public class MagmaBallProjectile extends ExplosiveProjectileEntity {
-
+    private int lifeTime = 50;
     public MagmaBallProjectile(EntityType<? extends MagmaBallProjectile> entityType, World world) {
         super((EntityType<? extends MagmaBallProjectile>)entityType, world);
     }
@@ -33,8 +33,15 @@ public class MagmaBallProjectile extends ExplosiveProjectileEntity {
         super(ModEntities.MAGMA_BALL_PROJECTILE, owner, directionX, directionY, directionZ, world);
     }
 
+    @Override
+    public void tick() {
+        super.tick();
 
-
+        // Decrease lifetime
+        if (--lifeTime <= 0) {
+            this.discard(); // Removes the entity from the world
+        }
+    }
 
     private ParticleEffect getParticleParameters() {
         return ParticleTypes.ASH;

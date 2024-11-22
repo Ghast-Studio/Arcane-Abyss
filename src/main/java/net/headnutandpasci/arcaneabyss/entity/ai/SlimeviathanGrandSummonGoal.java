@@ -78,7 +78,7 @@ public class SlimeviathanGrandSummonGoal extends Goal {
                     WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
                     mobWeightBag.addEntry(1, 1);
                     mobWeightBag.addEntry(2, 1);
-                    //mobWeightBag.addEntry(3, 1);
+                    mobWeightBag.addEntry(3, 1);
                     Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                     BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
                     summonMob(mobWeightBag.getRandom(), summonPos);
@@ -106,7 +106,7 @@ public class SlimeviathanGrandSummonGoal extends Goal {
         ArcaneSlimeEntity slime = switch (mobIndex) {
             case 1 -> new BlueSlimeEntity(ModEntities.DARK_BLUE_SLIME, world);
             case 2 -> new GreenSlimeEntity(ModEntities.GREEN_SLIME, world);
-            case 3 -> new RedSlimeEntity(ModEntities.RED_SLIME, world);
+            case 3 -> new RedSlimeEntity(ModEntities.DARK_RED_SLIME, world);
             default -> null;
         };
 

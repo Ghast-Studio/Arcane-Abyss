@@ -9,6 +9,7 @@ import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -129,13 +130,23 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             particleTimer--;
 
             if (targetPosAtStrike != null) {
-                spawnCircleParticles(targetAtStrike.getWorld(), this.targetPosAtStrike, ParticleTypes.DRAGON_BREATH, 1.5, 30);
+
+                // Assuming you have a reference to the Slimeviathan entity
+                LivingEntity targetAtStrike = entity.getTarget(); // This could be a player or another entity
+                if (targetAtStrike instanceof PlayerEntity) {
+                    spawnParticleEffectOnceAtPlayer(targetAtStrike);
+
+                }
+
+
+
 
                 if (particleTimer % 20 == 0) {
                     LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
                     if (lightning != null) {
                         lightning.refreshPositionAfterTeleport(targetPosAtStrike.x, targetPosAtStrike.y, targetPosAtStrike.z);
                         world.spawnEntity(lightning);
+                        resetEffectFlag();
                     }
                 }
 
@@ -174,10 +185,13 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         ServerWorld world = entity.getWorld() instanceof ServerWorld ? ((ServerWorld) entity.getWorld()) : null;
         if (world == null) return;
 
-        // Find the ground position for the summon
-        BlockPos groundPos = world.getTopPosition(Heightmap.Type.WORLD_SURFACE, summonPos);
+        // Adjust summon position to the ground level where the boss is
+        BlockPos groundPos = findSolidGround(world, summonPos, entity.getBlockPos().getY());
 
-        // Spawn initial particles at the ground position
+        // If no valid ground position is found, skip summoning
+        if (groundPos == null) return;
+
+        // Spawn initial particles at the adjusted ground position
         world.spawnParticles(ParticleTypes.CLOUD, groundPos.getX() + 0.5, groundPos.getY(), groundPos.getZ() + 0.5, 10, 0.5D, 0.5D, 0.5D, 0.0D);
 
         // Create the base slime at the ground position
@@ -194,7 +208,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         // Handle stacking the pillar slimes
         SlimePillarEntity previousSlime = (SlimePillarEntity) baseSlime;
 
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 4; i++) {
             BlockPos stackedPos = groundPos.up(i);
             SlimePillarEntity currentSlime = ModEntities.SLIME_PILLAR.spawn(world, stackedPos, SpawnReason.REINFORCEMENT);
 
@@ -205,7 +219,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
                 currentSlime.setParent(previousSlime);
                 previousSlime.setChild(currentSlime);
 
-
                 this.entity.getSummonedPillarIds().add(currentSlime.getId());
 
                 previousSlime = currentSlime;
@@ -213,19 +226,114 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         }
     }
 
+    private BlockPos findSolidGround(ServerWorld world, BlockPos targetPos, int bossYLevel) {
+        // Create a mutable copy of the target position
+        BlockPos.Mutable mutablePos = targetPos.mutableCopy();
+        mutablePos.setY(bossYLevel);  // Set Y to the desired level (bossYLevel or another level)
 
-    public void spawnCircleParticles(World world, Vec3d center, ParticleEffect particle, double radius, int particleCount) {
-        for (int i = 0; i < particleCount; i++) {
-            double angle = 2 * Math.PI * i / particleCount;
-            double x = center.x + radius * Math.cos(angle);
-            double z = center.z + radius * Math.sin(angle);
-            double y = world.getTopY(Heightmap.Type.WORLD_SURFACE, (int) x, (int) z) + 0.2;
+        // Store the current Y value (before updating)
+        int previousY = mutablePos.getY();
 
-            if (world instanceof ServerWorld serverWorld) {
-                serverWorld.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
+        // Search for solid ground below the target position
+        for (int y = bossYLevel; y >= world.getBottomY(); y--) {
+            mutablePos.setY(y);  // Update Y level for each iteration
+
+            // If we found a solid block, log the previous Y value
+            if (world.getBlockState(mutablePos).isSolidBlock(world, mutablePos)) {
+                int x = mutablePos.getX();
+                int yFound = mutablePos.getY();  // This is the current Y when the solid block is found
+                int z = mutablePos.getZ();
+
+                // Log the current position and the previous Y value
+                System.out.println("Found solid ground at - X: " + x + ", Y: " + yFound + ", Z: " + z);
+                System.out.println("Previous Y was: " + previousY);
+
+                return mutablePos.toImmutable();
             }
         }
+
+        return null;  // If no solid ground found, return null
     }
+
+
+
+    public void spawnCircleParticles(ServerWorld world, BlockPos center, ParticleEffect particle, double radius, int particleCount) {
+
+        double centerX = center.getX();
+        double centerY = center.getY() ;
+        double centerZ = center.getZ();
+
+        // Spawn particles in a circle around the given center position
+        for (int i = 0; i < particleCount; i++) {
+            double angle = 2 * Math.PI * i / particleCount;
+            double x = centerX + radius * Math.cos(angle);
+            double z = centerZ + radius * Math.sin(angle);
+            double y = centerY;  // Keep the particle at the ground level's Y coordinate
+
+            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0); // Spawn the particle
+        }
+    }
+
+
+    // Flag to track if the effect has already been triggered
+    private boolean hasSpawnedEffect = false;
+
+    public void spawnParticleEffectOnceAtPlayer(LivingEntity targetAtStrike) {
+        if (targetAtStrike instanceof PlayerEntity player) {
+            // Ensure the effect is only triggered once
+            if (hasSpawnedEffect) {
+                return; // Skip spawning if the effect has already been triggered
+            }
+
+
+            if(player.isOnGround()){
+                double playerX = player.getX();
+                double playerZ = player.getZ();
+                double playerY = player.getY();
+
+                // Get the ground level (Y-coordinate) for the player at their X, Z position
+                ServerWorld world = player.getWorld() instanceof ServerWorld ? (ServerWorld) player.getWorld() : null;
+                if (world != null) {
+                    // Get the ground Y position at the player's X and Z coordinates
+
+
+
+
+                    // Cast playerX and playerZ to int for BlockPos
+                    BlockPos groundPos = new BlockPos((int) playerX, (int) playerY, (int) playerZ);
+
+                    // Now spawn the particles at the correct ground level
+                    spawnCircleParticles(world, groundPos, ParticleTypes.DRAGON_BREATH, 1.5, 30);
+
+                    // Set the flag to prevent multiple spawns
+                    hasSpawnedEffect = true;
+                }
+            }
+
+        }
+    }
+
+    // Reset the flag when the state is appropriate, such as when the attack finishes
+    public void resetEffectFlag() {
+        hasSpawnedEffect = false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private void disableDrops(HostileEntity entity) {

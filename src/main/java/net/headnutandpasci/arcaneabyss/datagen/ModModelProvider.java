@@ -20,6 +20,7 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RUBY_BLOCK);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_RUBY_BLOCK);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_WALL_BLOCK);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK);
         blockStateModelGenerator.registerSimpleState(ModBlocks.SLIMESTEEL_MACHINE);
     }
 

@@ -79,7 +79,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
-                .add(EntityAttributes.GENERIC_ARMOR, 30)
+                .add(EntityAttributes.GENERIC_ARMOR, 20)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
 
 
@@ -223,9 +223,9 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
                 attackPool.addEntry(State.PUSH, 200);
 
-            attackPool.addEntry(State.SUMMON, 10);
-            attackPool.addEntry(State.PILLAR_SUMMON, 14);
-            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 40);
+            attackPool.addEntry(State.SUMMON, 15);
+            attackPool.addEntry(State.PILLAR_SUMMON, 20);
+            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 50);
             attackPool.addEntry(State.STRIKE_SUMMON, 30);
 
             this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());

@@ -18,6 +18,7 @@ public class ModBlocks {
     public static Block RUBY_BLOCK;
     public static Block RAW_RUBY_BLOCK;
     public static Block DUNGEON_WALL_BLOCK;
+    public static Block DUNGEON_BRICK;
     public static Block SLIMESTEEL_MACHINE;
 
     private static Block registerBlock(String name, Block block) {
@@ -38,6 +39,8 @@ public class ModBlocks {
                 new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
 
         DUNGEON_WALL_BLOCK = registerBlock("dungeon_wall_block",
+                new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
+        DUNGEON_BRICK = registerBlock("dungeon_brick",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
 
         SLIMESTEEL_MACHINE = registerBlock("slimesteel_machine",

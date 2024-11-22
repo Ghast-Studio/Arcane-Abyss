@@ -5,9 +5,12 @@ import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.Slimeviath
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
@@ -59,22 +62,27 @@ public class SlimeviathanStrikeGoal extends Goal {
 
     @Override
     public void tick() {
+
+        ServerWorld world = slimeviathanEntity.getWorld() instanceof ServerWorld ? ((ServerWorld) slimeviathanEntity.getWorld()) : null;
+
         if (particleTimer > 0) {
             if (this.targetAtStrike != null && particleTimer % 5 == 0) {
                 ParticleEffect effect = ((this.particleTimer % 10) == 0) ?
                         new DustParticleEffect(new Vector3f(18000000, 0, 0), 1.0f) :
                         new DustParticleEffect(new Vector3f(18000000, 18000000, 18000000), 1.0f);
-                spawnCircleParticles(targetAtStrike.getWorld(), this.targetPosAtStrike, effect, 4, 200);
+                spawnCircleParticles(world, targetPosAtStrike, effect, 4, 100);
             }
-
             particleTimer--;
         }
         if(slimeviathanEntity.getPhase() == 1) {
             if (slimeviathanEntity.getAttackTimer() == 0) {
                 if (targetAtStrike != null) {
+
                     this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
+
                     slimeviathanEntity.setInvulTimer(60);
                     slimeviathanEntity.stopAttacking(100);
+
                 }
             }
         }
@@ -85,23 +93,29 @@ public class SlimeviathanStrikeGoal extends Goal {
                     this.shootStrike(this.slimeviathanEntity.getPos().add(3, 3, 8), targetPosAtStrike);
                     this.shootStrike(this.slimeviathanEntity.getPos().add(-6, 3, -8), targetPosAtStrike);
                     this.shootStrike(this.slimeviathanEntity.getPos().add(9, 4, -12), targetPosAtStrike);
+
                     slimeviathanEntity.setInvulTimer(60);
                     slimeviathanEntity.stopAttacking(33);
+
                 }
             }
         }
     }
 
-    public void spawnCircleParticles(World world, Vec3d center, ParticleEffect particle, double radius, int particleCount) {
+    public void spawnCircleParticles(ServerWorld world, Vec3d center, ParticleEffect particle, double radius, int particleCount) {
+
+        double centerX = center.getX();
+        double centerY = slimeviathanEntity.getY();
+        double centerZ = center.getZ();
+
+        // Spawn particles in a circle around the given center position
         for (int i = 0; i < particleCount; i++) {
             double angle = 2 * Math.PI * i / particleCount;
-            double x = center.x + radius * Math.cos(angle);
-            double z = center.z + radius * Math.sin(angle);
-            double y = world.getTopY(Heightmap.Type.WORLD_SURFACE, (int) x, (int) z) + 0.2;
+            double x = centerX + radius * Math.cos(angle);
+            double z = centerZ + radius * Math.sin(angle);
+            double y = centerY;  // Keep the particle at the ground level's Y coordinate
 
-            if (world instanceof ServerWorld serverWorld) {
-                serverWorld.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
-            }
+            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0); // Spawn the particle
         }
     }
 

@@ -104,6 +104,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SlimeviathanResetGoal(this, getFollowDistance()));
+        this.goalSelector.add(1, new TargetSwitchGoal(this, 10000));
         this.goalSelector.add(1, new SlimeviathanBlastGoal(this));
         this.goalSelector.add(1, new SlimeviathanStrikeGoal(this));
         this.goalSelector.add(1, new SlimeviathanSummonPillarGoal(this));
@@ -223,9 +224,9 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
                 attackPool.addEntry(State.PUSH, 200);
 
-            attackPool.addEntry(State.SUMMON, 15);
-            attackPool.addEntry(State.PILLAR_SUMMON, 20);
-            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 50);
+            attackPool.addEntry(State.SUMMON, 20);
+            attackPool.addEntry(State.PILLAR_SUMMON, 25);
+            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 35);
             attackPool.addEntry(State.STRIKE_SUMMON, 30);
 
             this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());

@@ -10,6 +10,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -54,11 +55,12 @@ public class SlimeviathanGrandSummonGoal extends Goal {
     public void start() {
         super.start();
         entity.setAttackTimer(100);
+
     }
 
     @Override
     public void tick() {
-
+            ServerWorld world = entity.getWorld() instanceof ServerWorld ? ((ServerWorld) entity.getWorld()) : null;
             if (entity.getAttackTimer() == 100) {
                 entity.setAttackTimer(99);
                 /*blackSlimeEntity.playSound(blackSlimeEntity.getScreechSound(), 2.0F, 1.0F);*/
@@ -68,23 +70,29 @@ public class SlimeviathanGrandSummonGoal extends Goal {
                 ((ServerWorld) entity.getWorld()).spawnParticles(ParticleTypes.FLAME, d, e, f, 20, 3.0D, 3.0D, 3.0D, 0.0D);
 
 
-                int s = 5;
-
-                if(entity.getPhase() == 2) {
-                    s = 10;
+                for (int i = 0; i < 2; i++) {
+                    if(entity.getPhase() == 1) {
+                        Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
+                        BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
+                        ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.DARK_RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.GREEN_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                    }
+                    if(entity.getPhase() == 2) {
+                        Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
+                        BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
+                        ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.DARK_RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.DARK_RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.GREEN_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                        ModEntities.GREEN_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                    }
                 }
 
-                for (int i = 0; i < s; i++) {
-                    WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
-                    mobWeightBag.addEntry(1, 1);
-                    mobWeightBag.addEntry(2, 1);
-                    mobWeightBag.addEntry(3, 1);
-                    Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-                    BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
-                    summonMob(mobWeightBag.getRandom(), summonPos);
 
-
-                }
             }
 
 
@@ -107,6 +115,7 @@ public class SlimeviathanGrandSummonGoal extends Goal {
             case 1 -> new BlueSlimeEntity(ModEntities.DARK_BLUE_SLIME, world);
             case 2 -> new GreenSlimeEntity(ModEntities.GREEN_SLIME, world);
             case 3 -> new RedSlimeEntity(ModEntities.DARK_RED_SLIME, world);
+
             default -> null;
         };
 

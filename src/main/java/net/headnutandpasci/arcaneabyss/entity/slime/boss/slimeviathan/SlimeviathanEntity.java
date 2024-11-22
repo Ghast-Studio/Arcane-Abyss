@@ -232,7 +232,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         } else {
             --this.attackTimer;
         }
-
     }
 
     @Override
@@ -274,7 +273,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             }
 
         }
-        if(!this.isInState(State.PILLAR_SUMMON)){
+        if (!this.isInState(State.PILLAR_SUMMON)) {
             x = 0;
         }
 

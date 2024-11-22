@@ -10,16 +10,16 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
-import org.joml.Vector3f;
+import net.minecraft.world.RaycastContext;
+
+import java.util.Optional;
 
 public class SlimeviathanSummonPillarGoal extends Goal {
     private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
@@ -33,6 +33,8 @@ public class SlimeviathanSummonPillarGoal extends Goal {
     private int particleTimer = 0;
     private LivingEntity targetAtStrike;
     private Vec3d targetPosAtStrike;
+    private boolean hasSpawnedEffect = false;
+    private int cooldownTimer = 0;
 
     public SlimeviathanSummonPillarGoal(SlimeviathanEntity entity) {
         this.entity = entity;
@@ -41,7 +43,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
     @Override
     public boolean canStart() {
         if (entity.isAttacking(SlimeviathanEntity.State.PILLAR_SUMMON) && entity.getTarget() != null) {
-            if (canSummonSlimes()) {
+            if (this.canSummonSlimes()) {
                 return true;
             } else {
                 entity.stopAttacking(0);
@@ -64,15 +66,12 @@ public class SlimeviathanSummonPillarGoal extends Goal {
 
     @Override
     public void start() {
-        entity.setAttackTimer(100);
-
+        this.entity.setAttackTimer(100);
         this.targetAtStrike = entity.getTarget();
         if (this.targetAtStrike == null) this.stop();
 
-
         this.particleTimer = 50;
         this.entity.setAttackTimer(40);
-
 
         ServerWorld world = entity.getWorld() instanceof ServerWorld ? ((ServerWorld) entity.getWorld()) : null;
         if (world != null) {
@@ -85,21 +84,14 @@ public class SlimeviathanSummonPillarGoal extends Goal {
 
         for (int i = 0; i < 4; i++) {
             WeightedRandomBag<Integer> mobWeightBag = new WeightedRandomBag<>();
-
             mobWeightBag.addEntry(1, 1);
 
             Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-            BlockPos summonPos = entity.getBlockPos().offset(direction, 10);
-            summonMob(mobWeightBag.getRandom(), summonPos);
+            Optional<BlockPos> summonPos = this.generateMobSpawnPos(entity.getBlockPos(), 10, direction);
+            if (summonPos.isEmpty()) continue;
 
-
-        }
-
-        for (int i = 0; i < 4; i++) {
-
-            Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-            BlockPos summonPos = entity.getBlockPos().offset(direction, 5);
-            ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+            summonMob(mobWeightBag.getRandom(), summonPos.get());
+            ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos.get(), SpawnReason.REINFORCEMENT);
         }
     }
 
@@ -112,8 +104,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         this.targetPosAtStrike = null;
         this.particleTimer = 0;
     }
-
-    private int cooldownTimer = 0;
 
     @Override
     public void tick() {
@@ -137,8 +127,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
                     spawnParticleEffectOnceAtPlayer(targetAtStrike);
 
                 }
-
-
 
 
                 if (particleTimer % 20 == 0) {
@@ -173,9 +161,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             cooldownTimer = 20;
         }
     }
-
-
-
 
     private boolean canSummonSlimes() {
         return this.entity.getSummonedPillarIds().isEmpty();
@@ -226,6 +211,17 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         }
     }
 
+    private Optional<BlockPos> generateMobSpawnPos(BlockPos targetPos, int distance, Direction direction) {
+        Vec3d start = new Vec3d(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+        Vec3d end = new Vec3d(targetPos.getX() + direction.getOffsetX() * distance, targetPos.getY() + direction.getOffsetY() * distance, targetPos.getZ() + direction.getOffsetZ() * distance);
+        RaycastContext raycastContext = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity);
+
+        BlockHitResult hit = entity.getEntityWorld().raycast(raycastContext);
+        if (hit == null) return Optional.empty();
+
+        return Optional.of(targetPos.offset(direction, distance));
+    }
+
     private BlockPos findSolidGround(ServerWorld world, BlockPos targetPos, int bossYLevel) {
         // Create a mutable copy of the target position
         BlockPos.Mutable mutablePos = targetPos.mutableCopy();
@@ -255,12 +251,10 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         return null;  // If no solid ground found, return null
     }
 
-
-
     public void spawnCircleParticles(ServerWorld world, BlockPos center, ParticleEffect particle, double radius, int particleCount) {
 
         double centerX = center.getX();
-        double centerY = center.getY() ;
+        double centerY = center.getY();
         double centerZ = center.getZ();
 
         // Spawn particles in a circle around the given center position
@@ -274,10 +268,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         }
     }
 
-
-    // Flag to track if the effect has already been triggered
-    private boolean hasSpawnedEffect = false;
-
     public void spawnParticleEffectOnceAtPlayer(LivingEntity targetAtStrike) {
         if (targetAtStrike instanceof PlayerEntity player) {
             // Ensure the effect is only triggered once
@@ -286,7 +276,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             }
 
 
-            if(player.isOnGround()){
+            if (player.isOnGround()) {
                 double playerX = player.getX();
                 double playerZ = player.getZ();
                 double playerY = player.getY();
@@ -295,8 +285,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
                 ServerWorld world = player.getWorld() instanceof ServerWorld ? (ServerWorld) player.getWorld() : null;
                 if (world != null) {
                     // Get the ground Y position at the player's X and Z coordinates
-
-
 
 
                     // Cast playerX and playerZ to int for BlockPos
@@ -313,27 +301,9 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         }
     }
 
-    // Reset the flag when the state is appropriate, such as when the attack finishes
     public void resetEffectFlag() {
         hasSpawnedEffect = false;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void disableDrops(HostileEntity entity) {

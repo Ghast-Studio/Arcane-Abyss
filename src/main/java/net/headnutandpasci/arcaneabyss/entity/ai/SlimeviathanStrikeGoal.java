@@ -1,121 +1,151 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
+import com.google.common.collect.ImmutableList;
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
-import net.minecraft.entity.LivingEntity;
+import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
+import net.headnutandpasci.arcaneabyss.util.Util;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.World;
 import org.joml.Vector3f;
 
-public class SlimeviathanStrikeGoal extends Goal {
-    private final SlimeviathanEntity slimeviathanEntity;
-    private int particleTimer = 0;
-    private LivingEntity targetAtStrike;
-    private Vec3d targetPosAtStrike;
+import java.util.ArrayList;
+import java.util.List;
 
-    public SlimeviathanStrikeGoal(SlimeviathanEntity slimeviathanEntity) {
-        this.slimeviathanEntity = slimeviathanEntity;
+public class SlimeviathanStrikeGoal extends Goal {
+    private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
+            Direction.SOUTH,
+            Direction.NORTH,
+            Direction.EAST,
+            Direction.WEST
+    );
+
+    private final SlimeviathanEntity entity;
+    private final List<PlayerEntity> strikeTargets;
+    private final List<Vec3d> strikePositions;
+    private int particleTimer = 0;
+    private boolean firstTrigger = false;
+
+    public SlimeviathanStrikeGoal(SlimeviathanEntity entity) {
+        this.entity = entity;
+        this.strikeTargets = new ArrayList<>();
+        this.strikePositions = new ArrayList<>();
     }
 
     @Override
     public boolean canStart() {
-        return (slimeviathanEntity.isAttacking(SlimeviathanEntity.State.STRIKE_SUMMON)) && slimeviathanEntity.getTarget() != null;
+        return (entity.isAttacking(SlimeviathanEntity.State.STRIKE_SUMMON)) && entity.getTarget() != null;
     }
 
     @Override
     public void start() {
+        ArcaneAbyss.LOGGER.info("SlimeviathanStrikeGoal started");
         super.start();
-        this.targetAtStrike = slimeviathanEntity.getTarget();
-        if (this.targetAtStrike == null) this.stop();
-
-        System.out.println(this.slimeviathanEntity.getMoveControl());
-        if (this.slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+        if (this.entity.getPlayerNearby().isEmpty()) this.stop();
+        if (this.entity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
             moveControl.setDisabled(true);
-
         }
 
-        this.slimeviathanEntity.setAttackTimer(40);
-        this.targetPosAtStrike = targetAtStrike.getPos();
-        this.particleTimer = 50;
+        //this.entity.playSound(SoundEvents.ENTITY_WITHER_DEATH, 3.0F, 1.0F);
+        ((ServerWorld) this.entity.getWorld()).spawnParticles(ParticleTypes.POOF, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D); // Reduced particle spread
+
+        this.entity.getPlayerNearby().forEach(target -> {
+            this.strikeTargets.add(target);
+            Util.pushPlayer(this.entity, target, 10, 3.0f);
+            MovementControlPacket.send(true, (ServerPlayerEntity) target);
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
+        });
+
+        this.entity.setAttackTimer(20);
     }
 
     @Override
     public void stop() {
         super.stop();
-        this.targetAtStrike = null;
-        this.targetPosAtStrike = null;
-        this.particleTimer = 0;
+        this.strikeTargets.forEach(target -> {
+            this.entity.playSound(SoundEvents.BLOCK_ANCIENT_DEBRIS_BREAK, 3.0F, 1.0F);
+            target.removeStatusEffect(StatusEffects.SLOWNESS);
 
-        if (this.slimeviathanEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
+            MovementControlPacket.send(false, (ServerPlayerEntity) target);
+        });
+
+        if (this.entity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
             moveControl.setDisabled(false);
         }
+
+        this.strikeTargets.clear();
+        this.strikePositions.clear();
+        this.particleTimer = 0;
+        this.firstTrigger = false;
+
+        entity.stopAttacking(100);
     }
 
     @Override
     public void tick() {
+        this.spawnParticles();
 
-        ServerWorld world = slimeviathanEntity.getWorld() instanceof ServerWorld ? ((ServerWorld) slimeviathanEntity.getWorld()) : null;
+        if (this.entity.getAttackTimer() <= 2 && !this.strikeTargets.isEmpty()) {
+            if (!firstTrigger) {
+                this.firstTrigger = true;
+                this.shootStrike();
 
-        if (particleTimer > 0) {
-            if (this.targetAtStrike != null && particleTimer % 5 == 0) {
-                ParticleEffect effect = ((this.particleTimer % 10) == 0) ?
-                        new DustParticleEffect(new Vector3f(18000000, 0, 0), 1.0f) :
-                        new DustParticleEffect(new Vector3f(18000000, 18000000, 18000000), 1.0f);
-                spawnCircleParticles(world, targetPosAtStrike, effect, 4, 100);
-            }
-            particleTimer--;
-        }
-        if(slimeviathanEntity.getPhase() == 1) {
-            if (slimeviathanEntity.getAttackTimer() == 0) {
-                if (targetAtStrike != null) {
-
-                    this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
-
-                    slimeviathanEntity.setInvulTimer(60);
-                    slimeviathanEntity.stopAttacking(100);
-
-                }
-            }
-        }
-        if(slimeviathanEntity.getPhase() == 2) {
-            if (slimeviathanEntity.getAttackTimer() == 0) {
-                if (targetAtStrike != null) {
-                    this.shootStrike(this.slimeviathanEntity.getPos().add(0, 3, 0), targetPosAtStrike);
-                    this.shootStrike(this.slimeviathanEntity.getPos().add(3, 3, 8), targetPosAtStrike);
-                    this.shootStrike(this.slimeviathanEntity.getPos().add(-6, 3, -8), targetPosAtStrike);
-                    this.shootStrike(this.slimeviathanEntity.getPos().add(9, 4, -12), targetPosAtStrike);
-
-                    slimeviathanEntity.setInvulTimer(60);
-                    slimeviathanEntity.stopAttacking(33);
-
-                }
+                this.entity.setAttackTick(20);
+            } else {
+                this.stop();
             }
         }
     }
 
-    public void spawnCircleParticles(ServerWorld world, Vec3d center, ParticleEffect particle, double radius, int particleCount) {
+    private void shootStrike() {
+        this.particleTimer = 80;
+        this.strikeTargets.forEach(target -> {
+            this.strikePositions.add(target.getPos());
+        });
 
-        double centerX = center.getX();
-        double centerY = slimeviathanEntity.getY();
-        double centerZ = center.getZ();
+        switch (entity.getPhase()) {
+            case 0, 1 -> this.strikeTargets.forEach(target -> {
+                this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos());
+                //this.shootStrike(this.entity.getPos().add(2, 3, 0), target.getPos());
+            });
+            case 2 -> this.strikeTargets.forEach(target -> {
+                for (int i = 0; i < 4; i++) {
+                    Direction direction = MOB_SUMMON_POS.get(i);
+                    Vec3d spawn = this.entity.getPos().add(0, 3, 0).add(direction.getOffsetX() * 5, 0, direction.getOffsetZ() * 5);
+                    this.shootStrike(spawn, target.getPos());
+                }
+            });
+            default -> ArcaneAbyss.LOGGER.error("Invalid phase: {}", entity.getPhase());
+        }
+    }
 
-        // Spawn particles in a circle around the given center position
-        for (int i = 0; i < particleCount; i++) {
-            double angle = 2 * Math.PI * i / particleCount;
-            double x = centerX + radius * Math.cos(angle);
-            double z = centerZ + radius * Math.sin(angle);
-            double y = centerY;  // Keep the particle at the ground level's Y coordinate
-
-            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0); // Spawn the particle
+    private void spawnParticles() {
+        World world = this.entity.getWorld();
+        if (world instanceof ServerWorld serverWorld) {
+            if (particleTimer > 0) {
+                if (!this.strikePositions.isEmpty() && particleTimer % 4 == 0) {
+                    this.strikePositions.forEach(pos -> {
+                        ParticleEffect effect = ((this.particleTimer % 10) == 0) ?
+                                new DustParticleEffect(new Vector3f(18000000, 0, 0), 1.0f) :
+                                new DustParticleEffect(new Vector3f(18000000, 18000000, 18000000), 1.0f);
+                        Util.spawnCircleParticles(serverWorld, pos, effect, 4, 100, true);
+                    });
+                }
+                particleTimer--;
+            }
         }
     }
 
@@ -130,9 +160,8 @@ public class SlimeviathanStrikeGoal extends Goal {
 
         double initialYVelocity = initialVelocity * Math.sin(Math.atan2(arcHeight, distance));
 
-        //BlueSlimeEntity entity = ModEntities.BLUE_SLIME.spawn((ServerWorld) this.slimeviathanEntity.getWorld(), BlockPos.ofFloored(spawn), SpawnReason.REINFORCEMENT);
-        TntEntity entity = new TntEntity(this.slimeviathanEntity.getWorld(), spawn.x, spawn.y, spawn.z, this.slimeviathanEntity);
-        this.slimeviathanEntity.getWorld().spawnEntity(entity);
+        TntEntity entity = new TntEntity(this.entity.getWorld(), spawn.x, spawn.y, spawn.z, this.entity);
+        this.entity.getWorld().spawnEntity(entity);
 
         entity.setFuse(40);
         entity.setVelocity(
@@ -140,6 +169,7 @@ public class SlimeviathanStrikeGoal extends Goal {
                 initialYVelocity,
                 direction.z * initialVelocity
         );
+        entity.velocityModified = true;
     }
 
 

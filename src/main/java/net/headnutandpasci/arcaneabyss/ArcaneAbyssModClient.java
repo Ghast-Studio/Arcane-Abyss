@@ -1,7 +1,9 @@
 package net.headnutandpasci.arcaneabyss;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMachineScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -34,6 +36,8 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.BLACK_SLIME_PROJECTILE, BlackSlimeProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN_PROJECTLE, SlimeviathanProjectileRenderer::new);
         HandledScreens.register(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, SlimeSteelMachineScreen::new);
+
+        ClientPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, MovementControlPacket::handle);
     }
 
 }

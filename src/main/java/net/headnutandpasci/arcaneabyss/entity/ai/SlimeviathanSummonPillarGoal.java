@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
 import com.google.common.collect.ImmutableList;
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
@@ -217,7 +218,10 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         RaycastContext raycastContext = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity);
 
         BlockHitResult hit = entity.getEntityWorld().raycast(raycastContext);
-        if (hit == null) return Optional.empty();
+        if (hit == null) {
+            ArcaneAbyss.LOGGER.error("Failed to find a valid spawn position for the summoned mob.");
+            return Optional.empty();
+        }
 
         return Optional.of(targetPos.offset(direction, distance));
     }

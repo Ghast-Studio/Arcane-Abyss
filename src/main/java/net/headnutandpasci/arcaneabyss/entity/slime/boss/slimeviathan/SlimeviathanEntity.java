@@ -280,7 +280,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
         if (--this.playerUpdateTimer < 1) {
             this.playerUpdateTimer = 20 * 2;
-            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> true);
+            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> !player.isInvulnerable());
 
 
             if (this.isInState(SlimeviathanEntity.State.SPAWNING)) {

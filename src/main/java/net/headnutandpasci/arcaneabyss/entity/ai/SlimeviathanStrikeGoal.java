@@ -66,7 +66,7 @@ public class SlimeviathanStrikeGoal extends Goal {
             this.strikeTargets.add(target);
             Util.pushPlayer(this.entity, target, 10, 3.0f);
             MovementControlPacket.send(true, (ServerPlayerEntity) target);
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 2, false, false));
+            target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
         });
 
         this.entity.setAttackTimer(20);
@@ -101,9 +101,9 @@ public class SlimeviathanStrikeGoal extends Goal {
         if (this.entity.getAttackTimer() <= 2 && !this.strikeTargets.isEmpty()) {
             if (!firstTrigger) {
                 this.firstTrigger = true;
-                shootStrike();
+                this.shootStrike();
 
-                entity.setAttackTick(20);
+                this.entity.setAttackTick(20);
             } else {
                 this.stop();
             }
@@ -118,17 +118,17 @@ public class SlimeviathanStrikeGoal extends Goal {
 
         switch (entity.getPhase()) {
             case 0, 1 -> this.strikeTargets.forEach(target -> {
-                this.shootStrike(this.entity.getPos().add(-2, 3, 0), target.getPos());
-                this.shootStrike(this.entity.getPos().add(2, 3, 0), target.getPos());
+                this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos());
+                //this.shootStrike(this.entity.getPos().add(2, 3, 0), target.getPos());
             });
             case 2 -> this.strikeTargets.forEach(target -> {
-                for (int i = 0; i < 8; i++) {
-                    Direction direction = MOB_SUMMON_POS.get(i / 2);
+                for (int i = 0; i < 4; i++) {
+                    Direction direction = MOB_SUMMON_POS.get(i);
                     Vec3d spawn = this.entity.getPos().add(0, 3, 0).add(direction.getOffsetX() * 5, 0, direction.getOffsetZ() * 5);
                     this.shootStrike(spawn, target.getPos());
                 }
             });
-            default -> throw new IllegalStateException("Unexpected value: " + entity.getPhase());
+            default -> ArcaneAbyss.LOGGER.error("Invalid phase: {}", entity.getPhase());
         }
     }
 

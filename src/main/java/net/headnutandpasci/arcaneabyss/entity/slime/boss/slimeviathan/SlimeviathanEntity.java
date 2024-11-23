@@ -265,7 +265,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         if (this.isInState(State.PILLAR_SUMMON)) {
             x++;
             System.out.println(x);
-            if (!this.summonedPillarIds.isEmpty() && x >= 1800) { //1800 == ~1:30min
+            if (!this.summonedPillarIds.isEmpty() && x >= 1800) {
                 for (PlayerEntity player : playerNearby) {
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 99999, 20));
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 5, 200));
@@ -276,6 +276,26 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         }
         if (!this.isInState(State.PILLAR_SUMMON)) {
             x = 0;
+        }
+        if (--this.playerUpdateTimer < 1) {
+            this.playerUpdateTimer = 20 * 2;
+            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> true);
+
+
+            recalculateAttributes();
+
+            if (this.isInState(SlimeviathanEntity.State.SPAWNING)) {
+                if (!playerNearby.isEmpty()) {
+                    this.startBossFight();
+
+                    if (!this.getWorld().isClient()) {
+                        playerNearby.forEach(player -> {
+                            ServerPlayerEntity serverPlayer = this.getServer().getPlayerManager().getPlayer(player.getUuid());
+                            this.getBossBar().addPlayer(serverPlayer);
+                        });
+                    }
+                }
+            }
         }
 
         if (--this.playerUpdateTimer < 1) {
@@ -320,6 +340,34 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             this.phaseUpdateTick();
         }
     }
+
+    private void recalculateAttributes() {
+        int playerCount = playerNearby.size();
+
+
+        double scalingFactor = Math.max(1.0, playerCount * 0.50);
+
+
+        double baseHealth = 800.0;
+        double scaledHealth = baseHealth * scalingFactor;
+        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(scaledHealth);
+
+
+        if (this.getHealth() > scaledHealth) {
+            this.setHealth((float) scaledHealth);
+        } else {
+            this.heal((float) (scaledHealth - this.getHealth()));
+        }
+
+
+        double baseAttack = 20.0;
+        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(baseAttack * scalingFactor);
+
+
+        double baseArmor = 20.0;
+        this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(baseArmor * scalingFactor);
+    }
+
 
     public boolean isInState(SlimeviathanEntity.State state) {
         return this.getState().equals(state);

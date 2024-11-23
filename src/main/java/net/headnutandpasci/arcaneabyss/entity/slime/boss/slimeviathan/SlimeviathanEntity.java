@@ -67,7 +67,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         this.experiencePoints = 500;
         this.dataTracker.startTracking(PHASE, 1);
         this.attackTimer = 20 * 2;
-        this.customDimensions = EntityDimensions.fixed(1.0F, 2.0F); // Default 1x2 hitbox
+        this.customDimensions = EntityDimensions.fixed(2.0F, 2.0F); // Default 1x2 hitbox
         this.updateBoundingBox();
     }
 
@@ -159,7 +159,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     public void startBossFight() {
         if (this.isAlive() && this.dataTracker.get(PHASE) < 1 && this.getState() != SlimeviathanEntity.State.AWAKENING) {
             Box bossArena = new Box(this.getBlockPos()).expand(getFollowDistance());
-
+            recalculateAttributes();
             /*List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, bossArena);
             for (ServerPlayer p : players) {
                 playerUUIDs.add(p.getUUID());
@@ -176,6 +176,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
                 moveControl.setDisabled(false);
             }
         }
+
     }
 
     @Override
@@ -225,9 +226,9 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
                 attackPool.addEntry(State.PUSH, 200);
 
             attackPool.addEntry(State.SUMMON, 20);
-            attackPool.addEntry(State.PILLAR_SUMMON, 25);
+            attackPool.addEntry(State.PILLAR_SUMMON, 20);
             attackPool.addEntry(State.SHOOT_SLIME_BULLET, 35);
-            attackPool.addEntry(State.STRIKE_SUMMON, 30);
+            attackPool.addEntry(State.STRIKE_SUMMON, 35);
 
             this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
         } else {
@@ -276,26 +277,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         }
         if (!this.isInState(State.PILLAR_SUMMON)) {
             x = 0;
-        }
-        if (--this.playerUpdateTimer < 1) {
-            this.playerUpdateTimer = 20 * 2;
-            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> true);
-
-
-            recalculateAttributes();
-
-            if (this.isInState(SlimeviathanEntity.State.SPAWNING)) {
-                if (!playerNearby.isEmpty()) {
-                    this.startBossFight();
-
-                    if (!this.getWorld().isClient()) {
-                        playerNearby.forEach(player -> {
-                            ServerPlayerEntity serverPlayer = this.getServer().getPlayerManager().getPlayer(player.getUuid());
-                            this.getBossBar().addPlayer(serverPlayer);
-                        });
-                    }
-                }
-            }
         }
 
         if (--this.playerUpdateTimer < 1) {

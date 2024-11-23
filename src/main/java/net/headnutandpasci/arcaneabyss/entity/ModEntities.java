@@ -92,7 +92,7 @@ public class ModEntities {
         SLIMEVIATHAN = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "slimeviathan"),
                 FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
+                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
 
 
         ArcaneAbyss.LOGGER.info("Registering Entities");

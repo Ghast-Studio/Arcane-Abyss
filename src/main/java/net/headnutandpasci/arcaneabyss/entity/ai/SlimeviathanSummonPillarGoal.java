@@ -1,7 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.ai;
 
 import com.google.common.collect.ImmutableList;
-import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
@@ -88,11 +87,11 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             mobWeightBag.addEntry(1, 1);
 
             Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-            Optional<BlockPos> summonPos = this.generateMobSpawnPos(entity.getBlockPos(), 10, direction);
+            Optional<Vec3d> summonPos = this.generateMobSpawnPos(entity.getPos(), 10, direction);
             if (summonPos.isEmpty()) continue;
 
-            summonMob(mobWeightBag.getRandom(), summonPos.get());
-            ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos.get(), SpawnReason.REINFORCEMENT);
+            summonMob(mobWeightBag.getRandom(), BlockPos.ofFloored(summonPos.get()));
+            ModEntities.DARK_BLUE_SLIME.spawn(world, BlockPos.ofFloored(summonPos.get()), SpawnReason.REINFORCEMENT);
         }
     }
 
@@ -212,14 +211,11 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         }
     }
 
-    private Optional<BlockPos> generateMobSpawnPos(BlockPos targetPos, int distance, Direction direction) {
-        Vec3d start = new Vec3d(targetPos.getX(), targetPos.getY(), targetPos.getZ());
-        Vec3d end = new Vec3d(targetPos.getX() + direction.getOffsetX() * distance, targetPos.getY() + direction.getOffsetY() * distance, targetPos.getZ() + direction.getOffsetZ() * distance);
-        RaycastContext raycastContext = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity);
+    private Optional<Vec3d> generateMobSpawnPos(Vec3d targetPos, int distance, Direction direction) {
+        RaycastContext raycastContext = new RaycastContext(targetPos, targetPos.offset(direction, distance), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity);
+        BlockHitResult blockHitResult = this.entity.getWorld().raycast(raycastContext);
 
-        BlockHitResult hit = entity.getEntityWorld().raycast(raycastContext);
-        if (hit == null) {
-            ArcaneAbyss.LOGGER.error("Failed to find a valid spawn position for the summoned mob.");
+        if (blockHitResult.getType() == BlockHitResult.Type.BLOCK) {
             return Optional.empty();
         }
 

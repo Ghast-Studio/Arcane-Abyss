@@ -16,6 +16,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.Slimeviath
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
@@ -55,6 +56,7 @@ public class ArcaneAbyss implements ModInitializer {
         FabricDefaultAttributeRegistry.register(ModEntities.BLUE_SLIME, BlueSlimeEntity.setAttributesBlueSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.SLIME_PILLAR, SlimePillarEntity.setAttributesSlimePillar());
         FabricDefaultAttributeRegistry.register(ModEntities.RED_SLIME, RedSlimeEntity.setAttributesRedSlime());
+        FabricDefaultAttributeRegistry.register(ModEntities.RED_SLIME_STATIONARY, RedSlimeStationaryEntity.setAttributesRedSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.GREEN_SLIME, GreenSlimeEntity.setAttributesGreenSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.DARK_BLUE_SLIME, DarkBlueSlimeEntity.setAttributesDarkBlueSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.DARK_RED_SLIME, DarkRedSlimeEntity.setAttributesDarkRedSlime());

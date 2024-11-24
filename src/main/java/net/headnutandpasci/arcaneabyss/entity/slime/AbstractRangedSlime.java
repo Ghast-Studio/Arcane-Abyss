@@ -22,23 +22,23 @@ public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements R
     }
 
     public void attack(LivingEntity target, float pullProgress) {
-        // Create the projectile entity
+        
         MagmaBallProjectile magmaBallEntity = new MagmaBallProjectile(ModEntities.MAGMA_BALL_PROJECTILE, this.getWorld());
 
-        // Set the initial position of the projectile
+
         magmaBallEntity.setPos(this.getX(), this.getBodyY(0.5), this.getZ()); // Adjust Y for correct height
 
-        // Calculate velocity components
+
         double d = target.getX() - this.getX();
         double e = target.getBodyY(0.3333333333333333) - magmaBallEntity.getY();
         double f = target.getZ() - this.getZ();
         double g = Math.sqrt(d * d + f * f);
 
-        // Set velocity of the projectile
+
         magmaBallEntity.setVelocity(d, e + g * 0.1, f, 1.75F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
 
-        // Play sound and spawn the projectile
-        this.playSound(SoundEvents.ENTITY_WITHER_SHOOT, 1.0F, 0.4F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+
+        this.playSound(SoundEvents.ENTITY_WITHER_SHOOT, 0.33F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.getWorld().spawnEntity(magmaBallEntity);
     }
 

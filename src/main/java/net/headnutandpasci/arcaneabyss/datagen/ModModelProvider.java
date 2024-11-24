@@ -4,10 +4,12 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
+import net.minecraft.block.Block;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.util.Identifier;
 
 public class ModModelProvider extends FabricModelProvider {
     public ModModelProvider(FabricDataOutput output) {
@@ -21,7 +23,18 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_RUBY_BLOCK);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_WALL_BLOCK);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_CRACKED);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_SLAB);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_STAIR);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_STONE);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_STONE_CHISELED);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE_SLAB);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE_STAIR);
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_WALL);
         blockStateModelGenerator.registerSimpleState(ModBlocks.SLIMESTEEL_MACHINE);
+
+
     }
 
     @Override
@@ -43,4 +56,9 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_LEGGING));
         itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_BOOTS));
     }
+
+
+
+
+
 }

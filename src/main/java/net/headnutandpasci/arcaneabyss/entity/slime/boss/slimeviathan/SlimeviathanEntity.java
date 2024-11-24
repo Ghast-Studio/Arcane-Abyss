@@ -222,12 +222,12 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         if (attackTimer <= 0) {
             WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
 
-            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(5), (player) -> !player.isInvulnerable()).isEmpty())
+            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty())
                 attackPool.addEntry(State.PUSH, 200);
 
             attackPool.addEntry(State.SUMMON, 20);
             attackPool.addEntry(State.PILLAR_SUMMON, 20);
-            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 35);
+            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 45);
             attackPool.addEntry(State.STRIKE_SUMMON, 35);
 
             this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
@@ -326,7 +326,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         int playerCount = playerNearby.size();
 
 
-        double scalingFactor = Math.max(1.0, playerCount * 0.50);
+        double scalingFactor = Math.max(1.0, playerCount * 0.75);
 
 
         double baseHealth = 800.0;

@@ -140,7 +140,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             this.entity.bodyYaw = this.entity.getYaw();
             if (this.state != State.MOVE_TO) {
                 this.entity.setForwardSpeed(0.0F);
-            } else {
+            } else if(!isDisabled()){
                 this.state = State.WAIT;
                 if (this.entity.isOnGround()) {
                     this.entity.setMovementSpeed((float) (this.speed * this.entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)));

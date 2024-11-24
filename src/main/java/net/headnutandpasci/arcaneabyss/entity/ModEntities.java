@@ -14,6 +14,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -31,6 +32,7 @@ public class ModEntities {
     public static EntityType<GreenSlimeEntity> GREEN_SLIME;
     public static EntityType<DarkBlueSlimeEntity> DARK_BLUE_SLIME;
     public static EntityType<DarkRedSlimeEntity> DARK_RED_SLIME;
+    public static EntityType<RedSlimeStationaryEntity> RED_SLIME_STATIONARY;
     public static EntityType<BlackSlimeEntity> BLACK_SLIME;
     public static EntityType<SlimeviathanEntity> SLIMEVIATHAN;
     public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
@@ -55,6 +57,10 @@ public class ModEntities {
         RED_SLIME = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "red_slime"),
                 FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeEntity::new)
+                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        RED_SLIME_STATIONARY = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "red_slime_stationary"),
+                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeStationaryEntity::new)
                         .dimensions(EntityDimensions.fixed(1f, 1f)).build());
 
         GREEN_SLIME = Registry.register(Registries.ENTITY_TYPE,

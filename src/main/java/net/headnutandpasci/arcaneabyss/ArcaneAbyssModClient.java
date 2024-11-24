@@ -3,6 +3,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeStationaryRenderer;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMachineScreen;
@@ -27,6 +28,7 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.BLUE_SLIME, BlueSlimeRenderer::new);
         EntityRendererRegistry.register(ModEntities.SLIME_PILLAR, SlimePillarRenderer::new);
         EntityRendererRegistry.register(ModEntities.RED_SLIME, RedSlimeRenderer::new);
+        EntityRendererRegistry.register(ModEntities.RED_SLIME_STATIONARY, RedSlimeStationaryRenderer::new);
         EntityRendererRegistry.register(ModEntities.GREEN_SLIME, GreenSlimeRenderer::new);
         EntityRendererRegistry.register(ModEntities.DARK_BLUE_SLIME, DarkBlueSlimeRenderer::new);
         EntityRendererRegistry.register(ModEntities.DARK_RED_SLIME, DarkRedSlimeRenderer::new);

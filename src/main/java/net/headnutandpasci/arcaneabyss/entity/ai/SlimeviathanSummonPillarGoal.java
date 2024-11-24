@@ -122,8 +122,8 @@ public class SlimeviathanSummonPillarGoal extends Goal {
 
             if (targetPosAtStrike != null) {
 
-                // Assuming you have a reference to the Slimeviathan entity
-                LivingEntity targetAtStrike = entity.getTarget(); // This could be a player or another entity
+
+                LivingEntity targetAtStrike = entity.getTarget();
                 if (targetAtStrike instanceof PlayerEntity) {
                     spawnParticleEffectOnceAtPlayer(targetAtStrike);
 
@@ -134,6 +134,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
                     LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
                     if (lightning != null) {
                         lightning.refreshPositionAfterTeleport(targetPosAtStrike.x, targetPosAtStrike.y, targetPosAtStrike.z);
+                        world.spawnEntity(lightning);
                         world.spawnEntity(lightning);
                         resetEffectFlag();
                     }

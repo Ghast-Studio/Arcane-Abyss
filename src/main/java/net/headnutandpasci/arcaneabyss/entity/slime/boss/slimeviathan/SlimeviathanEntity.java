@@ -90,6 +90,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         this.setInvulTimer(DEFAULT_INVUL_TIMER);
         this.startBossFight();
+        this.calculateDimensions();
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
@@ -154,6 +155,14 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     public void setCustomName(@Nullable Text name) {
         super.setCustomName(name);
         this.bossBar.setName(this.getDisplayName());
+    }
+
+    public void calculateDimensions() {
+        double d = this.getX();
+        double e = this.getY();
+        double f = this.getZ();
+        super.calculateDimensions();
+        this.setPosition(d, e, f);
     }
 
     public void startBossFight() {

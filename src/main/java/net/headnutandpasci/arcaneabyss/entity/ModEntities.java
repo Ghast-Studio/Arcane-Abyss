@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
+import net.headnutandpasci.arcaneabyss.entity.miscEntites.YallaEntity;
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeviathanProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
@@ -38,6 +39,7 @@ public class ModEntities {
     public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
     public static EntityType<BlackSlimeProjectileEntity> BLACK_SLIME_PROJECTILE;
     public static EntityType<SlimeviathanProjectileEntity> SLIMEVIATHAN_PROJECTLE;
+    public static EntityType<YallaEntity> YALLA;
 
     public static void registerModEntities() {
         Test = Registry.register(Registries.ENTITY_TYPE,
@@ -98,6 +100,10 @@ public class ModEntities {
         SLIMEVIATHAN = Registry.register(Registries.ENTITY_TYPE,
                 new Identifier(ArcaneAbyss.MOD_ID, "slimeviathan"),
                 FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
+                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        YALLA = Registry.register(Registries.ENTITY_TYPE,
+                new Identifier(ArcaneAbyss.MOD_ID, "yalla"),
+                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, YallaEntity::new)
                         .dimensions(EntityDimensions.fixed(1f, 1f)).build());
 
 

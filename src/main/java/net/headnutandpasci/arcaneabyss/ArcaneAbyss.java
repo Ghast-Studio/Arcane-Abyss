@@ -8,6 +8,7 @@ import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
+import net.headnutandpasci.arcaneabyss.entity.miscEntites.YallaEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
@@ -63,6 +64,7 @@ public class ArcaneAbyss implements ModInitializer {
         FabricDefaultAttributeRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeEntity.setAttributesGreenSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanEntity.setAttributesGreenSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.Test, TestEntity.setAttributesTest());
+        FabricDefaultAttributeRegistry.register(ModEntities.YALLA, YallaEntity.setAttributesYalla());
 
         ServerPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, (server, player, handler, buf, responseSender) -> {
             // No-op, handled client-side

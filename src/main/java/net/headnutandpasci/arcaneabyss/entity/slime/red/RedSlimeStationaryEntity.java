@@ -30,7 +30,8 @@ public class RedSlimeStationaryEntity extends AbstractRangedSlime {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0D)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
+                .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f);
     }
 
     @Nullable

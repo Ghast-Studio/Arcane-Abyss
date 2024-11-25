@@ -1,7 +1,9 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.AbstractRangedSlime;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.control.JumpControl;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -12,6 +14,8 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -54,5 +58,29 @@ public class RedSlimeStationaryEntity extends AbstractRangedSlime {
         this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
+    @Override
+    public JumpControl getJumpControl() {
+        return super.getJumpControl();
+    }
 
+    @Override
+    protected void jump() {
+        System.out.println("jump");
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        System.out.println("step");
+    }
+
+    @Override
+    protected void playSecondaryStepSound(BlockState state) {
+        System.out.println("step");
+    }
+
+    @Override
+    protected SoundEvent getJumpSound() {
+        System.out.println("jump");
+        return null;
+    }
 }

@@ -8,7 +8,7 @@ import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
-import net.headnutandpasci.arcaneabyss.entity.miscEntites.YallaEntity;
+import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;

@@ -3,7 +3,7 @@ package net.headnutandpasci.arcaneabyss.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
-import net.headnutandpasci.arcaneabyss.entity.miscEntites.YallaEntity;
+import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeviathanProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;

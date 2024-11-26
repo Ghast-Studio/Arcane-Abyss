@@ -2,12 +2,11 @@ package net.headnutandpasci.arcaneabyss.entity.client.misc;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.headnutandpasci.arcaneabyss.entity.miscEntites.YallaEntity;
+import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
 import net.headnutandpasci.arcaneabyss.entity.model.YallaEntityModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
-import net.minecraft.client.render.entity.model.AllayEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.util.Identifier;

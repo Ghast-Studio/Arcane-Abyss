@@ -8,13 +8,16 @@ import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 public class SlimeShootGoal extends Goal {
     private final BlackSlimeEntity blackSlimeEntity;
-
     @Nullable
     private String type;
 
@@ -67,7 +70,6 @@ public class SlimeShootGoal extends Goal {
         }
 
         return bulletPatterns.getRandom();
-        //return "RapidMultiShot";
     }
 
     @Override
@@ -95,8 +97,9 @@ public class SlimeShootGoal extends Goal {
             }
             case "RapidMultiShot" -> {
                 if (blackSlimeEntity.getAttackTimer() % 10 == 0) {
-                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount + 90)));
-                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) - 90));
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount + 120)));
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 240));
+                    performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 360));
                     this.rotatedShootAmount++;
                 }
             }
@@ -105,13 +108,21 @@ public class SlimeShootGoal extends Goal {
     }
 
     private void shootSkullAt(Vec3d spawn, Vec3d direction) {
+        ServerWorld world = blackSlimeEntity.getWorld() instanceof ServerWorld ? ((ServerWorld) blackSlimeEntity.getWorld()) : null;
+        if (world == null) return; // Ensure the world is a ServerWorld instance
+
         double g = direction.x - spawn.x;
         double h = direction.y - spawn.y - 4.0f;
         double i = direction.z - spawn.z;
+
+        // Create and spawn the projectile
         BlackSlimeProjectileEntity witherSkullEntity = new BlackSlimeProjectileEntity(this.blackSlimeEntity.getWorld(), this.blackSlimeEntity, g, h, i);
         witherSkullEntity.setOwner(this.blackSlimeEntity);
         witherSkullEntity.setPos(spawn.x, spawn.y + 4.0f, spawn.z);
         this.blackSlimeEntity.getWorld().spawnEntity(witherSkullEntity);
+
+        // Add particle circle effect around the projectile
+        spawnParticleCircleAroundProjectile(witherSkullEntity, world);
     }
 
     private void performSingleRotatedShot(float angle) {
@@ -121,6 +132,20 @@ public class SlimeShootGoal extends Goal {
         Vec3d spawn = this.blackSlimeEntity.getRotationVector();
         spawn = VectorUtils.addRight(spawn, 3.0f);
         spawn = VectorUtils.rotateVectorCC(spawn, this.blackSlimeEntity.getRotationVector(), angle);
+
+        double playerX = target.getX();
+        double playerZ = target.getZ();
+        double playerY = blackSlimeEntity.getY();
+
+
+        ServerWorld world = target.getWorld() instanceof ServerWorld ? (ServerWorld) target.getWorld() : null;
+        if (world != null) {
+
+            BlockPos groundPos = new BlockPos((int) playerX, (int) playerY, (int) playerZ);
+
+            spawnParticleCircle(world, groundPos, ParticleTypes.GLOW, 1, 50);
+
+        }
 
         this.performSingleShot(spawn.add(0, 3, 0));
     }
@@ -136,7 +161,75 @@ public class SlimeShootGoal extends Goal {
         Vec3d spawn = this.blackSlimeEntity.getPos();
         Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
 
+        double playerX = target.getX();
+        double playerZ = target.getZ();
+        double playerY = blackSlimeEntity.getY();
+
+
+        ServerWorld world = target.getWorld() instanceof ServerWorld ? (ServerWorld) target.getWorld() : null;
+        if (world != null) {
+
+            BlockPos groundPos = new BlockPos((int) playerX, (int) playerY, (int) playerZ);
+
+            spawnParticleCircle(world, groundPos, ParticleTypes.GLOW, 1, 50);
+
+        }
+
         this.shootSkullAt(spawn.add(offset), direction);
     }
-}
 
+    public void spawnParticleCircle(ServerWorld world, BlockPos center, ParticleEffect particle, double radius, int particleCount) {
+
+        double centerX = center.getX();
+        double centerY = center.getY();
+        double centerZ = center.getZ();
+
+        for (int i = 0; i < particleCount; i++) {
+            double angle = 2 * Math.PI * i / particleCount;
+            double x = centerX + radius * Math.cos(angle);
+            double z = centerZ + radius * Math.sin(angle);
+            double y = centerY;
+
+            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
+        }
+    }
+
+    private void spawnParticleCircleAroundProjectile(BlackSlimeProjectileEntity projectile, ServerWorld world) {
+        if (projectile == null) return;
+
+        LivingEntity target = blackSlimeEntity.getTarget();
+        if (target == null) return;
+
+
+        Vec3d projectilePos = projectile.getPos();
+        Vec3d targetPos = target.getPos();
+        Vec3d normal = targetPos.subtract(projectilePos).normalize();
+
+        // Update these vectors to make particle spawn positions smoother
+        Vec3d up = new Vec3d(0, 1, 0);
+        Vec3d right = normal.crossProduct(up).normalize();
+        Vec3d forward = right.crossProduct(normal).normalize();
+
+        int particleCount = 12;
+        double radius = 0.85;
+
+        for (int i = 0; i < particleCount; i++) {
+            double angle = 2 * Math.PI * i / particleCount;
+
+            // Smoothly add to the position for better effect
+            Vec3d circlePos = projectilePos.add(
+                    right.multiply(radius * Math.cos(angle))
+                            .add(forward.multiply(radius * Math.sin(angle)))
+            );
+
+            // Spawn particles with a smooth fade effect
+            world.spawnParticles(
+                    ParticleTypes.SMALL_FLAME,
+                    circlePos.x, circlePos.y, circlePos.z,
+                    20,
+                    0, 0, 0,
+                    0.01
+            );
+        }
+    }
+}

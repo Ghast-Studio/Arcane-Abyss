@@ -65,7 +65,7 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
         Entity entity = entityHitResult.getEntity();
 
 
-        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 8.0f);
+        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 11.0f);
         entity.setFireTicks(100);
 
 
@@ -75,7 +75,7 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.getWorld().isClient) {
-            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 3F, false, World.ExplosionSourceType.MOB);
+            this.getWorld().createExplosion(this, this.getX(), this.getY(), this.getZ(), 1.5F, false, World.ExplosionSourceType.MOB);
             this.getWorld().sendEntityStatus(this, (byte) 3);
             this.discard();
         }

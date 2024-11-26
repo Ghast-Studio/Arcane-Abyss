@@ -81,7 +81,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 400.0f)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 10.0f)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 15.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
@@ -107,10 +107,10 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
+        //this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
         this.goalSelector.add(1, new SlimeShootGoal(this));
-        this.goalSelector.add(2, new SlimeSummonGoal(this));
-        this.goalSelector.add(2, new SlimePushGoal(this));
+        //this.goalSelector.add(2, new SlimeSummonGoal(this));
+        //this.goalSelector.add(2, new SlimePushGoal(this));
         this.goalSelector.add(3, new SwimmingGoal(this));
         this.goalSelector.add(4, new FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new RandomLookGoal(this));
@@ -235,7 +235,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
 
                 attackPool.addEntry(State.SUMMON, 5);
-                attackPool.addEntry(State.SHOOT_SLIME_BULLET, 20);
+                attackPool.addEntry(State.SHOOT_SLIME_BULLET, 10);
                 this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
             }
         }

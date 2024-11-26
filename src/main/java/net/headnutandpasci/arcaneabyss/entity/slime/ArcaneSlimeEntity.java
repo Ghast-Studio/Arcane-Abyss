@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -151,7 +152,12 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
                         }
 
                         this.slime.getJumpControl().setActive();
-                        this.slime.playSound(SoundEvents.ENTITY_SLIME_JUMP, 0.8f, this.getJumpSoundPitch());
+                        SoundEvent jumpSound = this.slime.getJumpSound();
+
+                        if(jumpSound != null) {
+                            this.slime.playSound(this.slime.getJumpSound(), 0.8f, this.getJumpSoundPitch());
+                        }
+
                     } else {
                         this.slime.sidewaysSpeed = 0.0F;
                         this.slime.forwardSpeed = 0.0F;
@@ -203,6 +209,10 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             }
 
         }
+    }
+
+    protected SoundEvent getJumpSound(){
+        return SoundEvents.ENTITY_SLIME_JUMP;
     }
 
     protected static class FaceTowardTargetGoal extends Goal {

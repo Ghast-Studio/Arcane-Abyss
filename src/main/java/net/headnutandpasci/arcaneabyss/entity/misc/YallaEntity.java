@@ -118,7 +118,7 @@ public class YallaEntity extends HostileEntity implements Vibrations {
     }
 
     protected Brain<?> deserializeBrain(Dynamic<?> dynamic) {
-        return YallaBrain.create(this, this.createBrainProfile().deserialize(dynamic));
+        return YallaBrain.create(this.createBrainProfile().deserialize(dynamic));
     }
 
     public Brain<YallaEntity> getBrain() {
@@ -143,7 +143,7 @@ public class YallaEntity extends HostileEntity implements Vibrations {
             if (this.isTouchingWater()) {
                 this.updateVelocity(0.02F, movementInput);
                 this.move(MovementType.SELF, this.getVelocity());
-                this.setVelocity(this.getVelocity().multiply(0.800000011920929));
+                this.setVelocity(this.getVelocity().multiply(0.8));
             } else if (this.isInLava()) {
                 this.updateVelocity(0.02F, movementInput);
                 this.move(MovementType.SELF, this.getVelocity());
@@ -151,7 +151,7 @@ public class YallaEntity extends HostileEntity implements Vibrations {
             } else {
                 this.updateVelocity(this.getMovementSpeed(), movementInput);
                 this.move(MovementType.SELF, this.getVelocity());
-                this.setVelocity(this.getVelocity().multiply(0.9100000262260437));
+                this.setVelocity(this.getVelocity().multiply(0.91));
             }
         }
 

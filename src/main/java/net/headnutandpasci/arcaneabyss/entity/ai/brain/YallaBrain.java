@@ -20,9 +20,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class YallaBrain {
-    public static Brain<?> create(YallaEntity yalla, Brain<YallaEntity> brain) {
+    public static Brain<?> create(Brain<YallaEntity> brain) {
         YallaBrain.addCoreActivities(brain);
-        YallaBrain.addCombatActivities(brain, yalla);
+        YallaBrain.addCombatActivities(brain);
         YallaBrain.addIdleActivities(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
@@ -38,7 +38,7 @@ public class YallaBrain {
                 new TemptationCooldownTask(MemoryModuleType.LIKED_NOTEBLOCK_COOLDOWN_TICKS)));
     }
 
-    private static void addCombatActivities(Brain<YallaEntity> brain, YallaEntity yalla) {
+    private static void addCombatActivities(Brain<YallaEntity> brain) {
         brain.setTaskList(Activity.FIGHT, 10, ImmutableList.of(
                         ForgetAttackTargetTask.create(),
                         RangedApproachTask.create(1.5F),
@@ -54,7 +54,6 @@ public class YallaBrain {
                 new RandomTask<>(ImmutableList.of(
                         Pair.of(StrollTask.createSolidTargeting(1.0F), 2),
                         Pair.of(GoTowardsLookTargetTask.create(1.0F, 3), 2),
-                        //Pair.of(WalkTowardsLookTargetTask.create(YallaBrain::getFriendlyLookTarget, livingEntity -> true, 4, 5, 1.0f), 2),
                         Pair.of(new WaitTask(30, 60), 1)))
         ));
     }

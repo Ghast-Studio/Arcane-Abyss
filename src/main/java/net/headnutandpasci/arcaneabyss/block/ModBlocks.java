@@ -64,9 +64,6 @@ public class ModBlocks {
         DUNGEON_COBBLE = registerBlock("dungeon_cobble",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
 
-        BLUE_SLIME_SPAWNER = registerBlock("blue_slime_spawner",
-                new BlueSlimeSpawner(FabricBlockSettings.copyOf(Blocks.SPAWNER).nonOpaque()));
-
         SLIMESTEEL_MACHINE = registerBlock("slimesteel_machine",
                 new SlimeSteelMachineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
 

@@ -78,7 +78,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
 
     @Override
     public boolean canSpawn(WorldView world) {
-        return false;
+        return true;
     }
 
     protected float getDamageAmount() {

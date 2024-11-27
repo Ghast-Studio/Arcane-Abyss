@@ -21,13 +21,14 @@ public class DarkRedSlimeEntity extends AbstractRangedSlime {
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 50.0D)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
+                .add(EntityAttributes.GENERIC_ARMOR, 5)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f);
     }
 
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SwimmingGoal(this));
-        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 13, 10.0F));
+        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 13, 15.0F));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
         this.goalSelector.add(4, new RandomLookGoal(this));
         this.goalSelector.add(5, new MoveGoal(this, 1.5));

@@ -85,7 +85,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
-                .add(EntityAttributes.GENERIC_ARMOR, 18)
+                .add(EntityAttributes.GENERIC_ARMOR, 10)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
     }
 
@@ -107,10 +107,10 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     protected void initGoals() {
-        //this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
+        this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
         this.goalSelector.add(1, new SlimeShootGoal(this));
-        //this.goalSelector.add(2, new SlimeSummonGoal(this));
-        //this.goalSelector.add(2, new SlimePushGoal(this));
+        this.goalSelector.add(2, new SlimeSummonGoal(this));
+        this.goalSelector.add(2, new SlimePushGoal(this));
         this.goalSelector.add(3, new SwimmingGoal(this));
         this.goalSelector.add(4, new FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new RandomLookGoal(this));

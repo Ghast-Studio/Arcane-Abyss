@@ -41,6 +41,7 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN_PROJECTLE, SlimeviathanProjectileRenderer::new);
         HandledScreens.register(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, SlimeSteelMachineScreen::new);
 
+
         EntityRendererRegistry.register(ModEntities.YALLA, YallaRenderer::new);
 
         ClientPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, MovementControlPacket::handle);

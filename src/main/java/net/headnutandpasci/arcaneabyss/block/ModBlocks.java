@@ -15,6 +15,7 @@ import net.minecraft.util.Identifier;
 
 public class ModBlocks {
 
+
     public static Block RUBY_BLOCK;
     public static Block RAW_RUBY_BLOCK;
     public static Block DUNGEON_WALL_BLOCK;
@@ -29,10 +30,13 @@ public class ModBlocks {
     public static Block DUNGEON_COBBLE_STAIR;
     public static Block DUNGEON_COBBLE_SLAB;
     public static Block SLIMESTEEL_MACHINE;
+    public static Block BLUE_SLIME_SPAWNER;
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(Registries.BLOCK, new Identifier(ArcaneAbyss.MOD_ID, name), block);
+
+
     }
 
     private static void registerBlockItem(String name, Block block) {
@@ -60,12 +64,11 @@ public class ModBlocks {
         DUNGEON_COBBLE = registerBlock("dungeon_cobble",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
 
-
-
+        BLUE_SLIME_SPAWNER = registerBlock("blue_slime_spawner",
+                new BlueSlimeSpawner(FabricBlockSettings.copyOf(Blocks.SPAWNER).nonOpaque()));
 
         SLIMESTEEL_MACHINE = registerBlock("slimesteel_machine",
                 new SlimeSteelMachineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));
-
 
         DUNGEON_BRICK_STAIR = registerBlock("dungeon_brick_stair",
                 new DungeonBrickStair(Blocks.BEDROCK.getDefaultState(),
@@ -89,7 +92,7 @@ public class ModBlocks {
 
 
 
-       ;
+
 
 
 

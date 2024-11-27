@@ -33,6 +33,7 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE_STAIR);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_WALL);
         blockStateModelGenerator.registerSimpleState(ModBlocks.SLIMESTEEL_MACHINE);
+        blockStateModelGenerator.registerSimpleState(ModBlocks.BLUE_SLIME_SPAWNER);
 
 
     }

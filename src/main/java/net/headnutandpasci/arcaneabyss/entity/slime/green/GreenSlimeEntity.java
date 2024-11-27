@@ -33,7 +33,7 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
     private static final TrackedData<Boolean> IGNITED;
     private int lastFuseTime;
     private int currentFuseTime;
-    private final int fuseTime = 20;
+    private final int fuseTime = 10;
 
     public GreenSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -41,10 +41,10 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
 
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0D)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0D)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.9f);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
         if (this.isAlive()) {
             this.lastFuseTime = this.currentFuseTime;
             if (this.isIgnited()) {
-                this.setFuseSpeed(1);
+                this.setFuseSpeed(5);
             }
 
             int i = this.getFuseSpeed();

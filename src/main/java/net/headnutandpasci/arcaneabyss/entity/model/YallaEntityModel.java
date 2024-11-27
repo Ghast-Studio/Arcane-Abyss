@@ -2,13 +2,12 @@ package net.headnutandpasci.arcaneabyss.entity.model;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.headnutandpasci.arcaneabyss.entity.miscEntites.YallaEntity;
+import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.ModelWithArms;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
@@ -22,9 +21,6 @@ public class YallaEntityModel extends SinglePartEntityModel<YallaEntity> impleme
     private final ModelPart leftArm;
     private final ModelPart rightWing;
     private final ModelPart leftWing;
-    private static final float field_38999 = 0.7853982F;
-    private static final float field_39000 = -1.134464F;
-    private static final float field_39001 = -1.0471976F;
 
     public YallaEntityModel(ModelPart root) {
         super(RenderLayer::getEntityTranslucent);
@@ -35,10 +31,6 @@ public class YallaEntityModel extends SinglePartEntityModel<YallaEntity> impleme
         this.leftArm = this.body.getChild("left_arm");
         this.rightWing = this.body.getChild("right_wing");
         this.leftWing = this.body.getChild("left_wing");
-    }
-
-    public ModelPart getPart() {
-        return this.root;
     }
 
     public static TexturedModelData getTexturedModelData() {
@@ -54,56 +46,69 @@ public class YallaEntityModel extends SinglePartEntityModel<YallaEntity> impleme
         return TexturedModelData.of(modelData, 32, 32);
     }
 
-
-
-    public void setAngles(YallaEntity yallaEntity, float f, float g, float h, float i, float j) {
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
-        float k = h * 20.0F * 0.017453292F + f;
-        float l = MathHelper.cos(k) * 3.1415927F * 0.15F + g;
-        float m = h - (float)yallaEntity.age;
-        float n = h * 9.0F * 0.017453292F;
-        float o = Math.min(g / 0.3F, 1.0F);
-        float p = 1.0F - o;
-        float q = yallaEntity.method_43397(m);
-        float r;
-        float s;
-        float t;
-        if (yallaEntity.isDancing()) {
-            r = h * 8.0F * 0.017453292F + g;
-            s = MathHelper.cos(r) * 16.0F * 0.017453292F;
-            t = yallaEntity.method_44368(m);
-            float u = MathHelper.cos(r) * 14.0F * 0.017453292F;
-            float v = MathHelper.cos(r) * 30.0F * 0.017453292F;
-            this.root.yaw = yallaEntity.method_44360() ? 12.566371F * t : this.root.yaw;
-            this.root.roll = s * (1.0F - t);
-            this.head.yaw = v * (1.0F - t);
-            this.head.roll = u * (1.0F - t);
-        } else {
-            this.head.pitch = j * 0.017453292F;
-            this.head.yaw = i * 0.017453292F;
-        }
-
-        this.rightWing.pitch = 0.43633232F * (1.0F - o);
-        this.rightWing.yaw = -0.7853982F + l;
-        this.leftWing.pitch = 0.43633232F * (1.0F - o);
-        this.leftWing.yaw = 0.7853982F - l;
-        this.body.pitch = o * 0.7853982F;
-        r = q * MathHelper.lerp(o, -1.0471976F, -1.134464F);
-        ModelPart var10000 = this.root;
-        var10000.pivotY += (float)Math.cos((double)n) * 0.25F * p;
-        this.rightArm.pitch = r;
-        this.leftArm.pitch = r;
-        s = p * (1.0F - q);
-        t = 0.43633232F - MathHelper.cos(n + 4.712389F) * 3.1415927F * 0.075F * s;
-        this.leftArm.roll = -t;
-        this.rightArm.roll = t;
-        this.rightArm.yaw = 0.27925268F * q;
-        this.leftArm.yaw = -0.27925268F * q;
+    public ModelPart getPart() {
+        return this.root;
     }
 
+    @Override
+    public void setAngles(YallaEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+        // Reset transformations of all model parts
+        this.getPart().traverse().forEach(ModelPart::resetTransform);
+
+        // Calculate base values
+        float timeFactor = animationProgress * 20.0F * 0.017453292F + limbAngle; // Converts time to radians with an offset
+        float swingOffset = MathHelper.cos(timeFactor) * 3.1415927F * 0.15F + limbDistance;
+        float phase = animationProgress - (float) entity.age;
+        float cycleAngle = animationProgress * 9.0F * 0.017453292F;
+
+        // Calculate interpolation factor for wings
+        float wingFactor = Math.min(limbDistance / 0.3F, 1.0F);
+        float inverseWingFactor = 1.0F - wingFactor;
+
+        // Handle dancing animation
+        if (entity.isDancing()) {
+            float danceCycle = animationProgress * 8.0F * 0.017453292F + limbDistance;
+            float danceRoll = MathHelper.cos(danceCycle) * 16.0F * 0.017453292F;
+            float danceYaw = MathHelper.cos(danceCycle) * 14.0F * 0.017453292F;
+            float dancePitch = MathHelper.cos(danceCycle) * 30.0F * 0.017453292F;
+            float danceProgress = entity.getAnimationProgress(phase);
+
+            this.root.yaw = entity.animationCycleProgress() ? 12.566371F * danceProgress : this.root.yaw;
+            this.root.roll = danceRoll * (1.0F - danceProgress);
+            this.head.yaw = dancePitch * (1.0F - danceProgress);
+            this.head.roll = danceYaw * (1.0F - danceProgress);
+        } else {
+            // Handle default head movement
+            this.head.pitch = headPitch * 0.017453292F;
+            this.head.yaw = headYaw * 0.017453292F;
+        }
+
+        // Wing movement
+        this.rightWing.pitch = 0.43633232F * (1.0F - wingFactor);
+        this.rightWing.yaw = -0.7853982F + swingOffset;
+        this.leftWing.pitch = 0.43633232F * (1.0F - wingFactor);
+        this.leftWing.yaw = 0.7853982F - swingOffset;
+
+        // Body movement
+        this.body.pitch = wingFactor * 0.7853982F;
+
+        // Arm and body positioning
+        float armPitch = inverseWingFactor * MathHelper.lerp(wingFactor, -1.0471976F, -1.134464F);
+        this.root.pivotY += (float) Math.cos(cycleAngle) * 0.25F * inverseWingFactor;
+        this.rightArm.pitch = armPitch;
+        this.leftArm.pitch = armPitch;
+
+        // Arm rolling and yaw adjustments
+        float rollSwing = inverseWingFactor * (1.0F - wingFactor);
+        float armRollOffset = 0.43633232F - MathHelper.cos(cycleAngle + 4.712389F) * 3.1415927F * 0.075F * rollSwing;
+        this.leftArm.roll = -armRollOffset;
+        this.rightArm.roll = armRollOffset;
+        this.rightArm.yaw = 0.27925268F * wingFactor;
+        this.leftArm.yaw = -0.27925268F * wingFactor;
+    }
+
+    @Override
     public void setArmAngle(Arm arm, MatrixStack matrices) {
-        float f = 1.0F;
-        float g = 3.0F;
         this.root.rotate(matrices);
         this.body.rotate(matrices);
         matrices.translate(0.0F, 0.0625F, 0.1875F);

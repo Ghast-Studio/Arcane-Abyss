@@ -1,0 +1,14 @@
+{
+    "type": "minecraft:jigsaw",
+    "biomes": "#arcaneabyss:has_structure/dungeon",
+    "step": "surface_structures",
+    "spawn_overrides": {},
+    "terrain_adaptation": "none",
+    "start_pool": "arcaneabyss:dungeon/starts",
+    "size": 7,
+    "start_height": {
+        "absolute": -60
+    },
+    "max_distance_from_center": 116,
+    "use_expansion_hack": false
+}

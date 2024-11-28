@@ -1,0 +1,84 @@
+{
+    "name": "arcaneabyss:dungeon/segments",
+    "fallback": "arcaneabyss:dungeon/segment_fallbacks",
+    "elements": [
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room_crafter"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room_maze"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room_mine"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room_puzzle"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room_supply"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room_yalla"
+            }
+        }
+    ]
+}

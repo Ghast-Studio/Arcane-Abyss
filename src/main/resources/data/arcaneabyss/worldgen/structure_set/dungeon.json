@@ -1,0 +1,18 @@
+{
+    "structures": [
+        {
+            "structure": "arcaneabyss:dungeon",
+            "weight": 1
+        }
+    ],
+    "placement": {
+        "type": "minecraft:random_spread",
+        "salt": 3524697,
+        "exclusion_zone": {
+            "other_set": "minecraft:mineshafts",
+            "chunk_count": 5
+        },
+        "spacing": 40,
+        "separation": 10
+    }
+}

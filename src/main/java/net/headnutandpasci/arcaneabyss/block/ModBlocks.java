@@ -30,7 +30,6 @@ public class ModBlocks {
     public static Block DUNGEON_COBBLE_STAIR;
     public static Block DUNGEON_COBBLE_SLAB;
     public static Block SLIMESTEEL_MACHINE;
-    public static Block BLUE_SLIME_SPAWNER;
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);

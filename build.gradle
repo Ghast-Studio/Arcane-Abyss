@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.matyrobbrt.mc.registrationutils' version "${minecraft_version}-1+"
 }
 
 version = project.mod_version
@@ -8,6 +9,13 @@ group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
+}
+
+registrationUtils {
+	group 'net.headnutandpasci.arcaneabyss.registration'
+	projects {
+
+	}
 }
 
 repositories {

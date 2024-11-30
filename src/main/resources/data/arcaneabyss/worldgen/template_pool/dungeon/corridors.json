@@ -1,0 +1,58 @@
+{
+    "name": "arcaneabyss:dungeon/corridors",
+    "fallback": "arcaneabyss:dungeon/segment_fallbacks",
+    "elements": [
+        {
+            "weight": 5,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/corridor/corridor_hallway"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/corridor/corridor_hallwayfork"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/corridor/corridor_hallwayleft"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/corridor/corridor_hallwayright"
+            }
+        }
+    ]
+}

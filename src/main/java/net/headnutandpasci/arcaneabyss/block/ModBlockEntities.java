@@ -17,8 +17,6 @@ public class ModBlockEntities {
                 FabricBlockEntityTypeBuilder.create(SlimeSteelMachineBlockEntity::new,
                         ModBlocks.SLIMESTEEL_MACHINE).build());
 
-
-
         ArcaneAbyss.LOGGER.info("Registering block entities" + ArcaneAbyss.MOD_ID);
     }
 }

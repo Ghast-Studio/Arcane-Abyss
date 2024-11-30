@@ -1,7 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.ai.*;
+import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;

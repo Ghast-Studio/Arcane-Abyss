@@ -2,6 +2,7 @@ package net.headnutandpasci.arcaneabyss;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.headnutandpasci.arcaneabyss.world.structures.ModStructures;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -50,6 +51,8 @@ public class ArcaneAbyss implements ModInitializer {
 
         ModBlockEntities.registerBlockEntities();
         ModScreenHandlers.registerScreenHandlers();
+
+        ModStructures.registerStructureType();
 
         ModRecipes.registerRecipes();
 

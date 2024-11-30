@@ -18,7 +18,7 @@ public class YallaRenderer extends MobEntityRenderer<YallaEntity, YallaEntityMod
 
     public YallaRenderer(EntityRendererFactory.Context context) {
         super(context, new YallaEntityModel(context.getPart(EntityModelLayers.ALLAY)), 0.4F);
-        this.addFeature(new HeldItemFeatureRenderer(this, context.getHeldItemRenderer()));
+        this.addFeature(new HeldItemFeatureRenderer<>(this, context.getHeldItemRenderer()));
     }
 
     public Identifier getTexture(YallaEntity allayEntity) {

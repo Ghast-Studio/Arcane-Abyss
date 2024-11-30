@@ -1,16 +1,13 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimePushGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimeResetGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimeShootGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.SlimeSummonGoal;
+import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimePushGoal;
+import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeResetGoal;
+import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeShootGoal;
+import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeSummonGoal;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
-import net.minecraft.client.render.entity.WitherEntityRenderer;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -32,7 +29,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -41,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.jar.Attributes;
 
 public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOwner {
 

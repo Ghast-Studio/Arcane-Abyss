@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlayOwner {
@@ -88,8 +89,8 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     @Nullable
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        this.setInvulTimer(DEFAULT_INVUL_TIMER);
         this.startBossFight();
+        this.setInvulTimer(DEFAULT_INVUL_TIMER);
         this.calculateDimensions();
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
@@ -166,18 +167,10 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     }
 
     public void startBossFight() {
-        if (this.isAlive() && this.dataTracker.get(PHASE) < 1 && this.getState() != SlimeviathanEntity.State.AWAKENING) {
-            Box bossArena = new Box(this.getBlockPos()).expand(getFollowDistance());
-            recalculateAttributes();
-            /*List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, bossArena);
-            for (ServerPlayer p : players) {
-                playerUUIDs.add(p.getUUID());
-            }
-            int playerCount = players.size();
-            EntityScale.scaleBossHealth(this, playerCount);
-            EntityScale.scaleBossAttack(this, playerCount);
-            this.dataTracker.set(PLAYER_COUNT, playerCount);*/
+        if (this.isAlive() && this.getState() == State.AWAKENING) {
+            System.out.println("working");
 
+            recalculateAttributes();
             this.dataTracker.set(AWAKENING_TICKS, 160);
             this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.AWAKENING.getValue());
 
@@ -340,8 +333,11 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
         double baseHealth = 800.0;
         double scaledHealth = baseHealth * scalingFactor;
-        this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(scaledHealth);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(scaledHealth);
 
+        for (int i = 0; i < 100; i++) {
+            System.out.println(scaledHealth);
+        }
 
         if (this.getHealth() > scaledHealth) {
             this.setHealth((float) scaledHealth);
@@ -351,13 +347,12 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
 
         double baseAttack = 20.0;
-        this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE).setBaseValue(baseAttack * scalingFactor);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)).setBaseValue(baseAttack * scalingFactor);
 
 
         double baseArmor = 20.0;
-        this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).setBaseValue(baseArmor * scalingFactor);
+        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR)).setBaseValue(baseArmor * scalingFactor);
     }
-
 
     public boolean isInState(SlimeviathanEntity.State state) {
         return this.getState().equals(state);

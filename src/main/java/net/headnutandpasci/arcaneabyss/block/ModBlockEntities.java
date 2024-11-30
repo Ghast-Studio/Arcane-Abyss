@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 public class ModBlockEntities {
     public static BlockEntityType<SlimeSteelMachineBlockEntity> SLIMESTEEL_MACHINE_ENTITY;
 
+
     public static void registerBlockEntities() {
         SLIMESTEEL_MACHINE_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(ArcaneAbyss.MOD_ID, "slimesteel_machine"),
                 FabricBlockEntityTypeBuilder.create(SlimeSteelMachineBlockEntity::new,

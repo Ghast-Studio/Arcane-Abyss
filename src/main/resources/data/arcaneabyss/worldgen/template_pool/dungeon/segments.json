@@ -16,7 +16,7 @@
             }
         },
         {
-            "weight": 4,
+            "weight": 5,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",
@@ -29,7 +29,7 @@
             }
         },
         {
-            "weight": 3,
+            "weight": 5,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",
@@ -42,7 +42,7 @@
             }
         },
         {
-            "weight": 3,
+            "weight": 5,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",
@@ -55,7 +55,20 @@
             }
         },
         {
-            "weight": 2,
+            "weight": 5,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_plus"
+            }
+        },
+        {
+            "weight": 3,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",

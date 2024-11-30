@@ -23,7 +23,6 @@ public class GenericMobFeature extends Feature<EntityTypeConfig> {
 
         context.getWorld().spawnEntity(entity);
         entity.setPersistent();
-        //EntityScale.scaleMobAttributes(entity);
         return true;
     }
 }

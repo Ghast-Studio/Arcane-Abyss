@@ -8,6 +8,7 @@ import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
@@ -90,6 +91,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         this.startBossFight();
+        System.out.print(this.getState());
         this.setInvulTimer(DEFAULT_INVUL_TIMER);
         this.calculateDimensions();
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
@@ -167,9 +169,9 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     }
 
     public void startBossFight() {
-        if (this.isAlive() && this.getState() == State.AWAKENING) {
-            System.out.println("working");
 
+        if (this.isAlive() && this.getState() == State.SPAWNING) {
+            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> !player.isInvulnerable());
             recalculateAttributes();
             this.dataTracker.set(AWAKENING_TICKS, 160);
             this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.AWAKENING.getValue());
@@ -325,18 +327,29 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
     }
 
     private void recalculateAttributes() {
+        if (playerNearby == null) {
+            System.err.println("Error: playerNearby list is null!");
+            return;
+        }
+
         int playerCount = playerNearby.size();
-
-
         double scalingFactor = Math.max(1.0, playerCount * 0.75);
-
+        System.out.println("Scaling Factor: " + scalingFactor);
 
         double baseHealth = 800.0;
         double scaledHealth = baseHealth * scalingFactor;
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)).setBaseValue(scaledHealth);
+
+        EntityAttributeInstance maxHealthAttr = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        if (maxHealthAttr != null) {
+            maxHealthAttr.setBaseValue(scaledHealth);
+            System.out.println("Scaled Health: " + scaledHealth);
+        } else {
+            System.err.println("Error: Max health attribute not found!");
+            return;
+        }
 
         for (int i = 0; i < 100; i++) {
-            System.out.println(scaledHealth);
+            System.out.println("Scaled Health in loop: " + scaledHealth);
         }
 
         if (this.getHealth() > scaledHealth) {
@@ -345,14 +358,25 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             this.heal((float) (scaledHealth - this.getHealth()));
         }
 
-
         double baseAttack = 20.0;
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE)).setBaseValue(baseAttack * scalingFactor);
-
+        EntityAttributeInstance attackDamageAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (attackDamageAttr != null) {
+            attackDamageAttr.setBaseValue(baseAttack * scalingFactor);
+            System.out.println("Attack Damage Set to: " + (baseAttack * scalingFactor));
+        } else {
+            System.err.println("Error: Attack damage attribute not found!");
+        }
 
         double baseArmor = 20.0;
-        Objects.requireNonNull(this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR)).setBaseValue(baseArmor * scalingFactor);
+        EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+        if (armorAttr != null) {
+            armorAttr.setBaseValue(baseArmor * scalingFactor);
+            System.out.println("Armor Set to: " + (baseArmor * scalingFactor));
+        } else {
+            System.err.println("Error: Armor attribute not found!");
+        }
     }
+
 
     public boolean isInState(SlimeviathanEntity.State state) {
         return this.getState().equals(state);

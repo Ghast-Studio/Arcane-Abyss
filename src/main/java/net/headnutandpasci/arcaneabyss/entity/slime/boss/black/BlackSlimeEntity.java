@@ -6,6 +6,7 @@ import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeResetGoal;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeShootGoal;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeSummonGoal;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.EntityData;
@@ -13,6 +14,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
@@ -51,7 +53,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     private final ServerBossBar bossBar;
     private final CopyOnWriteArrayList<Integer> summonedMobIds;
 
-
+    private List<PlayerEntity> playerNearby;
     protected int attackTimer;
     protected int playerUpdateTimer;
     /*private List<PlayerEntity> pushTargets;*/
@@ -153,25 +155,18 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     }
 
     public void startBossFight() {
-        if (this.isAlive() && this.dataTracker.get(PHASE) < 1 && this.getState() != State.AWAKENING) {
-            Box bossArena = new Box(this.getBlockPos()).expand(getFollowDistance());
 
-            /*List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, bossArena);
-            for (ServerPlayer p : players) {
-                playerUUIDs.add(p.getUUID());
-            }
-            int playerCount = players.size();
-            EntityScale.scaleBossHealth(this, playerCount);
-            EntityScale.scaleBossAttack(this, playerCount);
-            this.dataTracker.set(PLAYER_COUNT, playerCount);*/
-
+        if (this.isAlive() && this.getState() == BlackSlimeEntity.State.SPAWNING) {
+            playerNearby = this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(this.getFollowDistance()), (player) -> !player.isInvulnerable());
+            recalculateAttributes();
             this.dataTracker.set(AWAKENING_TICKS, 160);
-            this.dataTracker.set(DATA_STATE, State.AWAKENING.getValue());
+            this.dataTracker.set(DATA_STATE, SlimeviathanEntity.State.AWAKENING.getValue());
 
             if (this.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
                 moveControl.setDisabled(false);
             }
         }
+
     }
 
     @Override
@@ -305,6 +300,57 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
         }
 
+    }
+
+    private void recalculateAttributes() {
+        if (playerNearby == null) {
+            System.err.println("Error: playerNearby list is null!");
+            return;
+        }
+
+        int playerCount = playerNearby.size();
+        double scalingFactor = Math.max(1.0, playerCount * 0.50);
+        System.out.println("Scaling Factor: " + scalingFactor);
+
+        double baseHealth = 400.0;
+        double scaledHealth = baseHealth * scalingFactor;
+
+        EntityAttributeInstance maxHealthAttr = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        if (maxHealthAttr != null) {
+            maxHealthAttr.setBaseValue(scaledHealth);
+            System.out.println("Scaled Health: " + scaledHealth);
+        } else {
+            System.err.println("Error: Max health attribute not found!");
+            return;
+        }
+
+        for (int i = 0; i < 100; i++) {
+            System.out.println("Scaled Health in loop: " + scaledHealth);
+        }
+
+        if (this.getHealth() > scaledHealth) {
+            this.setHealth((float) scaledHealth);
+        } else {
+            this.heal((float) (scaledHealth - this.getHealth()));
+        }
+
+        double baseAttack = 15.0;
+        EntityAttributeInstance attackDamageAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (attackDamageAttr != null) {
+            attackDamageAttr.setBaseValue(baseAttack * scalingFactor);
+            System.out.println("Attack Damage Set to: " + (baseAttack * scalingFactor));
+        } else {
+            System.err.println("Error: Attack damage attribute not found!");
+        }
+
+        double baseArmor = 10.0;
+        EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
+        if (armorAttr != null) {
+            armorAttr.setBaseValue(baseArmor * scalingFactor);
+            System.out.println("Armor Set to: " + (baseArmor * scalingFactor));
+        } else {
+            System.err.println("Error: Armor attribute not found!");
+        }
     }
 
     public boolean isInState(State state) {

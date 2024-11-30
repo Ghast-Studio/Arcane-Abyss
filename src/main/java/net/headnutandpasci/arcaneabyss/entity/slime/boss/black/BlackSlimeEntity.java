@@ -256,7 +256,6 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
 
         if(--this.playerUpdateTimer < 1) {
-            System.out.println("playerupdate");
             this.playerUpdateTimer = 20*2;
 
             if(this.isInState(State.SPAWNING)) {

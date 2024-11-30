@@ -67,7 +67,8 @@ public class YallaBrain {
     private static Optional<LivingEntity> findNearestHostile(LivingEntity entity) {
         return entity.getBrain().getOptionalRegisteredMemory(MemoryModuleType.VISIBLE_MOBS)
                 .flatMap(mobs -> mobs.stream(EntityPredicates.VALID_LIVING_ENTITY::test)
-                        .filter(mob -> !mob.getType().getSpawnGroup().isPeaceful())
+                        .filter(mob -> mob.getType() != ModEntities.YALLA)
+                        .filter(mob -> mob.getType() != EntityType.PLAYER)
                         .min(Comparator.comparingDouble(entity::squaredDistanceTo)));
     }
 

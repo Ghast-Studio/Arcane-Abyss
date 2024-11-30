@@ -2,14 +2,14 @@ package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.AbstractRangedSlime;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.control.JumpControl;
-import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,7 +28,6 @@ public class RedSlimeStationaryEntity extends AbstractRangedSlime {
     }
 
 
-
     public static DefaultAttributeContainer.Builder setAttributesRedSlime() {
         return AnimalEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0D)
@@ -41,7 +40,7 @@ public class RedSlimeStationaryEntity extends AbstractRangedSlime {
     @Nullable
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        if(this.moveControl instanceof ArcaneSlimeMoveControl noMove){
+        if (this.moveControl instanceof ArcaneSlimeMoveControl noMove) {
             noMove.setDisabled(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
@@ -65,22 +64,19 @@ public class RedSlimeStationaryEntity extends AbstractRangedSlime {
 
     @Override
     protected void jump() {
-        System.out.println("jump");
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        System.out.println("step");
     }
 
     @Override
     protected void playSecondaryStepSound(BlockState state) {
-        System.out.println("step");
+
     }
 
     @Override
     protected SoundEvent getJumpSound() {
-        System.out.println("jump");
         return null;
     }
 }

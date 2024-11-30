@@ -269,7 +269,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
 
         if (this.isInState(State.PILLAR_SUMMON)) {
             x++;
-            System.out.println(x);
             if (!this.summonedPillarIds.isEmpty() && x >= 1800) {
                 for (PlayerEntity player : playerNearby) {
                     player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 99999, 20));

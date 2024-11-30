@@ -3,7 +3,7 @@
     "fallback": "arcaneabyss:dungeon/segment_fallbacks",
     "elements": [
         {
-            "weight": 1,
+            "weight": 5,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",
@@ -12,7 +12,59 @@
                         "processor_type": "minecraft:nop"
                     }
                 ],
-                "location": "arcaneabyss:dungeon/room_crafter"
+                "location": "arcaneabyss:dungeon/room/room_crafter"
+            }
+        },
+        {
+            "weight": 4,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_supply"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_mine"
+            }
+        },
+        {
+            "weight": 3,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_puzzle"
+            }
+        },
+        {
+            "weight": 2,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_maze"
             }
         },
         {
@@ -25,59 +77,7 @@
                         "processor_type": "minecraft:nop"
                     }
                 ],
-                "location": "arcaneabyss:dungeon/room_maze"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "element_type": "minecraft:single_pool_element",
-                "projection": "rigid",
-                "processors": [
-                    {
-                        "processor_type": "minecraft:nop"
-                    }
-                ],
-                "location": "arcaneabyss:dungeon/room_mine"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "element_type": "minecraft:single_pool_element",
-                "projection": "rigid",
-                "processors": [
-                    {
-                        "processor_type": "minecraft:nop"
-                    }
-                ],
-                "location": "arcaneabyss:dungeon/room_puzzle"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "element_type": "minecraft:single_pool_element",
-                "projection": "rigid",
-                "processors": [
-                    {
-                        "processor_type": "minecraft:nop"
-                    }
-                ],
-                "location": "arcaneabyss:dungeon/room_supply"
-            }
-        },
-        {
-            "weight": 1,
-            "element": {
-                "element_type": "minecraft:single_pool_element",
-                "projection": "rigid",
-                "processors": [
-                    {
-                        "processor_type": "minecraft:nop"
-                    }
-                ],
-                "location": "arcaneabyss:dungeon/room_yalla"
+                "location": "arcaneabyss:dungeon/room/room_yalla"
             }
         }
     ]

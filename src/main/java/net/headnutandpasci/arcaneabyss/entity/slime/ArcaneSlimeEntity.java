@@ -95,20 +95,30 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
 
     }
 
+    @Override
+    protected boolean isDisallowedInPeaceful() {
+        return true;
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return true;
+    }
+
     protected void updateStretch() {
         this.targetStretch *= 0.6F;
     }
 
-    protected void defineSynchedData() {
-
-    }
-
     /* AI Goals & Movement Controllers */
 
+    protected SoundEvent getJumpSound() {
+        return SoundEvents.ENTITY_SLIME_JUMP;
+    }
+
     public static class ArcaneSlimeMoveControl extends MoveControl {
+        private final ArcaneSlimeEntity slime;
         private float targetYaw;
         private int ticksUntilJump;
-        private final ArcaneSlimeEntity slime;
         private boolean jumpOften;
         private boolean disabled;
 
@@ -141,7 +151,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             this.entity.bodyYaw = this.entity.getYaw();
             if (this.state != State.MOVE_TO) {
                 this.entity.setForwardSpeed(0.0F);
-            } else if(!isDisabled()){
+            } else if (!isDisabled()) {
                 this.state = State.WAIT;
                 if (this.entity.isOnGround()) {
                     this.entity.setMovementSpeed((float) (this.speed * this.entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)));
@@ -154,7 +164,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
                         this.slime.getJumpControl().setActive();
                         SoundEvent jumpSound = this.slime.getJumpSound();
 
-                        if(jumpSound != null) {
+                        if (jumpSound != null) {
                             this.slime.playSound(this.slime.getJumpSound(), 0.8f, this.getJumpSoundPitch());
                         }
 
@@ -172,12 +182,12 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
 
         }
 
-        public void setDisabled(boolean disabled) {
-            this.disabled = disabled;
-        }
-
         public boolean isDisabled() {
             return disabled;
+        }
+
+        public void setDisabled(boolean disabled) {
+            this.disabled = disabled;
         }
     }
 
@@ -209,10 +219,6 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             }
 
         }
-    }
-
-    protected SoundEvent getJumpSound(){
-        return SoundEvents.ENTITY_SLIME_JUMP;
     }
 
     protected static class FaceTowardTargetGoal extends Goal {

@@ -20,16 +20,14 @@ import net.minecraft.world.gen.structure.StructureType;
 import java.util.Optional;
 
 public class ArcaneJigsawStructure extends Structure {
-    public static final Codec<ArcaneJigsawStructure> CODEC = Codecs.validate(RecordCodecBuilder.mapCodec((instance) -> {
-        return instance.group(configCodecBuilder(instance),
-                StructurePool.REGISTRY_CODEC.fieldOf("start_pool").forGetter((structure) -> structure.startPool),
-                Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter((structure) -> structure.startJigsawName),
-                Codec.intRange(0, 7).fieldOf("size").forGetter((structure) -> structure.size),
-                HeightProvider.CODEC.fieldOf("start_height").forGetter((structure) -> structure.startHeight),
-                Codec.BOOL.fieldOf("use_expansion_hack").forGetter((structure) -> structure.useExpansionHack),
-                Heightmap.Type.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter((structure) -> structure.projectStartToHeightmap),
-                Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter((structure) -> structure.maxDistanceFromCenter)).apply(instance, ArcaneJigsawStructure::new);
-    }), ArcaneJigsawStructure::validate).codec();
+    public static final Codec<ArcaneJigsawStructure> CODEC = Codecs.validate(RecordCodecBuilder.mapCodec((instance) -> instance.group(configCodecBuilder(instance),
+            StructurePool.REGISTRY_CODEC.fieldOf("start_pool").forGetter((structure) -> structure.startPool),
+            Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter((structure) -> structure.startJigsawName),
+            Codec.intRange(0, 100).fieldOf("size").forGetter((structure) -> structure.size),
+            HeightProvider.CODEC.fieldOf("start_height").forGetter((structure) -> structure.startHeight),
+            Codec.BOOL.fieldOf("use_expansion_hack").forGetter((structure) -> structure.useExpansionHack),
+            Heightmap.Type.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter((structure) -> structure.projectStartToHeightmap),
+            Codec.intRange(1, 500).fieldOf("max_distance_from_center").forGetter((structure) -> structure.maxDistanceFromCenter)).apply(instance, ArcaneJigsawStructure::new)), ArcaneJigsawStructure::validate).codec();
 
     private final RegistryEntry<StructurePool> startPool;
     private final Optional<Identifier> startJigsawName;
@@ -63,7 +61,7 @@ public class ArcaneJigsawStructure extends Structure {
             case NONE -> 0;
             case BURY, BEARD_THIN, BEARD_BOX -> 12;
         };
-        return structure.maxDistanceFromCenter + i > 128 ? DataResult.error(() -> "Structure size including terrain adaptation must not exceed 128") : DataResult.success(structure);
+        return structure.maxDistanceFromCenter + i > 500 ? DataResult.error(() -> "Structure size including terrain adaptation must not exceed 128") : DataResult.success(structure);
     }
 
     public Optional<Structure.StructurePosition> getStructurePosition(Structure.Context context) {
@@ -74,6 +72,6 @@ public class ArcaneJigsawStructure extends Structure {
     }
 
     public StructureType<?> getType() {
-        return StructureType.JIGSAW;
+        return ModStructures.ARCANE_JIGSAW_STRUCTURE_TYPE;
     }
 }

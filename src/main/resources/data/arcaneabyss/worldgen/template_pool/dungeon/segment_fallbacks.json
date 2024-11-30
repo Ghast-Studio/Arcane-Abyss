@@ -5,8 +5,14 @@
         {
             "weight": 100,
             "element": {
-                "element_type": "minecraft:empty_pool_element",
-                "projection": "rigid"
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/fallback/fallback"
             }
         }
     ]

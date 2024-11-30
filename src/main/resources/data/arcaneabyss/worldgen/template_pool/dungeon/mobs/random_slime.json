@@ -1,0 +1,45 @@
+{
+    "fallback": "minecraft:empty",
+    "elements": [
+        {
+            "weight": 15,
+            "element": {
+                "element_type": "minecraft:feature_pool_element",
+                "projection": "rigid",
+                "feature": "arcaneabyss:slime/blue/blue_slime"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:feature_pool_element",
+                "projection": "rigid",
+                "feature": "arcaneabyss:slime/blue/dark_blue_slime"
+            }
+        },
+        {
+            "weight": 1,
+            "element": {
+                "element_type": "minecraft:feature_pool_element",
+                "projection": "rigid",
+                "feature": "arcaneabyss:slime/red/dark_red_slime"
+            }
+        },
+        {
+            "weight": 10,
+            "element": {
+                "element_type": "minecraft:feature_pool_element",
+                "projection": "rigid",
+                "feature": "arcaneabyss:slime/red/red_slime"
+            }
+        },
+        {
+            "weight": 5,
+            "element": {
+                "element_type": "minecraft:feature_pool_element",
+                "projection": "rigid",
+                "feature": "arcaneabyss:slime/green/green_slime"
+            }
+        }
+    ]
+}

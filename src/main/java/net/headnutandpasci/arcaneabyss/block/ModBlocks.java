@@ -30,7 +30,6 @@ public class ModBlocks {
     public static Block DUNGEON_COBBLE_STAIR;
     public static Block DUNGEON_COBBLE_SLAB;
     public static Block SLIMESTEEL_MACHINE;
-    public static Block BLUE_SLIME_SPAWNER;
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
@@ -63,9 +62,6 @@ public class ModBlocks {
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
         DUNGEON_COBBLE = registerBlock("dungeon_cobble",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
-
-        BLUE_SLIME_SPAWNER = registerBlock("blue_slime_spawner",
-                new BlueSlimeSpawner(FabricBlockSettings.copyOf(Blocks.SPAWNER).nonOpaque()));
 
         SLIMESTEEL_MACHINE = registerBlock("slimesteel_machine",
                 new SlimeSteelMachineBlock(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()));

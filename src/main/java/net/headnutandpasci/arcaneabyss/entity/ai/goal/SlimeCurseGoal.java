@@ -4,18 +4,24 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.minecraft.sound.SoundEvents;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class SlimeCurseGoal extends Goal {
     private final BlackSlimeEntity blackSlimeEntity;
     private List<PlayerEntity> targetPlayers;
+    private List<PlayerEntity> hitPlayers;
     private int timer;
 
     public SlimeCurseGoal(BlackSlimeEntity blackSlimeEntity) {
@@ -24,30 +30,32 @@ public class SlimeCurseGoal extends Goal {
 
     @Override
     public boolean canStart() {
+
         World world = blackSlimeEntity.getWorld();
         targetPlayers = (List<PlayerEntity>) world.getPlayers();
-
 
         targetPlayers = targetPlayers.stream()
                 .filter(player -> player.squaredDistanceTo(blackSlimeEntity) <= 20 * 20)
                 .filter(player -> !player.isInvulnerable())
                 .toList();
 
-        return !targetPlayers.isEmpty();
+        return blackSlimeEntity.isAttacking(BlackSlimeEntity.State.CURSE) && blackSlimeEntity.getTarget() != null;
+
     }
-
-
 
     @Override
     public void start() {
         timer = 100;
+        this.blackSlimeEntity.playSound(SoundEvents.ENTITY_WARDEN_ROAR, 9.0F, 4.0F);
+        hitPlayers = new ArrayList<>();
         if (blackSlimeEntity.getWorld() instanceof ServerWorld serverWorld) {
+
             serverWorld.spawnParticles(
-                    net.minecraft.particle.ParticleTypes.ENCHANTED_HIT,
+                    ParticleTypes.GLOW,
                     blackSlimeEntity.getX(),
                     blackSlimeEntity.getBodyY(0.5),
                     blackSlimeEntity.getZ(),
-                    10,
+                    1000,
                     0.5,
                     0.5,
                     0.5,
@@ -75,13 +83,20 @@ public class SlimeCurseGoal extends Goal {
                 serverWorld.spawnParticles(
                         net.minecraft.particle.ParticleTypes.SOUL,
                         x, y + targetPlayer.getHeight() / 2.0, z,
-                        15,
+                        10,
                         0.1, 0.1, 0.1,
                         0.0
                 );
+
+
+                Vec3d projectilePos = new Vec3d(x, y, z);
+                if (projectilePos.distanceTo(targetPlayer.getPos()) < 1.0 && !hitPlayers.contains(targetPlayer)) {
+                    hitPlayers.add(targetPlayer);
+                }
             }
 
-            if (--timer <= 0) {
+            timer = timer - 3;
+            if (timer <= 0) {
                 applyEffect();
                 stop();
             }
@@ -89,10 +104,10 @@ public class SlimeCurseGoal extends Goal {
     }
 
     private void applyEffect() {
-        for (PlayerEntity targetPlayer : targetPlayers) {
-            if (targetPlayer != null && targetPlayer.isAlive()) {
-                targetPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1000, 3));
-                targetPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 50, 1));
+        for (PlayerEntity hitPlayer : hitPlayers) {
+            if (hitPlayer != null && hitPlayer.isAlive()) {
+                hitPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 1000, 3));
+                hitPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 50, 1));
             }
         }
     }
@@ -110,13 +125,13 @@ public class SlimeCurseGoal extends Goal {
                 blackSlimeEntity
         ));
 
-
         return hitResult.getType() == HitResult.Type.MISS || hitResult.getPos().distanceTo(to) < 0.1;
     }
 
     @Override
     public void stop() {
         targetPlayers = null;
+        hitPlayers = null;
     }
 
     @Override

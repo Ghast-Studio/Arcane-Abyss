@@ -7,6 +7,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.Slimeviath
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -104,11 +105,12 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     protected void initGoals() {
-        //this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
-        //this.goalSelector.add(1, new SlimeShootGoal(this));
-        this.goalSelector.add(1, new SlimeCurseGoal(this));
-        //this.goalSelector.add(1, new SlimeSummonGoal(this));
-        //this.goalSelector.add(1, new SlimePushGoal(this));
+        this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
+        this.goalSelector.add(2, new SlimeShootGoal(this));
+        this.goalSelector.add(2, new SlimeCurseGoal(this));
+        this.goalSelector.add(2, new TargetSwitchGoal(this, 10000));
+        this.goalSelector.add(2, new SlimeSummonGoal(this));
+        this.goalSelector.add(2, new SlimePushGoal(this));
         this.goalSelector.add(3, new SwimmingGoal(this));
         this.goalSelector.add(4, new FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new RandomLookGoal(this));
@@ -213,10 +215,12 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         if (attackTimer <= 0) {
             WeightedRandomBag<BlackSlimeEntity.State> attackPool = new WeightedRandomBag<>();
 
-            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(7), (player) -> !player.isInvulnerable()).isEmpty())
-                attackPool.addEntry(BlackSlimeEntity.State.PUSH, 2000);
+            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(6), (player) -> !player.isInvulnerable()).isEmpty())
+                attackPool.addEntry(BlackSlimeEntity.State.PUSH, 200);
+                attackPool.addEntry(BlackSlimeEntity.State.CURSE, 100);
 
-            attackPool.addEntry(BlackSlimeEntity.State.SUMMON, 5);
+            attackPool.addEntry(BlackSlimeEntity.State.SUMMON, 10);
+            attackPool.addEntry(BlackSlimeEntity.State.CURSE, 15);
             attackPool.addEntry(BlackSlimeEntity.State.SHOOT_SLIME_BULLET, 30);
 
 
@@ -415,7 +419,8 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         SHOOT_SLIME_BULLET(3),
         SUMMON(4),
         PUSH(5),
-        DEATH(6);
+        CURSE(6),
+        DEATH(7);
 
 
         private final int value;
@@ -472,5 +477,15 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     @Override
     public boolean isPushable() {
         return false;
+    }
+
+    @Override
+    public void pushAwayFrom(Entity entity) {
+        super.pushAwayFrom(entity);
+    }
+
+    @Override
+    public boolean isImmuneToExplosion() {
+        return true;
     }
 }

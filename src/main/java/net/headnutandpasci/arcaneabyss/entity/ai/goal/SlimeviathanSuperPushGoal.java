@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SlimeviathanSuperPushGoal extends Goal {
     private final SlimeviathanEntity slime;
-    private static final float PUSH_DISTANCE = 5.0f;
+    private static final float PUSH_DISTANCE = 10.0f;
 
     public SlimeviathanSuperPushGoal(SlimeviathanEntity slime) {
         this.slime = slime;
@@ -44,7 +44,7 @@ public class SlimeviathanSuperPushGoal extends Goal {
                     this.slime.playSound(SoundEvents.ENTITY_WITHER_DEATH, 3.0F, 1.0F);
                     ((ServerWorld) this.slime.getWorld()).spawnParticles(ParticleTypes.POOF, this.slime.getX(), this.slime.getY(), this.slime.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D); // Reduced particle spread
 
-                    Util.pushPlayer(this.slime, player, 20, (float) (PUSH_DISTANCE * this.slime.getAttackDamage()));
+                    Util.pushPlayer(this.slime, player, 40, (float) (PUSH_DISTANCE * this.slime.getAttackDamage()));
                 }
             });
         }

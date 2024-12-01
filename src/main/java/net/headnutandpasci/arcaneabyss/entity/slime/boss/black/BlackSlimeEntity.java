@@ -1,17 +1,16 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimePushGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeResetGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeShootGoal;
-import net.headnutandpasci.arcaneabyss.entity.ai.goal.SlimeSummonGoal;
+import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.control.JumpControl;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -28,6 +27,7 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -81,7 +81,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 15.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_ARMOR, 10)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
     }
@@ -104,10 +104,11 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
-        this.goalSelector.add(1, new SlimeShootGoal(this));
-        this.goalSelector.add(2, new SlimeSummonGoal(this));
-        this.goalSelector.add(2, new SlimePushGoal(this));
+        //this.goalSelector.add(1, new SlimeResetGoal(this, getFollowDistance()));
+        //this.goalSelector.add(1, new SlimeShootGoal(this));
+        this.goalSelector.add(1, new SlimeCurseGoal(this));
+        //this.goalSelector.add(1, new SlimeSummonGoal(this));
+        //this.goalSelector.add(1, new SlimePushGoal(this));
         this.goalSelector.add(3, new SwimmingGoal(this));
         this.goalSelector.add(4, new FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new RandomLookGoal(this));
@@ -206,28 +207,22 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
     }
 
     private void abilitySelectionTick() {
-        if (this.getTarget() != null) {
-            if (attackTimer > 0) {
-                --this.attackTimer;
-            } else {
-                WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
-                /*Box aabb = (new Box(this.getBlockPos())).expand(10);
-                pushTargets = this.getWorld().getEntitiesByType(EntityType.PLAYER, aabb, (player) -> !player.isCreative());*/
-                /*if (!pushTargets.isEmpty()) {
-                    attackPool.addEntry(State.PUSH, 3);
-                    attackPool.addEntry(State.SHOOT_GHOST_BULLET_SINGLE, 3);
-                    attackPool.addEntry(State.SHOOT_GHOST_BULLET_BURST, 2);
-                    attackPool.addEntry(State.SUMMON_MOB, 1);
-                } else {*/
+        if (this.getTarget() == null)
+            return;
 
-                if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty())
-                    attackPool.addEntry(State.PUSH, 200);
+        if (attackTimer <= 0) {
+            WeightedRandomBag<BlackSlimeEntity.State> attackPool = new WeightedRandomBag<>();
+
+            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(7), (player) -> !player.isInvulnerable()).isEmpty())
+                attackPool.addEntry(BlackSlimeEntity.State.PUSH, 2000);
+
+            attackPool.addEntry(BlackSlimeEntity.State.SUMMON, 5);
+            attackPool.addEntry(BlackSlimeEntity.State.SHOOT_SLIME_BULLET, 30);
 
 
-                attackPool.addEntry(State.SUMMON, 5);
-                attackPool.addEntry(State.SHOOT_SLIME_BULLET, 10);
-                this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
-            }
+            this.dataTracker.set(DATA_STATE, attackPool.getRandom().getValue());
+        } else {
+            --this.attackTimer;
         }
     }
 
@@ -308,7 +303,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         }
 
         int playerCount = playerNearby.size();
-        double scalingFactor = Math.max(1.0, playerCount * 0.50);
+        double scalingFactor = Math.max(1.0, playerCount);
         System.out.println("Scaling Factor: " + scalingFactor);
 
         double baseHealth = 400.0;
@@ -333,14 +328,7 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
             this.heal((float) (scaledHealth - this.getHealth()));
         }
 
-        double baseAttack = 15.0;
-        EntityAttributeInstance attackDamageAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (attackDamageAttr != null) {
-            attackDamageAttr.setBaseValue(baseAttack * scalingFactor);
-            System.out.println("Attack Damage Set to: " + (baseAttack * scalingFactor));
-        } else {
-            System.err.println("Error: Attack damage attribute not found!");
-        }
+
 
         double baseArmor = 10.0;
         EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
@@ -455,4 +443,34 @@ public class BlackSlimeEntity extends ArcaneSlimeEntity implements SkinOverlayOw
         this.dataTracker.set(PHASE, phase);
     }
 
+
+
+
+    @Override
+    public JumpControl getJumpControl() {
+        return super.getJumpControl();
+    }
+
+    @Override
+    protected void jump() {
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+    }
+
+    @Override
+    protected void playSecondaryStepSound(BlockState state) {
+
+    }
+
+    @Override
+    protected SoundEvent getJumpSound() {
+        return null;
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 }

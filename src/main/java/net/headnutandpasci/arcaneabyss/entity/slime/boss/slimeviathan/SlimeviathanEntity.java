@@ -332,7 +332,7 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
         }
 
         int playerCount = playerNearby.size();
-        double scalingFactor = Math.max(1.0, playerCount * 0.75);
+        double scalingFactor = Math.max(1.0, playerCount);
         System.out.println("Scaling Factor: " + scalingFactor);
 
         double baseHealth = 800.0;
@@ -355,15 +355,6 @@ public class SlimeviathanEntity extends ArcaneSlimeEntity implements SkinOverlay
             this.setHealth((float) scaledHealth);
         } else {
             this.heal((float) (scaledHealth - this.getHealth()));
-        }
-
-        double baseAttack = 20.0;
-        EntityAttributeInstance attackDamageAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (attackDamageAttr != null) {
-            attackDamageAttr.setBaseValue(baseAttack * scalingFactor);
-            System.out.println("Attack Damage Set to: " + (baseAttack * scalingFactor));
-        } else {
-            System.err.println("Error: Attack damage attribute not found!");
         }
 
         double baseArmor = 20.0;

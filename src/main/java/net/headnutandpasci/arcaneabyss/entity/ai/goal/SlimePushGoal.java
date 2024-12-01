@@ -47,7 +47,7 @@ public class SlimePushGoal extends Goal {
     }
 
     private void pushNearbyPlayers(PlayerEntity player) {
-        double knockbackStrength = 16.0D;
+        double knockbackStrength = 15.0D;
         int damageAmount;
 
 

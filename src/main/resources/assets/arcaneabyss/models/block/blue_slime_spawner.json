@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "arcaneabyss:block/blue_slime_spawner"
+  }
+}

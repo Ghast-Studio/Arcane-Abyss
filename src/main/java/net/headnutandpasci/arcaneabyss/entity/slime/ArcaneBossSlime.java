@@ -1,7 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.Entity;
@@ -19,7 +18,6 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -38,23 +36,27 @@ import java.util.function.Predicate;
 
 public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinOverlayOwner {
     protected static final int DEFAULT_INVUL_TIMER = 200;
+    protected static final int DEFAULT_AWAKENING_TIMER = 200;
+
     private static final TrackedData<Integer> INVUL_TIMER;
-    private static final TrackedData<Integer> AWAKENING_TICKS;
+    private static final TrackedData<Integer> AWAKENING_TIMER;
     private static final TrackedData<Integer> PHASE;
     private static final TrackedData<Integer> DATA_STATE;
+    private static final TrackedData<Integer> ATTACK_TIMER;
 
     static {
         DATA_STATE = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
         PHASE = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
         INVUL_TIMER = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
-        AWAKENING_TICKS = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
+        AWAKENING_TIMER = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
+        ATTACK_TIMER = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
     }
 
-    private final Predicate<Entity> showBossBarPredicate;
     private final ServerBossBar bossBar;
-    private final List<PlayerEntity> playerNearby;
-    protected int attackTimer;
     protected int playerUpdateTimer;
+    private List<ServerPlayerEntity> playerNearby;
+    @Nullable
+    private Predicate<Entity> showBossBarPredicate;
 
     public ArcaneBossSlime(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -63,13 +65,9 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
         this.playerNearby = new ArrayList<>();
         this.experiencePoints = 500;
 
-        this.setAttackTimer(100);
         this.setPersistent();
 
-        this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50));
-        this.bossBar = (ServerBossBar) (new ServerBossBar(Text.translatable("entity.minecraft.ender_dragon"), BossBar.Color.PINK, BossBar.Style.PROGRESS))
-                .setDragonMusic(true)
-                .setThickenFog(true);
+        this.bossBar = (ServerBossBar) (new ServerBossBar(Text.translatable("entity.minecraft.ender_dragon"), BossBar.Color.PINK, BossBar.Style.PROGRESS)).setDragonMusic(true).setThickenFog(true);
 
         this.bossBar.setPercent(0.0F);
     }
@@ -77,23 +75,30 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
     @Override
     public @Nullable EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         this.setInvulTimer(DEFAULT_INVUL_TIMER);
+        this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50));
+        System.out.println(this.getBlockPos().getX() + " " + this.getBlockPos().getY() + " " + this.getBlockPos().getZ());
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(DATA_STATE, BlackSlimeEntity.State.SPAWNING.getValue());
+        this.dataTracker.startTracking(DATA_STATE, State.SPAWNING.getValue());
         this.dataTracker.startTracking(PHASE, 1);
         this.dataTracker.startTracking(INVUL_TIMER, 0);
-        this.dataTracker.startTracking(AWAKENING_TICKS, 0);
+        this.dataTracker.startTracking(AWAKENING_TIMER, 0);
+        this.dataTracker.startTracking(ATTACK_TIMER, 0);
     }
 
     protected void updatePlayers() {
+        if (this.showBossBarPredicate == null) {
+            this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50));
+        }
+
         if (this.getWorld() instanceof ServerWorld serverWorld) {
-            for (ServerPlayerEntity serverPlayerEntity : serverWorld.getPlayers(this.showBossBarPredicate)) {
+            this.playerNearby = serverWorld.getPlayers(this.showBossBarPredicate);
+            for (ServerPlayerEntity serverPlayerEntity : this.playerNearby) {
                 this.bossBar.addPlayer(serverPlayerEntity);
-                playerNearby.add(serverPlayerEntity);
             }
         }
     }
@@ -101,17 +106,40 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
     public void tick() {
         super.tick();
 
+        System.out.println("this.getState(): " + this.getState());
+        System.out.println("this.getAttackTimer(): " + this.getAttackTimer());
+
         if (--this.playerUpdateTimer < 1) {
             this.playerUpdateTimer = 20 * 2;
             this.updatePlayers();
         }
 
-        if (this.getInvulnerableTimer() > 0) {
-            this.setInvulTimer(this.getInvulnerableTimer() - 1);
+        if (this.getAwakeningTimer() > 0 && this.isInState(State.AWAKENING)) {
+            int timer = this.getAwakeningTimer();
+            this.setAwakeningTimer(timer - 1);
+            this.setInvulTimer(timer);
+            this.getBossBar().setPercent(1.0F - (float) timer / DEFAULT_AWAKENING_TIMER);
+
+            if (this.getAwakeningTimer() <= 0) {
+                this.setState(State.IDLE);
+            }
         } else if (this.isAlive()) {
-            this.abilitySelectionTick();
-            this.phaseUpdateTick();
             this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+
+            if (this.hasTarget()) {
+                this.phaseUpdateTick();
+
+                if (this.getAttackTimer() > 0) {
+                    this.setAttackTimer(this.getAttackTimer() - 1);
+                } else if (this.isInState(State.IDLE)) {
+                    this.abilitySelectionTick();
+                }
+            }
+        }
+
+        if (this.getInvulnerableTimer() > 0) {
+            int timer = this.getInvulnerableTimer();
+            this.setInvulTimer(timer - 1);
         }
     }
 
@@ -152,17 +180,21 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.putInt("AttackTicks", this.attackTimer);
+        nbt.putInt("AttackTicks", this.getAttackTimer());
         nbt.putInt("InvulTimer", this.getInvulnerableTimer());
-        nbt.putInt("AwakeningTicks", this.dataTracker.get(AWAKENING_TICKS));
+        nbt.putInt("AwakeningTicks", this.getAwakeningTimer());
+        nbt.putInt("Phase", this.getPhase());
+        nbt.putInt("State", this.getState().getValue());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.attackTimer = nbt.getInt("AttackTicks");
+        this.setAttackTimer(nbt.getInt("AttackTicks"));
         this.setInvulTimer(nbt.getInt("InvulTimer"));
-        this.dataTracker.set(AWAKENING_TICKS, nbt.getInt("AwakeningTicks"));
+        this.setAwakeningTimer(nbt.getInt("AwakeningTicks"));
+        this.setPhase(nbt.getInt("Phase"));
+        this.dataTracker.set(DATA_STATE, nbt.getInt("State"));
 
         if (this.hasCustomName()) {
             this.bossBar.setName(this.getDisplayName());
@@ -174,8 +206,7 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
         super.onStartedTrackingBy(player);
 
         this.bossBar.addPlayer(player);
-        if (this.isInState(State.SPAWNING))
-            this.startBossFight();
+        if (this.isInState(State.SPAWNING)) this.startBossFight();
     }
 
     @Override
@@ -199,14 +230,14 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
     }
 
     public int getAttackTimer() {
-        return attackTimer;
+        return this.dataTracker.get(ATTACK_TIMER);
     }
 
-    public void setAttackTimer(int ticks) {
-        this.attackTimer = ticks;
+    public void setAttackTimer(int i) {
+        this.dataTracker.set(ATTACK_TIMER, i);
     }
 
-    public List<PlayerEntity> getPlayerNearby() {
+    public List<ServerPlayerEntity> getPlayerNearby() {
         return playerNearby;
     }
 
@@ -226,8 +257,12 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
         this.dataTracker.set(INVUL_TIMER, ticks);
     }
 
-    public void setAwakeningTicks(int ticks) {
-        this.dataTracker.set(AWAKENING_TICKS, ticks);
+    public int getAwakeningTimer() {
+        return this.dataTracker.get(AWAKENING_TIMER);
+    }
+
+    public void setAwakeningTimer(int ticks) {
+        this.dataTracker.set(AWAKENING_TIMER, ticks);
     }
 
     public void stopAttacking(int cooldown) {
@@ -305,16 +340,7 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
     protected abstract void startBossFight();
 
     public enum State {
-        SPAWNING(0),
-        AWAKENING(1),
-        IDLE(2),
-        SHOOT_SLIME_BULLET(3),
-        SUMMON(4),
-        PUSH(5),
-        CURSE(6),
-        PILLAR_SUMMON(7),
-        STRIKE_SUMMON(8),
-        DEATH(9);
+        SPAWNING(0), AWAKENING(1), IDLE(2), SHOOT_SLIME_BULLET(3), SUMMON(4), PUSH(5), CURSE(6), PILLAR_SUMMON(7), STRIKE_SUMMON(8), DEATH(9);
 
         private final int value;
 

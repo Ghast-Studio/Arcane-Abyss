@@ -2,6 +2,7 @@ package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import com.google.common.collect.ImmutableList;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
@@ -29,57 +30,42 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             Direction.WEST
     );
 
-    private final SlimeviathanEntity entity;
+    private final SlimeviathanEntity bossSlime;
     private int particleTimer = 0;
     private LivingEntity targetAtStrike;
     private Vec3d targetPosAtStrike;
     private boolean hasSpawnedEffect = false;
     private int cooldownTimer = 0;
 
-    public SlimeviathanSummonPillarGoal(SlimeviathanEntity entity) {
-        this.entity = entity;
+    public SlimeviathanSummonPillarGoal(SlimeviathanEntity bossSlime) {
+        this.bossSlime = bossSlime;
     }
 
     @Override
     public boolean canStart() {
-        if (entity.isAttacking(SlimeviathanEntity.State.PILLAR_SUMMON) && entity.getTarget() != null) {
-            if (this.canSummonSlimes()) {
-                return true;
-            } else {
-                entity.stopAttacking(0);
-                return false;
-            }
-        }
-        return false;
+        return (bossSlime.isInState(ArcaneBossSlime.State.PILLAR_SUMMON) && bossSlime.hasTarget() && this.canSummonSlimes());
     }
 
     @Override
     public boolean shouldContinue() {
-        return entity.isAttacking(SlimeviathanEntity.State.PILLAR_SUMMON) && entity.getTarget() != null;
+        return bossSlime.isInState(ArcaneBossSlime.State.PILLAR_SUMMON) && bossSlime.hasTarget();
     }
 
     @Override
     public boolean canStop() {
-        System.out.println(entity.getSummonedPillarIds().isEmpty());
-        return entity.getSummonedPillarIds().isEmpty();
+        return bossSlime.getSummonedPillarIds().isEmpty();
     }
 
     @Override
     public void start() {
-        this.entity.setAttackTimer(100);
-        this.targetAtStrike = entity.getTarget();
+        this.targetAtStrike = bossSlime.getTarget();
         if (this.targetAtStrike == null) this.stop();
 
         this.particleTimer = 50;
-        this.entity.setAttackTimer(40);
 
-        ServerWorld world = entity.getWorld() instanceof ServerWorld ? ((ServerWorld) entity.getWorld()) : null;
+        ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
         if (world != null) {
-            world.spawnParticles(ParticleTypes.FLAME, entity.getX(), entity.getY(), entity.getZ(), 20, 3.0D, 3.0D, 3.0D, 0.0D);
-        }
-
-        if (entity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl control) {
-            control.setDisabled(true);
+            world.spawnParticles(ParticleTypes.FLAME, bossSlime.getX(), bossSlime.getY(), bossSlime.getZ(), 20, 3.0D, 3.0D, 3.0D, 0.0D);
         }
 
         for (int i = 0; i < 4; i++) {
@@ -87,7 +73,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             mobWeightBag.addEntry(1, 1);
 
             Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
-            Optional<Vec3d> summonPos = this.generateMobSpawnPos(entity.getPos(), 10, direction);
+            Optional<Vec3d> summonPos = this.generateMobSpawnPos(bossSlime.getPos(), 10, direction);
             if (summonPos.isEmpty()) continue;
 
             summonMob(mobWeightBag.getRandom(), BlockPos.ofFloored(summonPos.get()));
@@ -97,37 +83,27 @@ public class SlimeviathanSummonPillarGoal extends Goal {
 
     @Override
     public void stop() {
-        if (entity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl control) {
-            control.setDisabled(false);
-        }
         this.targetAtStrike = null;
         this.targetPosAtStrike = null;
         this.particleTimer = 0;
+        this.bossSlime.stopAttacking(100);
     }
 
     @Override
     public void tick() {
-        ServerWorld world = entity.getWorld() instanceof ServerWorld ? ((ServerWorld) entity.getWorld()) : null;
+        ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
         if (world == null) return;
-
-
-        if (cooldownTimer > 0) {
-            cooldownTimer--;
-        }
+        if (cooldownTimer > 0) cooldownTimer--;
 
 
         if (particleTimer > 0) {
             particleTimer--;
 
             if (targetPosAtStrike != null) {
-
-
-                LivingEntity targetAtStrike = entity.getTarget();
+                LivingEntity targetAtStrike = bossSlime.getTarget();
                 if (targetAtStrike instanceof PlayerEntity) {
                     spawnParticleEffectOnceAtPlayer(targetAtStrike);
-
                 }
-
 
                 if (particleTimer % 20 == 0) {
                     LightningEntity lightning = EntityType.LIGHTNING_BOLT.create(world);
@@ -138,9 +114,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
                         resetEffectFlag();
                     }
                 }
-
             }
-
 
             if (particleTimer == 0) {
                 targetPosAtStrike = null;
@@ -149,30 +123,26 @@ public class SlimeviathanSummonPillarGoal extends Goal {
 
 
         if (cooldownTimer == 0 && particleTimer == 0) {
-
             particleTimer = 10;
-
-
-            if (entity.getTarget() != null) {
-                targetAtStrike = entity.getTarget();
+            if (bossSlime.getTarget() != null) {
+                targetAtStrike = bossSlime.getTarget();
                 targetPosAtStrike = targetAtStrike.getPos();
             }
-
 
             cooldownTimer = 20;
         }
     }
 
     private boolean canSummonSlimes() {
-        return this.entity.getSummonedPillarIds().isEmpty();
+        return this.bossSlime.getSummonedPillarIds().isEmpty();
     }
 
     private void summonMob(int mobIndex, BlockPos summonPos) {
-        ServerWorld world = entity.getWorld() instanceof ServerWorld ? ((ServerWorld) entity.getWorld()) : null;
+        ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
         if (world == null) return;
 
 
-        BlockPos groundPos = findSolidGround(world, summonPos, entity.getBlockPos().getY());
+        BlockPos groundPos = findSolidGround(world, summonPos, bossSlime.getBlockPos().getY());
 
 
         if (groundPos == null) return;
@@ -204,7 +174,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
                 currentSlime.setParent(previousSlime);
                 previousSlime.setChild(currentSlime);
 
-                this.entity.getSummonedPillarIds().add(currentSlime.getId());
+                this.bossSlime.getSummonedPillarIds().add(currentSlime.getId());
 
                 previousSlime = currentSlime;
             }
@@ -212,8 +182,8 @@ public class SlimeviathanSummonPillarGoal extends Goal {
     }
 
     private Optional<Vec3d> generateMobSpawnPos(Vec3d targetPos, int distance, Direction direction) {
-        RaycastContext raycastContext = new RaycastContext(targetPos, targetPos.offset(direction, distance), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity);
-        BlockHitResult blockHitResult = this.entity.getWorld().raycast(raycastContext);
+        RaycastContext raycastContext = new RaycastContext(targetPos, targetPos.offset(direction, distance), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, bossSlime);
+        BlockHitResult blockHitResult = this.bossSlime.getWorld().raycast(raycastContext);
 
         if (blockHitResult.getType() == BlockHitResult.Type.BLOCK) {
             return Optional.empty();

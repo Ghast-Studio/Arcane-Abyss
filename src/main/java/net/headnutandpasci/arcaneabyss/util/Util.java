@@ -10,18 +10,16 @@ import net.minecraft.world.Heightmap;
 public class Util {
 
     public static void pushPlayer(LivingEntity attacker, PlayerEntity target, float baseDamage, double powah) {
-        float damageAmount = baseDamage;
-
         if (target.isBlocking()) {
             target.disableShield(true);
-            damageAmount *= 0.3F;
+            baseDamage *= 0.3F;
         }
 
         Vec3d direction = new Vec3d(target.getX() - attacker.getX(), 0, target.getZ() - attacker.getZ()).normalize();
 
         target.addVelocity(direction.x * powah, 1, direction.z * powah);
         target.velocityModified = true;
-        target.damage(attacker.getDamageSources().mobAttack(attacker), damageAmount);
+        target.damage(attacker.getDamageSources().mobAttack(attacker), baseDamage);
     }
 
     public static void spawnCircleParticles(ServerWorld world, Vec3d center, ParticleEffect particle, double radius, int particleCount, boolean spawnOnGround) {

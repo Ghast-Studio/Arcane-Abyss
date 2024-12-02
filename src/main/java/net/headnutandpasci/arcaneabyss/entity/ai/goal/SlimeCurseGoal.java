@@ -1,7 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -19,40 +18,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SlimeCurseGoal extends Goal {
-    private final BlackSlimeEntity blackSlimeEntity;
+    private final ArcaneBossSlime bossSlime;
     private List<PlayerEntity> targetPlayers;
     private List<PlayerEntity> hitPlayers;
     private int timer;
 
-    public SlimeCurseGoal(BlackSlimeEntity blackSlimeEntity) {
-        this.blackSlimeEntity = blackSlimeEntity;
+    public SlimeCurseGoal(ArcaneBossSlime bossSlime) {
+        this.bossSlime = bossSlime;
     }
 
     @Override
     public boolean canStart() {
-        World world = blackSlimeEntity.getWorld();
+        World world = bossSlime.getWorld();
         targetPlayers = (List<PlayerEntity>) world.getPlayers();
 
         targetPlayers = targetPlayers.stream()
-                .filter(player -> player.squaredDistanceTo(blackSlimeEntity) <= 20 * 20)
+                .filter(player -> player.squaredDistanceTo(bossSlime) <= 20 * 20)
                 .filter(player -> !player.isInvulnerable())
                 .toList();
 
-        return blackSlimeEntity.isInState(ArcaneBossSlime.State.CURSE) && blackSlimeEntity.getTarget() != null;
+        return bossSlime.isInState(ArcaneBossSlime.State.CURSE) && bossSlime.getTarget() != null;
     }
 
     @Override
     public void start() {
         timer = 100;
-        this.blackSlimeEntity.playSound(SoundEvents.ENTITY_WARDEN_ROAR, 9.0F, 4.0F);
+        this.bossSlime.playSound(SoundEvents.ENTITY_WARDEN_ROAR, 9.0F, 4.0F);
         hitPlayers = new ArrayList<>();
-        if (blackSlimeEntity.getWorld() instanceof ServerWorld serverWorld) {
-
+        if (bossSlime.getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.spawnParticles(
                     ParticleTypes.GLOW,
-                    blackSlimeEntity.getX(),
-                    blackSlimeEntity.getBodyY(0.5),
-                    blackSlimeEntity.getZ(),
+                    bossSlime.getX(),
+                    bossSlime.getBodyY(0.5),
+                    bossSlime.getZ(),
                     1000,
                     0.5,
                     0.5,
@@ -62,15 +60,16 @@ public class SlimeCurseGoal extends Goal {
         }
     }
 
+
     @Override
     public void tick() {
-        if (!targetPlayers.isEmpty() && blackSlimeEntity.getWorld() instanceof ServerWorld serverWorld) {
+        if (!targetPlayers.isEmpty() && bossSlime.getWorld() instanceof ServerWorld serverWorld) {
             for (PlayerEntity targetPlayer : targetPlayers) {
                 if (!hasLineOfSight(targetPlayer)) {
                     continue;
                 }
 
-                Vec3d from = blackSlimeEntity.getPos();
+                Vec3d from = bossSlime.getPos();
                 Vec3d to = targetPlayer.getPos();
 
                 double progress = 1.0 - (timer / 100.0);
@@ -95,8 +94,8 @@ public class SlimeCurseGoal extends Goal {
 
             timer = timer - 3;
             if (timer <= 0) {
-                applyEffect();
-                stop();
+                this.applyEffect();
+                this.stop();
             }
         }
     }
@@ -111,8 +110,8 @@ public class SlimeCurseGoal extends Goal {
     }
 
     private boolean hasLineOfSight(PlayerEntity player) {
-        World world = blackSlimeEntity.getWorld();
-        Vec3d from = blackSlimeEntity.getEyePos();
+        World world = bossSlime.getWorld();
+        Vec3d from = bossSlime.getEyePos();
         Vec3d to = player.getEyePos();
 
         BlockHitResult hitResult = world.raycast(new RaycastContext(
@@ -120,7 +119,7 @@ public class SlimeCurseGoal extends Goal {
                 to,
                 RaycastContext.ShapeType.COLLIDER,
                 RaycastContext.FluidHandling.NONE,
-                blackSlimeEntity
+                bossSlime
         ));
 
         return hitResult.getType() == HitResult.Type.MISS || hitResult.getPos().distanceTo(to) < 0.1;
@@ -130,6 +129,8 @@ public class SlimeCurseGoal extends Goal {
     public void stop() {
         targetPlayers = null;
         hitPlayers = null;
+
+        this.bossSlime.stopAttacking(100);
     }
 
     @Override

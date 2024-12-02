@@ -1,7 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
-import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -58,7 +57,7 @@ public class SlimeResetGoal extends Goal{
         }
 
         bossSlime.setState(ArcaneBossSlime.State.SPAWNING);
-        bossSlime.setAwakeningTicks(0);
+        bossSlime.setAwakeningTimer(0);
         bossSlime.getBossBar().clearPlayers();
         bossSlime.setAttackTimer(0);
         bossSlime.setPhase(0);

@@ -2,6 +2,7 @@ package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import com.google.common.collect.ImmutableList;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
@@ -47,7 +48,7 @@ public class SlimeviathanStrikeGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return (entity.isAttacking(SlimeviathanEntity.State.STRIKE_SUMMON)) && entity.getTarget() != null;
+        return (entity.isInState(ArcaneBossSlime.State.STRIKE_SUMMON)) && entity.getTarget() != null;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class SlimeviathanStrikeGoal extends Goal {
 
         this.entity.getPlayerNearby().forEach(target -> {
             this.strikeTargets.add(target);
-            Util.pushPlayer(this.entity, target, 10, 3.0f);
+            Util.pushPlayer(this.entity, target, 10, 2.0f);
             MovementControlPacket.send(true, (ServerPlayerEntity) target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
         });
@@ -81,10 +82,6 @@ public class SlimeviathanStrikeGoal extends Goal {
 
             MovementControlPacket.send(false, (ServerPlayerEntity) target);
         });
-
-        if (this.entity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
-            moveControl.setDisabled(false);
-        }
 
         this.strikeTargets.clear();
         this.strikePositions.clear();
@@ -103,7 +100,7 @@ public class SlimeviathanStrikeGoal extends Goal {
                 this.firstTrigger = true;
                 this.shootStrike();
 
-                this.entity.setAttackTick(20);
+                this.entity.setAttackTimer(20);
             } else {
                 this.stop();
             }
@@ -117,11 +114,11 @@ public class SlimeviathanStrikeGoal extends Goal {
         });
 
         switch (entity.getPhase()) {
-            case 0, 1 -> this.strikeTargets.forEach(target -> {
+            case 0 -> this.strikeTargets.forEach(target -> {
                 this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos());
                 //this.shootStrike(this.entity.getPos().add(2, 3, 0), target.getPos());
             });
-            case 2 -> this.strikeTargets.forEach(target -> {
+            case 1 -> this.strikeTargets.forEach(target -> {
                 for (int i = 0; i < 4; i++) {
                     Direction direction = MOB_SUMMON_POS.get(i);
                     Vec3d spawn = this.entity.getPos().add(0, 3, 0).add(direction.getOffsetX() * 5, 0, direction.getOffsetZ() * 5);

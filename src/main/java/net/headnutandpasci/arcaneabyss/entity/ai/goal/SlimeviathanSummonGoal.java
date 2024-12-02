@@ -5,7 +5,7 @@ import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.minecraft.entity.EquipmentSlot;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class SlimeSummonGoal extends Goal {
+public class SlimeviathanSummonGoal extends Goal {
     private static final ImmutableList<Direction> MOB_SUMMON_POS = ImmutableList.of(
             Direction.SOUTH,
             Direction.NORTH,
@@ -26,9 +26,9 @@ public class SlimeSummonGoal extends Goal {
             Direction.WEST
     );
 
-    private final BlackSlimeEntity bossSlime;
+    private final SlimeviathanEntity bossSlime;
 
-    public SlimeSummonGoal(BlackSlimeEntity bossSlime) {
+    public SlimeviathanSummonGoal(SlimeviathanEntity bossSlime) {
         this.bossSlime = bossSlime;
     }
 
@@ -52,23 +52,29 @@ public class SlimeSummonGoal extends Goal {
             return;
         }
 
-        world.spawnParticles(ParticleTypes.FLAME, this.bossSlime.getX(), this.bossSlime.getY(), this.bossSlime.getZ(), 20, 3.0D, 3.0D, 3.0D, 0.0D);
+        double d = bossSlime.getX();
+        double e = bossSlime.getY();
+        double f = bossSlime.getZ();
+        ((ServerWorld) bossSlime.getWorld()).spawnParticles(ParticleTypes.FLAME, d, e, f, 20, 3.0D, 3.0D, 3.0D, 0.0D);
 
         for (int i = 0; i < 2; i++) {
             if (bossSlime.getPhase() == 0) {
                 Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                 BlockPos summonPos = bossSlime.getBlockPos().offset(direction, 5);
-                ModEntities.BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
-                ModEntities.BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
-                ModEntities.RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.GREEN_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
             }
             if (bossSlime.getPhase() == 1) {
                 Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                 BlockPos summonPos = bossSlime.getBlockPos().offset(direction, 5);
-                ModEntities.BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
-                ModEntities.BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
-                ModEntities.RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
-                ModEntities.RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_BLUE_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.DARK_RED_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
+                ModEntities.GREEN_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
                 ModEntities.GREEN_SLIME.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
             }
         }
@@ -77,8 +83,6 @@ public class SlimeSummonGoal extends Goal {
     }
 
     private boolean canSummonSlimes() {
-        System.out.println("Can Summon Slimes");
-        System.out.println("is empty: " + this.bossSlime.getSummonedMobIds().isEmpty());
         return this.bossSlime.getSummonedMobIds().isEmpty();
     }
 
@@ -89,9 +93,10 @@ public class SlimeSummonGoal extends Goal {
         double f = summonPos.getZ();
         ((ServerWorld) bossSlime.getWorld()).spawnParticles(ParticleTypes.CLOUD, d, e, f, 10, 0.5D, 0.5D, 0.5D, 0.0D);
         ArcaneSlimeEntity slime = switch (mobIndex) {
-            case 1 -> new BlueSlimeEntity(ModEntities.BLUE_SLIME, world);
+            case 1 -> new BlueSlimeEntity(ModEntities.DARK_BLUE_SLIME, world);
             case 2 -> new GreenSlimeEntity(ModEntities.GREEN_SLIME, world);
-            case 3 -> new RedSlimeEntity(ModEntities.RED_SLIME, world);
+            case 3 -> new RedSlimeEntity(ModEntities.DARK_RED_SLIME, world);
+
             default -> null;
         };
 

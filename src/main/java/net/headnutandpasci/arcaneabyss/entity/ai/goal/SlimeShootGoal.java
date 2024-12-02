@@ -26,14 +26,28 @@ public class SlimeShootGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (bossSlime.isInState(ArcaneBossSlime.State.SHOOT_SLIME_BULLET)) {
+            if (!(bossSlime.hasTarget() && !bossSlime.getPlayerNearby().isEmpty())) {
+                this.bossSlime.setState(ArcaneBossSlime.State.IDLE);
+                return false;
+            }
+        }
+
         return bossSlime.isInState(ArcaneBossSlime.State.SHOOT_SLIME_BULLET) && bossSlime.hasTarget() && !bossSlime.getPlayerNearby().isEmpty();
     }
 
     @Override
     public void start() {
         super.start();
-        bossSlime.setAttackTimer(200);
+        System.out.println("starting shoot goal");
         this.type = this.rollType();
+        bossSlime.setAttackTimer(200);
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.bossSlime.stopAttacking(100);
     }
 
     private String rollType() {
@@ -49,13 +63,14 @@ public class SlimeShootGoal extends Goal {
             }
         }
 
+        String type = bulletPatterns.getRandom();
+        if (type == null) return "Single";
+
         return bulletPatterns.getRandom();
     }
 
     @Override
     public void tick() {
-        if (type == null) this.type = this.rollType();
-        if (type == null) return;
         if (bossSlime.getAttackTimer() == 0) {
             bossSlime.stopAttacking(100);
             this.rotatedShootAmount = 0;

@@ -55,8 +55,8 @@ public class SlimeviathanResetGoal extends Goal {
 
         slimeviathanEntity.setState(SlimeviathanEntity.State.SPAWNING);
         slimeviathanEntity.getBossBar().clearPlayers();
-        slimeviathanEntity.setAwakeningTick(0);
-        slimeviathanEntity.setAttackTick(0);
+        slimeviathanEntity.setAwakeningTimer(0);
+        slimeviathanEntity.setAttackTimer(0);
         slimeviathanEntity.setPhase(0);
         slimeviathanEntity.setTarget(null);
         slimeviathanEntity.setHealth(slimeviathanEntity.getMaxHealth());

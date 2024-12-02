@@ -3,7 +3,6 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
-import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -17,7 +16,7 @@ import net.minecraft.world.World;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwner {
+public class BlackSlimeEntity extends ArcaneBossSlime {
     private final CopyOnWriteArrayList<Integer> summonedMobIds;
 
     public BlackSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
@@ -38,10 +37,10 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new SlimeResetGoal(this, 50));
+        //this.goalSelector.add(1, new SlimeResetGoal(this, 50));
+        this.goalSelector.add(2, new TargetSwitchGoal(this, 10000));
         this.goalSelector.add(2, new SlimeShootGoal(this));
         this.goalSelector.add(2, new SlimeCurseGoal(this));
-        this.goalSelector.add(2, new TargetSwitchGoal(this, 10000));
         this.goalSelector.add(2, new SlimeSummonGoal(this));
         this.goalSelector.add(2, new SlimePushGoal(this));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
@@ -55,20 +54,17 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
             System.out.println("Starting Boss Fight");
             this.updatePlayers();
             this.recalculateAttributes();
-            this.setAwakeningTicks(160);
+            this.setAwakeningTimer(160);
             this.setState(State.AWAKENING);
         }
     }
 
     @Override
     protected void abilitySelectionTick() {
-        if (this.getTarget() == null)
-            return;
-
-        if (attackTimer <= 0) {
+        if (this.getAttackTimer() <= 0) {
             WeightedRandomBag<ArcaneBossSlime.State> attackPool = new WeightedRandomBag<>();
 
-            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(4), (player) -> !player.isInvulnerable()).isEmpty()) {
+            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty()) {
                 attackPool.addEntry(ArcaneBossSlime.State.PUSH, 200);
                 attackPool.addEntry(ArcaneBossSlime.State.CURSE, 100);
             }
@@ -77,8 +73,13 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
             attackPool.addEntry(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 30);
 
             this.setState(attackPool.getRandom());
-        } else {
-            --this.attackTimer;
+        }
+    }
+
+    @Override
+    protected void phaseUpdateTick() {
+        if (this.getHealth() < (this.getMaxHealth() * 0.5)) {
+            this.setPhase(2);
         }
     }
 
@@ -91,7 +92,6 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
 
         int playerCount = this.getPlayerNearby().size();
         double scalingFactor = Math.max(1.0, playerCount);
-        System.out.println("Scaling Factor: " + scalingFactor);
 
         double baseHealth = 800.0;
         double scaledHealth = baseHealth * scalingFactor;
@@ -99,14 +99,8 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
         EntityAttributeInstance maxHealthAttr = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (maxHealthAttr != null) {
             maxHealthAttr.setBaseValue(scaledHealth);
-            System.out.println("Scaled Health: " + scaledHealth);
         } else {
-            System.err.println("Error: Max health attribute not found!");
             return;
-        }
-
-        for (int i = 0; i < 100; i++) {
-            System.out.println("Scaled Health in loop: " + scaledHealth);
         }
 
         if (this.getHealth() > scaledHealth) {
@@ -119,9 +113,6 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
         EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
         if (armorAttr != null) {
             armorAttr.setBaseValue(baseArmor * scalingFactor);
-            System.out.println("Armor Set to: " + (baseArmor * scalingFactor));
-        } else {
-            System.err.println("Error: Armor attribute not found!");
         }
     }
 
@@ -130,33 +121,9 @@ public class BlackSlimeEntity extends ArcaneBossSlime implements SkinOverlayOwne
 
         this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
         if (!this.summonedMobIds.isEmpty()) this.setInvulTimer(40);
-
-        if (this.getInvulnerableTimer() > 0) {
-            int i = this.getInvulnerableTimer();
-
-            if (i > 0) {
-                if (this.isInState(ArcaneBossSlime.State.SPAWNING)) {
-                    this.getBossBar().setPercent(1.0F - (float) i / DEFAULT_INVUL_TIMER);
-                    if (this.age % 10 == 0) {
-                        this.heal(10.0f);
-                    }
-                }
-            } else {
-                this.setState(State.IDLE);
-                this.setAttackTimer(40);
-                this.setInvulTimer(0);
-            }
-        }
     }
 
     public CopyOnWriteArrayList<Integer> getSummonedMobIds() {
         return summonedMobIds;
-    }
-
-    @Override
-    protected void phaseUpdateTick() {
-        if (this.getHealth() < (this.getMaxHealth() * 0.5)) {
-            this.setPhase(2);
-        }
     }
 }

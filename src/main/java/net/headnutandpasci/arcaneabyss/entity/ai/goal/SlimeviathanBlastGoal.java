@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
@@ -18,10 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SlimeviathanBlastGoal extends Goal {
     private final SlimeviathanEntity slimeviathanEntity;
-
+    int counter = 0;
     @Nullable
     private String type;
-
     private int rotatedShootAmount = 0;
 
     public SlimeviathanBlastGoal(SlimeviathanEntity slimeviathanEntity) {
@@ -31,7 +31,7 @@ public class SlimeviathanBlastGoal extends Goal {
     @Override
     public boolean canStart() {
         int playerInArea = this.slimeviathanEntity.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.slimeviathanEntity.getBlockPos()).expand(2), player -> !player.isInvulnerable()).size();
-        return (slimeviathanEntity.isAttacking(SlimeviathanEntity.State.SHOOT_SLIME_BULLET)) && slimeviathanEntity.getTarget() != null && playerInArea == 0;
+        return (slimeviathanEntity.isInState(ArcaneBossSlime.State.SHOOT_SLIME_BULLET)) && slimeviathanEntity.getTarget() != null && playerInArea == 0;
     }
 
     @Override
@@ -58,9 +58,6 @@ public class SlimeviathanBlastGoal extends Goal {
     private String rollType() {
         WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
         if (slimeviathanEntity.getState() == SlimeviathanEntity.State.SHOOT_SLIME_BULLET) {
-            slimeviathanEntity.triggerRangeAttackAnimation();
-
-            System.out.println(slimeviathanEntity.getPhase());
             if (slimeviathanEntity.getPhase() == 1) {
                 bulletPatterns.addEntry("Single", 1);
                 bulletPatterns.addEntry("MultiShot", 1);
@@ -73,8 +70,6 @@ public class SlimeviathanBlastGoal extends Goal {
         return bulletPatterns.getRandom();
         //return "RapidMultiShot";
     }
-
-    int counter = 0;
 
     @Override
     public void tick() {
@@ -91,7 +86,7 @@ public class SlimeviathanBlastGoal extends Goal {
                 if (slimeviathanEntity.getAttackTimer() % 5 == 0) performSingleShot();
             }
             case "RapidDouble" -> {
-                if (slimeviathanEntity.getAttackTimer() % 2.5 == 0){
+                if (slimeviathanEntity.getAttackTimer() % 2.5 == 0) {
                     performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount)));
                     performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 180));
                     this.rotatedShootAmount++;

@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.Util;
 import net.minecraft.entity.ai.goal.Goal;
@@ -22,7 +23,7 @@ public class SlimeviathanSuperPushGoal extends Goal {
     @Override
     public boolean canStart() {
         // Ensures the goal can start if the slime is in the PUSH state and has a target
-        return slime.isAttacking(SlimeviathanEntity.State.PUSH) && slime.getTarget() != null;
+        return slime.isInState(ArcaneBossSlime.State.PUSH) && slime.getTarget() != null;
     }
     @Override
     public void start() {

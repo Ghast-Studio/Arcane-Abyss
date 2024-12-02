@@ -1,7 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
@@ -14,19 +14,19 @@ import java.util.List;
 
 
 public class SlimeResetGoal extends Goal{
-    private final BlackSlimeEntity blackSlimeEntity;
+    private final ArcaneBossSlime bossSlime;
     private final double range;
 
-    public SlimeResetGoal(BlackSlimeEntity blackSlimeEntity, double range) {
-        this.blackSlimeEntity = blackSlimeEntity;
+    public SlimeResetGoal(ArcaneBossSlime bossSlime, double range) {
+        this.bossSlime = bossSlime;
         this.range = range;
     }
 
     @Override
     public boolean canStart() {
-        if (!blackSlimeEntity.isSleeping()) {
-            World world = blackSlimeEntity.getWorld();
-            BlockPos blockPos = blackSlimeEntity.getBlockPos();
+        if (!bossSlime.isSleeping()) {
+            World world = bossSlime.getWorld();
+            BlockPos blockPos = bossSlime.getBlockPos();
             Box box = new Box(blockPos).expand(range);
 
             // Get a list of PlayerEntity instances within the Box
@@ -42,31 +42,27 @@ public class SlimeResetGoal extends Goal{
 
     @Override
     public void start() {
-        World world = blackSlimeEntity.getWorld();
+        World world = bossSlime.getWorld();
         if (world instanceof ServerWorld) {
             for (int i = 0; i < 50; ++i) {
                 ((ServerWorld) world).spawnParticles(
                         ParticleTypes.POOF,
-                        blackSlimeEntity.getX() + (world.random.nextDouble() * 2 - 1),
-                        blackSlimeEntity.getY() + world.random.nextDouble(),
-                        blackSlimeEntity.getZ() + (world.random.nextDouble() * 2 - 1),
+                        bossSlime.getX() + (world.random.nextDouble() * 2 - 1),
+                        bossSlime.getY() + world.random.nextDouble(),
+                        bossSlime.getZ() + (world.random.nextDouble() * 2 - 1),
                         1,
                         0.0D, 0.0D, 0.0D,
                         0.0D
                 );
             }
         }
-        blackSlimeEntity.setState(BlackSlimeEntity.State.SPAWNING);
-        blackSlimeEntity.setAwakeningTick(0);
-        blackSlimeEntity.getBossBar().clearPlayers();
-        blackSlimeEntity.setAttackTick(0);
-        blackSlimeEntity.setPhase(0);
-        blackSlimeEntity.setTarget(null);
-        blackSlimeEntity.setHealth(blackSlimeEntity.getMaxHealth());
-        if(blackSlimeEntity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
-            moveControl.setDisabled(true);
-        }
 
-
+        bossSlime.setState(ArcaneBossSlime.State.SPAWNING);
+        bossSlime.setAwakeningTicks(0);
+        bossSlime.getBossBar().clearPlayers();
+        bossSlime.setAttackTimer(0);
+        bossSlime.setPhase(0);
+        bossSlime.setTarget(null);
+        bossSlime.setHealth(bossSlime.getMaxHealth());
     }
 }

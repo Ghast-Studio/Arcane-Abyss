@@ -235,7 +235,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             if (livingEntity == null) {
                 return false;
             } else {
-                return this.slime.canTarget(livingEntity) && this.slime.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl;
+                return this.slime.canTarget(livingEntity) && (this.slime.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl || this.slime.getMoveControl() instanceof ArcaneBossSlime.DisabledMoveControl);
             }
         }
 
@@ -270,6 +270,9 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
                 slimeMoveControl.look(this.slime.getYaw(), true);
             }
 
+            if (control instanceof ArcaneBossSlime.DisabledMoveControl disabledMoveControl) {
+                disabledMoveControl.look(this.slime.getYaw());
+            }
         }
     }
 
@@ -284,7 +287,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
         }
 
         public boolean canStart() {
-            return this.slime.getTarget() == null && (this.slime.isOnGround() || this.slime.isTouchingWater() || this.slime.isInLava() || this.slime.hasStatusEffect(StatusEffects.LEVITATION)) && this.slime.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl;
+            return this.slime.getTarget() == null && (this.slime.isOnGround() || this.slime.isTouchingWater() || this.slime.isInLava() || this.slime.hasStatusEffect(StatusEffects.LEVITATION)) && (this.slime.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl || this.slime.getMoveControl() instanceof ArcaneBossSlime.DisabledMoveControl);
         }
 
         public void tick() {
@@ -298,6 +301,9 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
                 slimeMoveControl.look(this.targetYaw, false);
             }
 
+            if (control instanceof ArcaneBossSlime.DisabledMoveControl disabledMoveControl) {
+                disabledMoveControl.look(this.slime.getYaw());
+            }
         }
     }
 

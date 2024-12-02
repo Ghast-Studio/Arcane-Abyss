@@ -2,7 +2,6 @@ package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;

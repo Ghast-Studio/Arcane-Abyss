@@ -1,5 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -12,8 +14,6 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
-import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
-import net.minecraft.sound.SoundEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,6 @@ public class SlimeCurseGoal extends Goal {
 
     @Override
     public boolean canStart() {
-
         World world = blackSlimeEntity.getWorld();
         targetPlayers = (List<PlayerEntity>) world.getPlayers();
 
@@ -39,8 +38,7 @@ public class SlimeCurseGoal extends Goal {
                 .filter(player -> !player.isInvulnerable())
                 .toList();
 
-        return blackSlimeEntity.isAttacking(BlackSlimeEntity.State.CURSE) && blackSlimeEntity.getTarget() != null;
-
+        return blackSlimeEntity.isInState(ArcaneBossSlime.State.CURSE) && blackSlimeEntity.getTarget() != null;
     }
 
     @Override

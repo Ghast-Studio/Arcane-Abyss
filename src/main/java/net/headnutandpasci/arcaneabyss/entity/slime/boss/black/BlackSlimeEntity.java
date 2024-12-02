@@ -87,10 +87,10 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
 
             if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty()) {
                 attackPool.addEntry(ArcaneBossSlime.State.PUSH, 200);
-                attackPool.addEntry(ArcaneBossSlime.State.CURSE, 100);
-            }
 
-            attackPool.addEntry(ArcaneBossSlime.State.SUMMON, 5);
+            }
+            attackPool.addEntry(ArcaneBossSlime.State.CURSE, 20);
+            attackPool.addEntry(ArcaneBossSlime.State.SUMMON, 15);
             attackPool.addEntry(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 30);
 
             this.setState(attackPool.getRandom());

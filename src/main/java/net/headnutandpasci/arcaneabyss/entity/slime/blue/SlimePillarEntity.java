@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -53,9 +54,10 @@ public class SlimePillarEntity extends ArcaneSlimeEntity {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        // Prevent damage if the slime above this one (child) is still alive
         if (this.hasChild()) {
-            return false; // Cancel damage
+            if (source.isOf(DamageTypes.GENERIC) || source.isOf(DamageTypes.GENERIC_KILL))
+                return super.damage(source, amount);
+            return false;
         }
 
         // Allow damage otherwise

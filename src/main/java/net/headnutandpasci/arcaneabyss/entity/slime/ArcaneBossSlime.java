@@ -13,6 +13,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -34,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinOverlayOwner {
+public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinOverlayOwner {
     protected static final int DEFAULT_INVUL_TIMER = 200;
     protected static final int DEFAULT_AWAKENING_TIMER = 200;
 
@@ -84,7 +85,7 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(DATA_STATE, State.SPAWNING.getValue());
-        this.dataTracker.startTracking(PHASE, 1);
+        this.dataTracker.startTracking(PHASE, 0);
         this.dataTracker.startTracking(INVUL_TIMER, 0);
         this.dataTracker.startTracking(AWAKENING_TIMER, 0);
         this.dataTracker.startTracking(ATTACK_TIMER, 0);
@@ -148,6 +149,8 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
         if (this.isInvulnerableTo(source)) {
             return false;
         } else if (this.getInvulnerableTimer() > 0) {
+            if (source.isOf(DamageTypes.GENERIC) || source.isOf(DamageTypes.GENERIC_KILL))
+                return super.damage(source, amount);
             return false;
         } else {
             return super.damage(source, amount);
@@ -339,8 +342,19 @@ public abstract class ArcaneBossSlime extends ArcaneSlimeEntity implements SkinO
 
     protected abstract void startBossFight();
 
+    protected abstract boolean inAttackState();
+
     public enum State {
-        SPAWNING(0), AWAKENING(1), IDLE(2), SHOOT_SLIME_BULLET(3), SUMMON(4), PUSH(5), CURSE(6), PILLAR_SUMMON(7), STRIKE_SUMMON(8), DEATH(9);
+        SPAWNING(0),
+        AWAKENING(1),
+        IDLE(2),
+        SHOOT_SLIME_BULLET(3),
+        SUMMON(4),
+        PUSH(5),
+        CURSE(6),
+        PILLAR_SUMMON(7),
+        STRIKE_SUMMON(8),
+        DEATH(9);
 
         private final int value;
 

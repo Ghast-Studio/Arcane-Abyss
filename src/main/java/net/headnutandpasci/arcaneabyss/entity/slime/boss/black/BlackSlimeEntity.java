@@ -60,6 +60,16 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     }
 
     @Override
+    protected boolean inAttackState() {
+        return this.isInState(State.SHOOT_SLIME_BULLET) ||
+                this.isInState(State.SUMMON) ||
+                this.isInState(State.PUSH) ||
+                this.isInState(State.CURSE) ||
+                this.isInState(State.PILLAR_SUMMON) ||
+                this.isInState(State.STRIKE_SUMMON);
+    }
+
+    @Override
     protected void abilitySelectionTick() {
         if (this.getAttackTimer() <= 0) {
             WeightedRandomBag<ArcaneBossSlime.State> attackPool = new WeightedRandomBag<>();

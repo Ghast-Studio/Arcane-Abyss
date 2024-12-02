@@ -1,6 +1,5 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,7 +23,6 @@ public class TargetSwitchGoal extends Goal {
 
     @Override
     public boolean canStart() {
-
         return System.currentTimeMillis() - lastSwitchTime >= switchInterval && hasNearbyPlayers();
     }
 
@@ -36,7 +34,7 @@ public class TargetSwitchGoal extends Goal {
 
     private void switchTarget() {
         if (mob.getWorld() instanceof ServerWorld serverWorld) {
-            List<ServerPlayerEntity> players = serverWorld.getPlayers(player -> player.isAlive() && mob.canSee(player));
+            List<ServerPlayerEntity> players = serverWorld.getPlayers(player -> player.isAlive() && mob.canSee(player) && !player.isCreative() && !player.isSpectator());
             if (!players.isEmpty()) {
                 Random random = new Random();
                 PlayerEntity newTarget = players.get(random.nextInt(players.size()));

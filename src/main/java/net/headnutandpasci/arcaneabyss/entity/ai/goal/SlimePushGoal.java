@@ -8,8 +8,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Box;
 
-import java.util.List;
-
 public class SlimePushGoal extends Goal {
     private final ArcaneBossSlime bossSlime;
 
@@ -27,9 +25,7 @@ public class SlimePushGoal extends Goal {
         super.start();
         this.bossSlime.playSound(SoundEvents.ENTITY_ENDER_DRAGON_GROWL, 3.0F, 1.0F);
         ((ServerWorld) this.bossSlime.getWorld()).spawnParticles(ParticleTypes.POOF, this.bossSlime.getX(), this.bossSlime.getY(), this.bossSlime.getZ(), 50, 3.0D, 0.0D, 3.0D, 0.0D);
-        Box box = (new Box(this.bossSlime.getBlockPos())).expand(8);
-        List<PlayerEntity> targets = this.bossSlime.getWorld().getEntitiesByClass(PlayerEntity.class, box, (entity) -> true);
-        targets.forEach(this::pushNearbyPlayers);
+        this.bossSlime.getPlayerNearby().forEach(this::pushNearbyPlayers);
         this.bossSlime.stopAttacking(100);
     }
 

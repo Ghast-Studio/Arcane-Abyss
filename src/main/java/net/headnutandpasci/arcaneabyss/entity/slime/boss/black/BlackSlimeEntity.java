@@ -4,6 +4,7 @@ import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -43,16 +44,26 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
         this.goalSelector.add(2, new SlimeCurseGoal(this));
         this.goalSelector.add(2, new SlimeSummonGoal(this));
         this.goalSelector.add(2, new SlimePushGoal(this));
-        this.goalSelector.add(3, new FaceTowardTargetGoal(this));
-        this.goalSelector.add(4, new RandomLookGoal(this));
+        this.goalSelector.add(3, new ProjectileAttackGoal(this, 0, 20, 20.0F));
+        this.goalSelector.add(4, new FaceTowardTargetGoal(this));
+        this.goalSelector.add(5, new RandomLookGoal(this));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!this.summonedMobIds.isEmpty()) {
+            this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
+            this.setInvulTimer(40);
+        }
     }
 
     @Override
     protected void startBossFight() {
         if (this.isAlive() && this.isInState(ArcaneBossSlime.State.SPAWNING)) {
             System.out.println("Starting Boss Fight");
-            this.updatePlayers();
             this.recalculateAttributes();
             this.setAwakeningTimer(160);
             this.setState(State.AWAKENING);
@@ -126,11 +137,11 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
         }
     }
 
-    public void tick() {
-        super.tick();
+    @Override
+    public void attack(LivingEntity target, float pullProgress) {
+        if (this.getInvulnerableTimer() > 0 || this.inAttackState()) return;
 
-        this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-        if (!this.summonedMobIds.isEmpty()) this.setInvulTimer(40);
+        super.attack(target, pullProgress);
     }
 
     public CopyOnWriteArrayList<Integer> getSummonedMobIds() {

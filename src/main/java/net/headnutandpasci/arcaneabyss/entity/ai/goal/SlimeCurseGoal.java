@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
@@ -19,7 +20,6 @@ import java.util.List;
 
 public class SlimeCurseGoal extends Goal {
     private final ArcaneBossSlime bossSlime;
-    private List<PlayerEntity> targetPlayers;
     private List<PlayerEntity> hitPlayers;
     private int timer;
 
@@ -29,15 +29,7 @@ public class SlimeCurseGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        World world = bossSlime.getWorld();
-        targetPlayers = (List<PlayerEntity>) world.getPlayers();
-
-        targetPlayers = targetPlayers.stream()
-                .filter(player -> player.squaredDistanceTo(bossSlime) <= 20 * 20)
-                .filter(player -> !player.isInvulnerable())
-                .toList();
-
-        return bossSlime.isInState(ArcaneBossSlime.State.CURSE) && bossSlime.getTarget() != null;
+        return bossSlime.isInState(ArcaneBossSlime.State.CURSE) && bossSlime.hasTarget();
     }
 
     @Override
@@ -63,8 +55,8 @@ public class SlimeCurseGoal extends Goal {
 
     @Override
     public void tick() {
-        if (!targetPlayers.isEmpty() && bossSlime.getWorld() instanceof ServerWorld serverWorld) {
-            for (PlayerEntity targetPlayer : targetPlayers) {
+        if (!this.bossSlime.getPlayerNearby().isEmpty() && bossSlime.getWorld() instanceof ServerWorld serverWorld) {
+            for (PlayerEntity targetPlayer : this.bossSlime.getPlayerNearby()) {
                 if (!hasLineOfSight(targetPlayer)) {
                     continue;
                 }
@@ -127,7 +119,6 @@ public class SlimeCurseGoal extends Goal {
 
     @Override
     public void stop() {
-        targetPlayers = null;
         hitPlayers = null;
 
         this.bossSlime.stopAttacking(100);
@@ -135,7 +126,7 @@ public class SlimeCurseGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        return timer > 0 && !targetPlayers.isEmpty() &&
-                targetPlayers.stream().anyMatch(player -> player.isAlive() && hasLineOfSight(player));
+        List<ServerPlayerEntity> playerNearby = this.bossSlime.getPlayerNearby();
+        return timer > 0 && !playerNearby.isEmpty();
     }
 }

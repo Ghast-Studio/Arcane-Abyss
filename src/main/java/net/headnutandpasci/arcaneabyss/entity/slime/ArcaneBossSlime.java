@@ -106,6 +106,12 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
             for (ServerPlayerEntity serverPlayerEntity : this.playerNearby) {
                 this.bossBar.addPlayer(serverPlayerEntity);
             }
+
+            this.playerNearby.removeIf(player -> player.isSpectator() || player.isCreative());
+        }
+
+        if (this.isInState(State.SPAWNING) && !this.playerNearby.isEmpty()) {
+            this.startBossFight();
         }
     }
 
@@ -141,6 +147,10 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
                     this.abilitySelectionTick();
                 }
             }
+        }
+
+        if (this.isInState(State.SPAWNING)) {
+            this.setInvulTimer(200);
         }
 
         if (this.getInvulnerableTimer() > 0) {
@@ -214,7 +224,6 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         super.onStartedTrackingBy(player);
 
         this.bossBar.addPlayer(player);
-        if (this.isInState(State.SPAWNING)) this.startBossFight();
     }
 
     @Override

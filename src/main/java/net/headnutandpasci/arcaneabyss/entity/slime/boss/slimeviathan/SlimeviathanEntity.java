@@ -59,7 +59,6 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     @Override
     protected void startBossFight() {
         if (this.isAlive() && this.isInState(State.SPAWNING)) {
-            this.updatePlayers();
             this.recalculateAttributes();
             this.setAwakeningTimer(160);
             this.setState(State.AWAKENING);

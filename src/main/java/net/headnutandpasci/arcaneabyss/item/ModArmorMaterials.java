@@ -33,6 +33,7 @@ public enum ModArmorMaterials implements ArmorMaterial {
         this.toughness = toughness;
         this.knockbackResistance = knockbackResistance;
         this.repairIngredient = repairIngredient;
+
     }
 
 
@@ -75,4 +76,6 @@ public enum ModArmorMaterials implements ArmorMaterial {
     public float getKnockbackResistance() {
         return this.knockbackResistance;
     }
+
+
 }

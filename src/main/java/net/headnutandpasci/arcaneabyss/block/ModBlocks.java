@@ -6,6 +6,7 @@ import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.block.custom.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -38,6 +39,7 @@ public class ModBlocks {
 
     }
 
+
     private static void registerBlockItem(String name, Block block) {
         Registry.register(Registries.ITEM, new Identifier(ArcaneAbyss.MOD_ID, name),
                 new BlockItem(block, new FabricItemSettings()));
@@ -52,8 +54,12 @@ public class ModBlocks {
 
         DUNGEON_WALL_BLOCK = registerBlock("dungeon_wall_block",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
+
         DUNGEON_BRICK = registerBlock("dungeon_brick",
-                new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
+                new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)
+                        .noBlockBreakParticles()
+                        .strength(1000000.0F, 36000.0F) // Makes it indestructible
+                        .pistonBehavior(PistonBehavior.NORMAL)));
         DUNGEON_BRICK_CRACKED = registerBlock("dungeon_brick_cracked",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
         DUNGEON_STONE = registerBlock("dungeon_stone",

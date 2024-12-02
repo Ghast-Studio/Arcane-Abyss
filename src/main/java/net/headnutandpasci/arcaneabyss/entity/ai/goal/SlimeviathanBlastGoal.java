@@ -58,11 +58,11 @@ public class SlimeviathanBlastGoal extends Goal {
     private String rollType() {
         WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
         if (slimeviathanEntity.getState() == SlimeviathanEntity.State.SHOOT_SLIME_BULLET) {
-            if (slimeviathanEntity.getPhase() == 1) {
+            if (slimeviathanEntity.getPhase() == 0) {
                 bulletPatterns.addEntry("Single", 1);
-                bulletPatterns.addEntry("MultiShot", 1);
-            } else if (slimeviathanEntity.getPhase() == 2) {
                 bulletPatterns.addEntry("RapidDouble", 1);
+            } else if (slimeviathanEntity.getPhase() == 1) {
+                bulletPatterns.addEntry("MultiShot", 1);
                 bulletPatterns.addEntry("RapidMultiShot", 1);
             }
         }

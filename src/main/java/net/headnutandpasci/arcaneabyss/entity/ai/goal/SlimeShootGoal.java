@@ -54,10 +54,10 @@ public class SlimeShootGoal extends Goal {
         WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
         if (bossSlime.isInState(ArcaneBossSlime.State.SHOOT_SLIME_BULLET)) {
 
-            if (bossSlime.isInPhase(1)) {
+            if (bossSlime.isInPhase(0)) {
                 bulletPatterns.addEntry("Single", 1);
                 bulletPatterns.addEntry("MultiShot", 1);
-            } else if (bossSlime.isInPhase(2)) {
+            } else if (bossSlime.isInPhase(1)) {
                 bulletPatterns.addEntry("RapidSingle", 1);
                 bulletPatterns.addEntry("RapidMultiShot", 1);
             }

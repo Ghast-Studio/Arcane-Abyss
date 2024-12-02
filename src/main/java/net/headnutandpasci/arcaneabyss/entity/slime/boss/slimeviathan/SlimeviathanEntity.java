@@ -4,12 +4,11 @@ import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -50,8 +49,9 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         this.goalSelector.add(2, new SlimeviathanSummonPillarGoal(this));
         this.goalSelector.add(2, new SlimeviathanSummonGoal(this));
         this.goalSelector.add(2, new SlimePushGoal(this));
-        this.goalSelector.add(3, new FaceTowardTargetGoal(this));
-        this.goalSelector.add(4, new RandomLookGoal(this));
+        this.goalSelector.add(3, new ProjectileAttackGoal(this, 0, 20, 20.0F));
+        this.goalSelector.add(4, new FaceTowardTargetGoal(this));
+        this.goalSelector.add(5, new RandomLookGoal(this));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
     }
 
@@ -84,7 +84,7 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
 
     @Override
     protected void phaseUpdateTick() {
-        if (this.getHealth() < (this.getMaxHealth() * 0.66)) {
+        if (this.getHealth() < (this.getMaxHealth() * 0.50)) {
             this.setPhase(2);
         }
     }
@@ -92,19 +92,20 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     public void tick() {
         super.tick();
 
-        if (!this.summonedPillarIds.isEmpty())
+        if (!this.summonedPillarIds.isEmpty()) {
             this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-        if (!this.summonedMobIds.isEmpty())
+            this.setInvulTimer(40);
+        } else if (!this.summonedMobIds.isEmpty()) {
             this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-        if (!this.summonedMobIds.isEmpty() || !this.summonedPillarIds.isEmpty()) this.setInvulTimer(40);
+            this.setInvulTimer(40);
+        }
 
         if (this.isInState(State.PILLAR_SUMMON)) {
             x++;
             if (!this.summonedPillarIds.isEmpty() && x >= 1800) {
-                for (PlayerEntity player : this.getPlayerNearby()) {
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 99999, 20));
-                    player.addStatusEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 5, 200));
-                }
+                for (PlayerEntity player : this.getPlayerNearby())
+                    player.kill();
+
                 x = 0;
             }
 
@@ -124,7 +125,6 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
 
         int playerCount = this.getPlayerNearby().size();
         double scalingFactor = Math.max(1.0, playerCount);
-        System.out.println("Scaling Factor: " + scalingFactor);
 
         double baseHealth = 800.0;
         double scaledHealth = baseHealth * scalingFactor;
@@ -132,14 +132,8 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         EntityAttributeInstance maxHealthAttr = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (maxHealthAttr != null) {
             maxHealthAttr.setBaseValue(scaledHealth);
-            System.out.println("Scaled Health: " + scaledHealth);
         } else {
-            System.err.println("Error: Max health attribute not found!");
             return;
-        }
-
-        for (int i = 0; i < 100; i++) {
-            System.out.println("Scaled Health in loop: " + scaledHealth);
         }
 
         if (this.getHealth() > scaledHealth) {
@@ -152,10 +146,24 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
         if (armorAttr != null) {
             armorAttr.setBaseValue(baseArmor * scalingFactor);
-            System.out.println("Armor Set to: " + (baseArmor * scalingFactor));
-        } else {
-            System.err.println("Error: Armor attribute not found!");
         }
+    }
+
+    @Override
+    protected boolean inAttackState() {
+        return this.isInState(State.SHOOT_SLIME_BULLET) ||
+                this.isInState(State.SUMMON) ||
+                this.isInState(State.PUSH) ||
+                this.isInState(State.CURSE) ||
+                this.isInState(State.PILLAR_SUMMON) ||
+                this.isInState(State.STRIKE_SUMMON);
+    }
+
+    @Override
+    public void attack(LivingEntity target, float pullProgress) {
+        if (this.getInvulnerableTimer() > 0 || this.inAttackState()) return;
+
+        super.attack(target, pullProgress);
     }
 
     public CopyOnWriteArrayList<Integer> getSummonedMobIds() {

@@ -1,6 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
-import net.headnutandpasci.arcaneabyss.entity.slime.AbstractRangedSlime;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneRangedSlime;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
-public class RedSlimeEntity extends AbstractRangedSlime {
+public class RedSlimeEntity extends ArcaneRangedSlime {
 
     public RedSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);

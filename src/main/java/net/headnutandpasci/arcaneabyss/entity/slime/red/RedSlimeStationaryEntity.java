@@ -1,6 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
-import net.headnutandpasci.arcaneabyss.entity.slime.AbstractRangedSlime;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneRangedSlime;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -21,7 +21,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class RedSlimeStationaryEntity extends AbstractRangedSlime {
+public class RedSlimeStationaryEntity extends ArcaneRangedSlime {
 
     public RedSlimeStationaryEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);

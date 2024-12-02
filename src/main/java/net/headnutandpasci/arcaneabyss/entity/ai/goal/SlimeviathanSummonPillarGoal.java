@@ -47,14 +47,15 @@ public class SlimeviathanSummonPillarGoal extends Goal {
     }
 
     @Override
-    public boolean shouldContinue() {
-        return bossSlime.isInState(ArcaneBossSlime.State.PILLAR_SUMMON) && bossSlime.hasTarget();
-    }
-
-    @Override
     public boolean canStop() {
         return bossSlime.getSummonedPillarIds().isEmpty();
     }
+
+    @Override
+    public boolean shouldContinue() {
+        return bossSlime.isInState(ArcaneBossSlime.State.PILLAR_SUMMON) && bossSlime.hasTarget() && !this.bossSlime.getSummonedPillarIds().isEmpty();
+    }
+
 
     @Override
     public void start() {

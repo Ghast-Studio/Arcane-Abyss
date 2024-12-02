@@ -9,25 +9,23 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
-public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements RangedAttackMob {
+public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements RangedAttackMob {
 
-    public AbstractRangedSlime(EntityType<? extends HostileEntity> entityType, World world) {
+    public ArcaneRangedSlime(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
     }
 
     public void attack(LivingEntity target, float pullProgress) {
         MagmaBallProjectile magmaBallEntity = new MagmaBallProjectile(ModEntities.MAGMA_BALL_PROJECTILE, this.getWorld());
-
 
         Vec3d forward = this.getRotationVector().multiply(1);
         double startX = this.getX() + forward.x;
@@ -43,7 +41,7 @@ public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements R
         magmaBallEntity.setVelocity(d, e + g * 0.1, f, 1.75F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
 
 
-        this.playSound(SoundEvents.ENTITY_WITHER_SHOOT, 0.33F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(SoundEvents.ENTITY_WITHER_SHOOT, 0.10F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.getWorld().spawnEntity(magmaBallEntity);
 
 
@@ -119,7 +117,6 @@ public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements R
         }
 
         public boolean canStart() {
-
             LivingEntity livingEntity = this.mob.getTarget();
             if (livingEntity != null && livingEntity.isAlive()) {
                 this.target = livingEntity;
@@ -145,11 +142,11 @@ public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements R
 
         public void tick() {
             if (this.target == null) return;
-            if(this.target.isInvulnerable()){
+            if (this.target.isInvulnerable()) {
                 return;
             }
 
-            if(squaredMaxShootRange > this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ())) {
+            if (squaredMaxShootRange > this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ())) {
 
                 double d = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
                 boolean bl = this.mob.getVisibilityCache().canSee(this.target);
@@ -158,7 +155,6 @@ public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements R
                 } else {
                     this.seenTargetTicks = 0;
                 }
-
 
 
                 if (--this.updateCountdownTicks == 0) {
@@ -172,10 +168,9 @@ public abstract class AbstractRangedSlime extends ArcaneSlimeEntity implements R
                     this.updateCountdownTicks = MathHelper.floor(f * (float) (this.maxIntervalTicks - this.minIntervalTicks) + (float) this.minIntervalTicks);
                 } else if (this.updateCountdownTicks < 0) {
                     this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double) this.maxShootRange, this.minIntervalTicks, this.maxIntervalTicks));
-                }else{
+                } else {
                     this.mob.getNavigation().startMovingTo(this.target, this.mobSpeed);
                 }
-
             }
         }
     }

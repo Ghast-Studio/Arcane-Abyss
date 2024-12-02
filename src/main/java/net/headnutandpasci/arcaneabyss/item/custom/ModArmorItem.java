@@ -80,4 +80,6 @@ public class ModArmorItem extends ArmorItem {
         return helmet.getMaterial() == material && breastplate.getMaterial() == material &&
                 leggings.getMaterial() == material && boots.getMaterial() == material;
     }
+
+
 }

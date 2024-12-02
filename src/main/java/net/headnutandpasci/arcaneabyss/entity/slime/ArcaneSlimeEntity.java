@@ -12,6 +12,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
@@ -322,5 +323,12 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             }
 
         }
+    }
+
+    @Override
+    protected Identifier getLootTableId() {
+        Identifier lootTable = new Identifier("arcaneabyss", "entities/genericslimes");
+        System.out.println("Loot table ID: " + lootTable);
+        return lootTable;
     }
 }

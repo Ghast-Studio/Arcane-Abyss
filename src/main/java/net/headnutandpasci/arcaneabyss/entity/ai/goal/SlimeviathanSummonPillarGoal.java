@@ -56,7 +56,6 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         return bossSlime.isInState(ArcaneBossSlime.State.PILLAR_SUMMON) && bossSlime.hasTarget() && !this.bossSlime.getSummonedPillarIds().isEmpty();
     }
 
-
     @Override
     public void start() {
         this.targetAtStrike = bossSlime.getTarget();

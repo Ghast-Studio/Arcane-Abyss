@@ -1,11 +1,14 @@
 package net.headnutandpasci.arcaneabyss.util;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
+
+import java.util.function.Predicate;
 
 public class Util {
 
@@ -35,5 +38,17 @@ public class Util {
 
             world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
         }
+    }
+
+    public static Predicate<Entity> visibleTo(LivingEntity entity) {
+        return (target) -> {
+            if (target == entity) {
+                return false;
+            }
+            if (target instanceof LivingEntity livingEntity) {
+                return livingEntity.isAlive() && entity.canSee(livingEntity);
+            }
+            return false;
+        };
     }
 }

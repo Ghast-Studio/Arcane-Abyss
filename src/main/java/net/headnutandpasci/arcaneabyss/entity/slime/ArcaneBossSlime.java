@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.util.Util;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.Entity;
@@ -68,7 +69,9 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
 
         this.setPersistent();
 
-        this.bossBar = (ServerBossBar) (new ServerBossBar(Text.translatable("entity.minecraft.ender_dragon"), BossBar.Color.PINK, BossBar.Style.PROGRESS)).setDragonMusic(true).setThickenFog(true);
+        this.bossBar = (ServerBossBar) (new ServerBossBar(Text.translatable("entity.arcaneabyss.black_slime"), BossBar.Color.GREEN, BossBar.Style.PROGRESS))
+                .setDragonMusic(true)
+                .setThickenFog(true);
 
         this.bossBar.setPercent(0.0F);
     }
@@ -76,7 +79,7 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
     @Override
     public @Nullable EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         this.setInvulTimer(DEFAULT_INVUL_TIMER);
-        this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50));
+        this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50)).and(Util.visibleTo(this));
         System.out.println(this.getBlockPos().getX() + " " + this.getBlockPos().getY() + " " + this.getBlockPos().getZ());
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
@@ -93,8 +96,10 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
 
     protected void updatePlayers() {
         if (this.showBossBarPredicate == null) {
-            this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50));
+            this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50)).and(Util.visibleTo(this));
         }
+
+        this.bossBar.clearPlayers();
 
         if (this.getWorld() instanceof ServerWorld serverWorld) {
             this.playerNearby = serverWorld.getPlayers(this.showBossBarPredicate);

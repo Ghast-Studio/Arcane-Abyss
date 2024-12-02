@@ -49,6 +49,7 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         this.goalSelector.add(2, new SlimeviathanSummonPillarGoal(this));
         this.goalSelector.add(2, new SlimeviathanSummonGoal(this));
         this.goalSelector.add(2, new SlimePushGoal(this));
+        this.goalSelector.add(2, new SlimeCurseGoal(this));
         this.goalSelector.add(3, new ProjectileAttackGoal(this, 0, 20, 20.0F));
         this.goalSelector.add(4, new FaceTowardTargetGoal(this));
         this.goalSelector.add(5, new RandomLookGoal(this));
@@ -77,6 +78,7 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
             attackPool.addEntry(State.PILLAR_SUMMON, 20);
             attackPool.addEntry(State.SHOOT_SLIME_BULLET, 45);
             attackPool.addEntry(State.STRIKE_SUMMON, 35);
+            attackPool.addEntry(State.CURSE, 25);
 
             this.setState(attackPool.getRandom());
         }

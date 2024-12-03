@@ -38,8 +38,8 @@ public class SlimeviathanStrikeGoal extends Goal {
     private final List<PlayerEntity> strikeTargets;
     private final List<Vec3d> strikePositions;
     private int particleTimer = 0;
-    private int chargeUpTimer = 0; // Timer for the charge-up phase
-    private boolean isCharging = false; // Tracks if the entity is charging up
+    private int chargeUpTimer = 0; 
+    private boolean isCharging = false;
     private boolean firstTrigger = false;
 
     public SlimeviathanStrikeGoal(SlimeviathanEntity entity) {
@@ -113,12 +113,12 @@ public class SlimeviathanStrikeGoal extends Goal {
         this.spawnParticles();
 
         if (!isCharging) {
-            // Begin charging phase
+
             isCharging = true;
-            chargeUpTimer = 30; // Adjust duration as needed
+            chargeUpTimer = 30;
             this.entity.playSound(SoundEvents.ENTITY_WITHER_AMBIENT, 3.0F, 0.5F);
 
-            // Initial particle burst to signify the charge-up start
+
             ((ServerWorld) this.entity.getWorld()).spawnParticles(
                     ParticleTypes.FLAME,
                     this.entity.getX(), this.entity.getY() + 1.0, this.entity.getZ(),
@@ -126,7 +126,7 @@ public class SlimeviathanStrikeGoal extends Goal {
             );
 
         } else if (chargeUpTimer > 0) {
-            // During charging phase, show particles
+
             chargeUpTimer--;
             ((ServerWorld) this.entity.getWorld()).spawnParticles(
                     ParticleTypes.ENCHANTED_HIT,
@@ -134,12 +134,12 @@ public class SlimeviathanStrikeGoal extends Goal {
                     10, 0.5, 0.5, 0.5, 0.2
             );
         } else if (chargeUpTimer == 0 && !firstTrigger) {
-            // Execute the attack after charging
+
             firstTrigger = true;
             this.shootStrike();
-            this.entity.setAttackTimer(20); // Reset attack timer for cooldown
+            this.entity.setAttackTimer(20);
         } else if (this.entity.getAttackTimer() <= 2) {
-            // Stop after the attack finishes
+
             this.stop();
         }
     }

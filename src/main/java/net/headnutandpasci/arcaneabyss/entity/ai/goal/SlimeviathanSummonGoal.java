@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -49,6 +50,7 @@ public class SlimeviathanSummonGoal extends Goal {
     public void start() {
         super.start();
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
+        this.bossSlime.playSound(SoundEvents.ENTITY_PIGLIN_ANGRY, 500.0F, 40.0F);
         if (world == null) {
             System.out.println("World is null");
             return;
@@ -90,7 +92,7 @@ public class SlimeviathanSummonGoal extends Goal {
     }
 
     private void summonMob(EntityType<? extends ArcaneSlimeEntity> slimeType, ServerWorld world, BlockPos summonPos) {
-        world.spawnParticles(ParticleTypes.CLOUD, summonPos.getX(), summonPos.getY(), summonPos.getZ(), 10, 0.5D, 0.5D, 0.5D, 0.0D);
+        world.spawnParticles(ParticleTypes.GLOW, summonPos.getX(), summonPos.getY(), summonPos.getZ(), 1000, 0.5D, 0.5D, 0.5D, 0.0D);
         ArcaneSlimeEntity slime = slimeType.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
 
         if (slime == null) return;

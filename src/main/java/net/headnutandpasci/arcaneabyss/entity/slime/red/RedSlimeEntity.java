@@ -30,7 +30,7 @@ public class RedSlimeEntity extends ArcaneRangedSlime {
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SwimmingGoal(this));
-        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 20, 15.0F));
+        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 40, 15.0F));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
         this.goalSelector.add(4, new RandomLookGoal(this));
         this.goalSelector.add(5, new MoveGoal(this, 1.0));

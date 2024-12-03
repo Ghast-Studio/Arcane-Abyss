@@ -38,6 +38,8 @@ public class SlimeviathanStrikeGoal extends Goal {
     private final List<PlayerEntity> strikeTargets;
     private final List<Vec3d> strikePositions;
     private int particleTimer = 0;
+    private int chargeUpTimer = 0; // Timer for the charge-up phase
+    private boolean isCharging = false; // Tracks if the entity is charging up
     private boolean firstTrigger = false;
 
     public SlimeviathanStrikeGoal(SlimeviathanEntity entity) {
@@ -55,21 +57,35 @@ public class SlimeviathanStrikeGoal extends Goal {
     public void start() {
         ArcaneAbyss.LOGGER.info("SlimeviathanStrikeGoal started");
         super.start();
+        isCharging = false;
+        chargeUpTimer = 0;
+        firstTrigger = false;
+        this.strikeTargets.clear();
+        this.strikePositions.clear();
+
+        this.entity.playSound(SoundEvents.ENTITY_WITHER_HURT, 100.0F, 40.0F);
         if (this.entity.getPlayerNearby().isEmpty()) this.stop();
         if (this.entity.getMoveControl() instanceof ArcaneSlimeEntity.ArcaneSlimeMoveControl moveControl) {
             moveControl.setDisabled(true);
         }
 
-        //this.entity.playSound(SoundEvents.ENTITY_WITHER_DEATH, 3.0F, 1.0F);
-        ((ServerWorld) this.entity.getWorld()).spawnParticles(ParticleTypes.POOF, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 400, 5.0D, 0.0D, 5.0D, 0.0D); // Reduced particle spread
+        ((ServerWorld) this.entity.getWorld()).spawnParticles(
+                ParticleTypes.POOF,
+                this.entity.getX(), this.entity.getY(), this.entity.getZ(),
+                400, 5.0D, 0.0D, 5.0D, 0.0D
+        );
 
         this.entity.getPlayerNearby().forEach(target -> {
             this.strikeTargets.add(target);
             Util.pushPlayer(this.entity, target, 10, 2.0f);
             MovementControlPacket.send(true, (ServerPlayerEntity) target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
+            for (int i = 0; i < 50; i++) {
+                double offsetX = (this.entity.getRandom().nextDouble() - 0.5) * 2.0;
+                double offsetY = this.entity.getRandom().nextDouble() * 2.0;
+                double offsetZ = (this.entity.getRandom().nextDouble() - 0.5) * 2.0;
+                ((ServerWorld) target.getWorld()).spawnParticles(ParticleTypes.END_ROD, target.getX() + offsetX, target.getY() + offsetY, target.getZ() + offsetZ, 3, 0.5, 0.5, 0.5, 0.1); }
         });
-
         this.entity.setAttackTimer(20);
     }
 
@@ -79,13 +95,14 @@ public class SlimeviathanStrikeGoal extends Goal {
         this.strikeTargets.forEach(target -> {
             this.entity.playSound(SoundEvents.BLOCK_ANCIENT_DEBRIS_BREAK, 3.0F, 1.0F);
             target.removeStatusEffect(StatusEffects.SLOWNESS);
-
             MovementControlPacket.send(false, (ServerPlayerEntity) target);
         });
 
         this.strikeTargets.clear();
         this.strikePositions.clear();
         this.particleTimer = 0;
+        this.chargeUpTimer = 0;
+        this.isCharging = false;
         this.firstTrigger = false;
 
         entity.stopAttacking(100);
@@ -95,15 +112,35 @@ public class SlimeviathanStrikeGoal extends Goal {
     public void tick() {
         this.spawnParticles();
 
-        if (this.entity.getAttackTimer() <= 2 && !this.strikeTargets.isEmpty()) {
-            if (!firstTrigger) {
-                this.firstTrigger = true;
-                this.shootStrike();
+        if (!isCharging) {
+            // Begin charging phase
+            isCharging = true;
+            chargeUpTimer = 30; // Adjust duration as needed
+            this.entity.playSound(SoundEvents.ENTITY_WITHER_AMBIENT, 3.0F, 0.5F);
 
-                this.entity.setAttackTimer(20);
-            } else {
-                this.stop();
-            }
+            // Initial particle burst to signify the charge-up start
+            ((ServerWorld) this.entity.getWorld()).spawnParticles(
+                    ParticleTypes.FLAME,
+                    this.entity.getX(), this.entity.getY() + 1.0, this.entity.getZ(),
+                    50, 1.0, 1.0, 1.0, 0.1
+            );
+
+        } else if (chargeUpTimer > 0) {
+            // During charging phase, show particles
+            chargeUpTimer--;
+            ((ServerWorld) this.entity.getWorld()).spawnParticles(
+                    ParticleTypes.ENCHANTED_HIT,
+                    this.entity.getX(), this.entity.getY() + 1.0, this.entity.getZ(),
+                    10, 0.5, 0.5, 0.5, 0.2
+            );
+        } else if (chargeUpTimer == 0 && !firstTrigger) {
+            // Execute the attack after charging
+            firstTrigger = true;
+            this.shootStrike();
+            this.entity.setAttackTimer(20); // Reset attack timer for cooldown
+        } else if (this.entity.getAttackTimer() <= 2) {
+            // Stop after the attack finishes
+            this.stop();
         }
     }
 
@@ -116,7 +153,6 @@ public class SlimeviathanStrikeGoal extends Goal {
         switch (entity.getPhase()) {
             case 0 -> this.strikeTargets.forEach(target -> {
                 this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos());
-                //this.shootStrike(this.entity.getPos().add(2, 3, 0), target.getPos());
             });
             case 1 -> this.strikeTargets.forEach(target -> {
                 for (int i = 0; i < 4; i++) {
@@ -168,6 +204,4 @@ public class SlimeviathanStrikeGoal extends Goal {
         );
         entity.velocityModified = true;
     }
-
-
 }

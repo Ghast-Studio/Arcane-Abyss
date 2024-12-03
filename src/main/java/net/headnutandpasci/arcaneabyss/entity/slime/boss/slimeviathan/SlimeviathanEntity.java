@@ -73,11 +73,11 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
             if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty())
                 attackPool.addEntry(State.PUSH, 200);
 
-            attackPool.addEntry(State.SUMMON, 20);
-            attackPool.addEntry(State.PILLAR_SUMMON, 20);
-            attackPool.addEntry(State.SHOOT_SLIME_BULLET, 45);
+            //attackPool.addEntry(State.SUMMON, 20);
+            //attackPool.addEntry(State.PILLAR_SUMMON, 20);
+            //attackPool.addEntry(State.SHOOT_SLIME_BULLET, 45);
             attackPool.addEntry(State.STRIKE_SUMMON, 35);
-            attackPool.addEntry(State.CURSE, 25);
+            //attackPool.addEntry(State.CURSE, 25);
 
             this.setState(attackPool.getRandom());
         }

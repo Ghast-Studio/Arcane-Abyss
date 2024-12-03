@@ -89,9 +89,9 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
                 attackPool.addEntry(ArcaneBossSlime.State.PUSH, 200);
 
             }
-            attackPool.addEntry(ArcaneBossSlime.State.CURSE, 20);
+            attackPool.addEntry(ArcaneBossSlime.State.CURSE, 15);
             attackPool.addEntry(ArcaneBossSlime.State.SUMMON, 15);
-            attackPool.addEntry(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 30);
+            attackPool.addEntry(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 15);
 
             this.setState(attackPool.getRandom());
         }

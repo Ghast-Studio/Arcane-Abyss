@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.datagen;
 
+import com.eliotlash.mclib.math.functions.classic.Mod;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
@@ -40,8 +41,11 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.RUBY, Models.GENERATED);
         itemModelGenerator.register(ModItems.RAW_RUBY, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIMESTEEL_INGOT, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SLIME_FLESH, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SLIME_JUICE, Models.GENERATED);
 
         itemModelGenerator.register(ModItems.TOMATO, Models.GENERATED);
+        itemModelGenerator.register(ModItems.COOKED_SLIME_MEAT, Models.GENERATED);
 
         itemModelGenerator.register(ModItems.RUBY_SWORD, Models.HANDHELD);
         itemModelGenerator.register(ModItems.RUBY_AXE, Models.HANDHELD);

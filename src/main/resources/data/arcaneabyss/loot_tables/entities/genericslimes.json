@@ -29,6 +29,21 @@
           "weight": 15
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "arcaneabyss:slime_flesh",
+          "weight": 30
+        },
+        {
+          "type": "minecraft:item",
+          "name": "arcaneabyss:slime_juice",
+          "weight": 5
+        }
+      ]
     }
   ],
   "random_sequence": "arcaneabyss:chests/dungeon/generic"

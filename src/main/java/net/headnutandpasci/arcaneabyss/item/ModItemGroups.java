@@ -20,9 +20,12 @@ public class ModItemGroups {
                         entries.add(ModItems.RAW_RUBY);
                         entries.add(ModItems.RUBY);
                         entries.add(ModItems.SLIMESTEEL_INGOT);
+                        entries.add(ModItems.SLIME_JUICE);
+                        entries.add(ModItems.SLIME_FLESH);
 
 
                         entries.add(ModItems.TOMATO);
+                        entries.add(ModItems.COOKED_SLIME_MEAT);
 
 
                         entries.add(ModBlocks.RUBY_BLOCK);

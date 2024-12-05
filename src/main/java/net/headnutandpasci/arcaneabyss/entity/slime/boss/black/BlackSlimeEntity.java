@@ -2,9 +2,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
-import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -12,7 +10,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -81,23 +78,6 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     }
 
     @Override
-    protected void abilitySelectionTick() {
-        if (this.getAttackTimer() <= 0) {
-            WeightedRandomBag<ArcaneBossSlime.State> attackPool = new WeightedRandomBag<>();
-
-            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty()) {
-                attackPool.addEntry(ArcaneBossSlime.State.PUSH, 200);
-
-            }
-            attackPool.addEntry(ArcaneBossSlime.State.CURSE, 15);
-            attackPool.addEntry(ArcaneBossSlime.State.SUMMON, 15);
-            attackPool.addEntry(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 15);
-
-            this.setState(attackPool.getRandom());
-        }
-    }
-
-    @Override
     protected void phaseUpdateTick() {
         if (this.getHealth() < (this.getMaxHealth() * 0.5)) {
             this.setPhase(2);
@@ -138,10 +118,17 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     }
 
     @Override
-    public void attack(LivingEntity target, float pullProgress) {
-        if (this.getInvulnerableTimer() > 0 || this.inAttackState()) return;
+    protected void initAbilities() {
+        this.registerAbility(State.PUSH, 200, bossSlime -> bossSlime.getWorld().getClosestPlayer(bossSlime, 3.0D) != null);
 
-        super.attack(target, pullProgress);
+        this.registerAbility(ArcaneBossSlime.State.CURSE, 15);
+        this.registerAbility(ArcaneBossSlime.State.SUMMON, 15);
+        this.registerAbility(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 15);
+    }
+
+    @Override
+    protected boolean isDistanceBasedAbility(State state) {
+        return state == State.PUSH;
     }
 
     public CopyOnWriteArrayList<Integer> getSummonedMobIds() {

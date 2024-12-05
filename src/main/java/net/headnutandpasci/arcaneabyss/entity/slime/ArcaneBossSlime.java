@@ -2,12 +2,10 @@ package net.headnutandpasci.arcaneabyss.entity.slime;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.util.Util;
+import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.JumpControl;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -54,8 +52,10 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         ATTACK_TIMER = DataTracker.registerData(ArcaneBossSlime.class, TrackedDataHandlerRegistry.INTEGER);
     }
 
+    protected final List<ArcaneBossSlime.Ability> abilityPool;
     private final ServerBossBar bossBar;
     protected int playerUpdateTimer;
+    protected ArcaneBossSlime.State lastState;
     private List<ServerPlayerEntity> playerNearby;
     @Nullable
     private Predicate<Entity> showBossBarPredicate;
@@ -64,6 +64,7 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         super(entityType, world);
         this.moveControl = new DisabledMoveControl(this);
         this.jumpControl = new DisabledJumpControl(this);
+        this.abilityPool = new ArrayList<>();
         this.playerNearby = new ArrayList<>();
         this.experiencePoints = 500;
 
@@ -74,13 +75,14 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
                 .setThickenFog(true);
 
         this.bossBar.setPercent(0.0F);
+
+        this.initAbilities();
     }
 
     @Override
     public @Nullable EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
         this.setInvulTimer(DEFAULT_INVUL_TIMER);
         this.showBossBarPredicate = EntityPredicates.VALID_ENTITY.and(EntityPredicates.maxDistance(this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 50)).and(Util.visibleTo(this));
-        System.out.println(this.getBlockPos().getX() + " " + this.getBlockPos().getY() + " " + this.getBlockPos().getZ());
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
@@ -115,6 +117,35 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         }
     }
 
+    protected void registerAbility(ArcaneBossSlime.State state, int weight) {
+        this.abilityPool.add(new Ability(state, weight, (slime) -> true));
+    }
+
+    protected void registerAbility(ArcaneBossSlime.State state, int weight, Predicate<ArcaneBossSlime> condition) {
+        this.abilityPool.add(new Ability(state, weight, condition));
+    }
+
+    private void abilitySelectionTick() {
+        if (this.getAttackTimer() <= 0) {
+            WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
+
+            this.abilityPool.forEach(ability -> {
+                if (ability.condition.test(this)) {
+                    attackPool.addEntry(ability.state, ability.weight);
+                }
+            });
+
+            ArcaneBossSlime.State selectedState;
+            do {
+                selectedState = attackPool.getRandom();
+            } while (selectedState == this.lastState && !isDistanceBasedAbility(selectedState));
+
+            this.setState(selectedState);
+            lastState = selectedState;
+        }
+    }
+
+    @Override
     public void tick() {
         super.tick();
 
@@ -348,15 +379,24 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         return true;
     }
 
-    protected abstract void recalculateAttributes();
+    @Override
+    public void attack(LivingEntity target, float pullProgress) {
+        if (this.getInvulnerableTimer() > 0 || this.inAttackState()) return;
 
-    protected abstract void abilitySelectionTick();
+        super.attack(target, pullProgress);
+    }
+
+    protected abstract void recalculateAttributes();
 
     protected abstract void phaseUpdateTick();
 
     protected abstract void startBossFight();
 
     protected abstract boolean inAttackState();
+
+    protected abstract boolean isDistanceBasedAbility(State state);
+
+    protected abstract void initAbilities();
 
     public enum State {
         SPAWNING(0),
@@ -381,6 +421,9 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         }
     }
 
+    protected record Ability(ArcaneBossSlime.State state, int weight, Predicate<ArcaneBossSlime> condition) {
+
+    }
 
     public static class DisabledMoveControl extends MoveControl {
         private float targetYaw;

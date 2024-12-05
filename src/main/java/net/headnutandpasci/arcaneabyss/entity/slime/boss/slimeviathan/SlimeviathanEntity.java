@@ -2,9 +2,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan;
 
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
-import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
@@ -12,7 +10,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -27,7 +24,6 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         this.summonedMobIds = new CopyOnWriteArrayList<>();
         this.summonedPillarIds = new CopyOnWriteArrayList<>();
     }
-
 
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
@@ -66,24 +62,6 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     }
 
     @Override
-    protected void abilitySelectionTick() {
-        if (this.getAttackTimer() <= 0) {
-            WeightedRandomBag<State> attackPool = new WeightedRandomBag<>();
-
-            if (!this.getWorld().getEntitiesByClass(PlayerEntity.class, new Box(this.getBlockPos()).expand(3), (player) -> !player.isInvulnerable()).isEmpty())
-                attackPool.addEntry(State.PUSH, 200);
-
-            //attackPool.addEntry(State.SUMMON, 20);
-            //attackPool.addEntry(State.PILLAR_SUMMON, 20);
-            //attackPool.addEntry(State.SHOOT_SLIME_BULLET, 45);
-            attackPool.addEntry(State.STRIKE_SUMMON, 35);
-            //attackPool.addEntry(State.CURSE, 25);
-
-            this.setState(attackPool.getRandom());
-        }
-    }
-
-    @Override
     protected void phaseUpdateTick() {
         if (this.getHealth() < (this.getMaxHealth() * 0.50)) {
             this.setPhase(2);
@@ -93,11 +71,10 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     public void tick() {
         super.tick();
 
-        if (!this.summonedPillarIds.isEmpty()) {
-            this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
-            this.setInvulTimer(40);
-        } else if (!this.summonedMobIds.isEmpty()) {
-            this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
+        this.summonedPillarIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
+        this.summonedMobIds.removeIf(id -> this.getWorld().getEntityById(id) == null);
+
+        if (!this.summonedPillarIds.isEmpty() || !this.summonedMobIds.isEmpty()) {
             this.setInvulTimer(40);
         }
 
@@ -151,6 +128,17 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     }
 
     @Override
+    protected void initAbilities() {
+        this.registerAbility(State.PUSH, 200, bossSlime -> bossSlime.getWorld().getClosestPlayer(bossSlime, 3.0D) != null);
+
+        this.registerAbility(State.SUMMON, 20);
+        this.registerAbility(State.PILLAR_SUMMON, 20);
+        this.registerAbility(State.SHOOT_SLIME_BULLET, 45);
+        this.registerAbility(State.STRIKE_SUMMON, 35);
+        this.registerAbility(State.CURSE, 25);
+    }
+
+    @Override
     protected boolean inAttackState() {
         return this.isInState(State.SHOOT_SLIME_BULLET) ||
                 this.isInState(State.SUMMON) ||
@@ -161,10 +149,8 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     }
 
     @Override
-    public void attack(LivingEntity target, float pullProgress) {
-        if (this.getInvulnerableTimer() > 0 || this.inAttackState()) return;
-
-        super.attack(target, pullProgress);
+    protected boolean isDistanceBasedAbility(State state) {
+        return state == State.PUSH;
     }
 
     public CopyOnWriteArrayList<Integer> getSummonedMobIds() {

@@ -38,7 +38,7 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
         double e = target.getBodyY(0.3333333333333333) - magmaBallEntity.getY();
         double f = target.getZ() - magmaBallEntity.getZ();
         double g = Math.sqrt(d * d + f * f);
-        magmaBallEntity.setVelocity(d, e + g * 0.1, f, 1.75F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
+        magmaBallEntity.setVelocity(d, e + g * 0.1, f, 1.35F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
 
 
         this.playSound(SoundEvents.ENTITY_WITHER_SHOOT, 0.10F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));

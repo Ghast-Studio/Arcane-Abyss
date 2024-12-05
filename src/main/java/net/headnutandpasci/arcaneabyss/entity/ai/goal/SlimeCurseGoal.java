@@ -35,7 +35,7 @@ public class SlimeCurseGoal extends Goal {
     @Override
     public void start() {
         timer = 100;
-        this.bossSlime.playSound(SoundEvents.ENTITY_WARDEN_ROAR, 9.0F, 4.0F);
+        this.bossSlime.playSound(SoundEvents.ENTITY_WARDEN_ROAR, 200.0F, 4.0F);
         hitPlayers = new ArrayList<>();
         if (bossSlime.getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.spawnParticles(

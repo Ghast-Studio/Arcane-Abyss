@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -64,6 +65,7 @@ public class SlimeviathanSummonPillarGoal extends Goal {
         this.particleTimer = 50;
 
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
+        this.bossSlime.playSound(SoundEvents.ENTITY_WITHER_SPAWN, 200.0F, 40.0F);
         if (world != null) {
             world.spawnParticles(ParticleTypes.FLAME, bossSlime.getX(), bossSlime.getY(), bossSlime.getZ(), 20, 3.0D, 3.0D, 3.0D, 0.0D);
         }

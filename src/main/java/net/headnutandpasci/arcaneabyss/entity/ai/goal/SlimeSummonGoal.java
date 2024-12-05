@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -43,6 +44,7 @@ public class SlimeSummonGoal extends Goal {
     public void start() {
         super.start();
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
+        this.bossSlime.playSound(SoundEvents.ENTITY_PIGLIN_ANGRY, 500.0F, 240.0F);
         if (world == null) {
             System.out.println("World is null");
             return;
@@ -52,23 +54,23 @@ public class SlimeSummonGoal extends Goal {
             if (bossSlime.getPhase() == 0) {
                 Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                 BlockPos summonPos = bossSlime.getBlockPos().offset(direction, 5);
-                this.summonMob(ModEntities.DARK_BLUE_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_BLUE_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_RED_SLIME, world, summonPos);
+                this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);
+                this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);
+                this.summonMob(ModEntities.RED_SLIME, world, summonPos);
                 this.summonMob(ModEntities.GREEN_SLIME, world, summonPos);
             }
             if (bossSlime.getPhase() == 1) {
                 Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                 BlockPos summonPos = bossSlime.getBlockPos().offset(direction, 5);
-                this.summonMob(ModEntities.DARK_BLUE_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_BLUE_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_BLUE_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_RED_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_RED_SLIME, world, summonPos);
-                this.summonMob(ModEntities.DARK_RED_SLIME, world, summonPos);
+                this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);
+                this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);
+                this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);
+                this.summonMob(ModEntities.RED_SLIME, world, summonPos);
+                this.summonMob(ModEntities.RED_SLIME, world, summonPos);
+                this.summonMob(ModEntities.RED_SLIME, world, summonPos);
                 this.summonMob(ModEntities.GREEN_SLIME, world, summonPos);
                 this.summonMob(ModEntities.GREEN_SLIME, world, summonPos);
-                this.summonMob(ModEntities.GREEN_SLIME, world, summonPos);
+
             }
         }
     }
@@ -84,7 +86,7 @@ public class SlimeSummonGoal extends Goal {
     }
 
     private void summonMob(EntityType<? extends ArcaneSlimeEntity> slimeType, ServerWorld world, BlockPos summonPos) {
-        world.spawnParticles(ParticleTypes.CLOUD, summonPos.getX(), summonPos.getY(), summonPos.getZ(), 10, 0.5D, 0.5D, 0.5D, 0.0D);
+        world.spawnParticles(ParticleTypes.GLOW, summonPos.getX(), summonPos.getY(), summonPos.getZ(), 300, 0.5D, 0.5D, 0.5D, 0.0D);
         ArcaneSlimeEntity slime = slimeType.spawn(world, summonPos, SpawnReason.REINFORCEMENT);
 
         if (slime == null) return;

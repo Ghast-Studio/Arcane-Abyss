@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss;
 import net.fabricmc.api.ModInitializer;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.headnutandpasci.arcaneabyss.item.ModEnchantments;
 import net.headnutandpasci.arcaneabyss.world.structures.ModStructures;
 import net.minecraft.util.Identifier;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -44,6 +45,8 @@ public class ArcaneAbyss implements ModInitializer {
         ModItems.registerModItems();
         ModBlocks.registerModBlocks();
         ModEntities.registerModEntities();
+
+        ModEnchantments.registerEnchantments();
 
         ModBlockEntities.registerBlockEntities();
         ModScreenHandlers.registerScreenHandlers();

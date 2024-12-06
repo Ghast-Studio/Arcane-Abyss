@@ -30,7 +30,7 @@ public class RubySwordItem extends SwordItem {
 
 
     public RubySwordItem(Settings settings) {
-        super(ModToolMaterial.RUBY, 2, -2.4F, settings);
+        super(ModToolMaterial.RUBY, 0, -2.4F, settings);
     }
 
     public void upgradeSword(ItemStack stack) {
@@ -51,7 +51,7 @@ public class RubySwordItem extends SwordItem {
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         Multimap<EntityAttribute, EntityAttributeModifier> modifiers = HashMultimap.create(super.getAttributeModifiers(stack, slot));
 
-        if (slot == EquipmentSlot.MAINHAND) {
+        if (slot == EquipmentSlot.MAINHAND && stack.getItem() instanceof RubySwordItem && this.getUpgradeLevel(stack) > 0) {
             int upgradeLevel = getUpgradeLevel(stack);
 
             double additionalDamage = 2 * upgradeLevel;

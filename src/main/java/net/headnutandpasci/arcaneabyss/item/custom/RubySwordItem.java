@@ -30,7 +30,7 @@ public class RubySwordItem extends SwordItem {
 
 
     public RubySwordItem(Settings settings) {
-        super(ModToolMaterial.RUBY, 4, -2.4F, settings);
+        super(ModToolMaterial.RUBY, 2, -2.4F, settings);
     }
 
     public void upgradeSword(ItemStack stack) {
@@ -62,7 +62,7 @@ public class RubySwordItem extends SwordItem {
                     new EntityAttributeModifier(
                             ATTACK_DAMAGE_MODIFIER_UUID,
                             "Slime Sword attack upgrade",
-                            4.0 + additionalDamage,
+                            additionalDamage,
                             EntityAttributeModifier.Operation.ADDITION
                     )
             );

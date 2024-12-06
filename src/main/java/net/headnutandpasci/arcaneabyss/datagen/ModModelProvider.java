@@ -44,18 +44,14 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.SLIME_FLESH, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIME_JUICE, Models.GENERATED);
 
-        itemModelGenerator.register(ModItems.TOMATO, Models.GENERATED);
         itemModelGenerator.register(ModItems.COOKED_SLIME_MEAT, Models.GENERATED);
 
         itemModelGenerator.register(ModItems.RUBY_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(ModItems.RUBY_AXE, Models.HANDHELD);
-        itemModelGenerator.register(ModItems.RUBY_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(ModItems.RUBY_HOE, Models.HANDHELD);
 
-        itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_HELMET));
-        itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_CHESTPLATE));
-        itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_LEGGINGS));
-        itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_BOOTS));
+        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_HELMET));
+        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_CHESTPLATE));
+        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_LEGGINGS));
+        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_BOOTS));
     }
 
 

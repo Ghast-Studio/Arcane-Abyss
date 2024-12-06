@@ -32,53 +32,10 @@ public class ModRecipeProvider extends FabricRecipeProvider {
         offerSmelting(exporter, SLIME_COOKABLES,RecipeCategory.FOOD, ModItems.COOKED_SLIME_MEAT,0.7f,200,"slime_meat");
 
 
-        createArmorRecipe(exporter, ModItems.RUBY_HELMET, "RRR", "R R", RecipeCategory.COMBAT, "ruby_helmet");
-        createArmorRecipe(exporter, ModItems.RUBY_CHESTPLATE, "R R", "RRR", "RRR", RecipeCategory.COMBAT, "ruby_chestplate");
-        createArmorRecipe(exporter, ModItems.RUBY_LEGGINGS, "RRR", "R R", "R R", RecipeCategory.COMBAT, "ruby_leggings");
-        createArmorRecipe(exporter, ModItems.RUBY_BOOTS, "R R", "R R", RecipeCategory.COMBAT, "ruby_boots");
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.RUBY_SWORD, 1)
-                .pattern("S")
-                .pattern("S")
-                .pattern("R")
-                .input('S', ModItems.SLIMESTEEL_INGOT)
-                .input('R', ModItems.RUBY)
-                .criterion(hasItem(ModItems.RUBY), conditionsFromItem(ModItems.RUBY))
-                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.RUBY_SWORD)));
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.RUBY_AXE, 1)
-                .pattern("RR")
-                .pattern("RS")
-                .pattern(" S")
-                .input('S', ModItems.RUBY)
-                .input('R', ModItems.SLIMESTEEL_INGOT)
-                .criterion(hasItem(ModItems.RUBY), conditionsFromItem(ModItems.RUBY))
-                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.RUBY_AXE)));
-
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.RUBY_HOE, 1)
-                .pattern("RR ")
-                .pattern(" S ")
-                .pattern(" S ")
-                .input('S', ModItems.RUBY)
-                .input('R', ModItems.SLIMESTEEL_INGOT)
-                .criterion(hasItem(ModItems.RUBY), conditionsFromItem(ModItems.RUBY))
-                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.RUBY_HOE)));
-
-
-        ShapedRecipeJsonBuilder.create(RecipeCategory.TOOLS, ModItems.RUBY_PICKAXE, 1)
-                .pattern("RRR")
-                .pattern(" S ")
-                .pattern(" S ")
-                .input('S', ModItems.RUBY)
-                .input('R', ModItems.SLIMESTEEL_INGOT)
-                .criterion(hasItem(ModItems.RUBY), conditionsFromItem(ModItems.RUBY))
-                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
-                .offerTo(exporter, new Identifier(getRecipeName(ModItems.RUBY_PICKAXE)));
-
+        //createArmorRecipe(exporter, ModItems.RUBY_HELMET, "RRR", "R R", RecipeCategory.COMBAT, "ruby_helmet");
+        //createArmorRecipe(exporter, ModItems.RUBY_CHESTPLATE, "R R", "RRR", "RRR", RecipeCategory.COMBAT, "ruby_chestplate");
+        //createArmorRecipe(exporter, ModItems.RUBY_LEGGINGS, "RRR", "R R", "R R", RecipeCategory.COMBAT, "ruby_leggings");
+        //createArmorRecipe(exporter, ModItems.RUBY_BOOTS, "R R", "R R", RecipeCategory.COMBAT, "ruby_boots");
     }
 
 

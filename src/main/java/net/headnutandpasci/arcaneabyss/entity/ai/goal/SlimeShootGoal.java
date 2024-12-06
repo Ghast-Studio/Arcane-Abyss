@@ -1,6 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
-import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeBallProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
@@ -39,7 +39,6 @@ public class SlimeShootGoal extends Goal {
     @Override
     public void start() {
         super.start();
-        System.out.println("starting shoot goal");
         this.type = this.rollType();
         bossSlime.setAttackTimer(200);
     }
@@ -53,7 +52,6 @@ public class SlimeShootGoal extends Goal {
     private String rollType() {
         WeightedRandomBag<String> bulletPatterns = new WeightedRandomBag<>();
         if (bossSlime.isInState(ArcaneBossSlime.State.SHOOT_SLIME_BULLET)) {
-
             if (bossSlime.isInPhase(0)) {
                 bulletPatterns.addEntry("Single", 1);
                 bulletPatterns.addEntry("MultiShot", 1);
@@ -76,6 +74,8 @@ public class SlimeShootGoal extends Goal {
             this.rotatedShootAmount = 0;
             return;
         }
+
+        if (this.type == null) return;
 
         switch (type) {
             case "Single" -> {
@@ -102,22 +102,25 @@ public class SlimeShootGoal extends Goal {
         }
     }
 
-    private void shootSkullAt(Vec3d spawn, Vec3d direction) {
+    private void shootSkullAt(Vec3d offset, LivingEntity target) {
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
-        if (world == null) return; // Ensure the world is a ServerWorld instance
+        if (world == null) return;
 
-        double g = direction.x - spawn.x;
-        double h = direction.y - spawn.y - 4.0f;
-        double i = direction.z - spawn.z;
+        Vec3d forward = this.bossSlime.getRotationVector().multiply(1);
+        double startX = this.bossSlime.getX() + offset.getX() + forward.x;
+        double startY = this.bossSlime.getBodyY(1) + offset.getY();
+        double startZ = this.bossSlime.getZ() + offset.getZ() + forward.z;
 
-        // Create and spawn the projectile
-        BlackSlimeProjectileEntity witherSkullEntity = new BlackSlimeProjectileEntity(this.bossSlime.getWorld(), this.bossSlime, g, h, i);
-        witherSkullEntity.setOwner(this.bossSlime);
-        witherSkullEntity.setPos(spawn.x, spawn.y + 4.0f, spawn.z);
-        this.bossSlime.getWorld().spawnEntity(witherSkullEntity);
+        SlimeBallProjectile projectile = new SlimeBallProjectile(this.bossSlime, world, new Vec3d(startX, startY, startZ));
 
-        // Add particle circle effect around the projectile
-        spawnParticleCircleAroundProjectile(witherSkullEntity, world);
+        double d = target.getX() - projectile.getX();
+        double e = target.getBodyY(0.3333333333333333) - projectile.getY();
+        double f = target.getZ() - projectile.getZ();
+        double g = Math.sqrt(d * d + f * f);
+        projectile.setVelocity(d, e + g * 0.1, f, 1.35F, (float) (14 - this.bossSlime.getWorld().getDifficulty().getId() * 4));
+
+        this.bossSlime.getWorld().spawnEntity(projectile);
+        spawnParticleCircleAroundProjectile(projectile, world);
     }
 
     private void performSingleRotatedShot(float angle) {
@@ -128,25 +131,11 @@ public class SlimeShootGoal extends Goal {
         spawn = VectorUtils.addRight(spawn, 3.0f);
         spawn = VectorUtils.rotateVectorCC(spawn, this.bossSlime.getRotationVector(), angle);
 
-        double playerX = target.getX();
-        double playerZ = target.getZ();
-        double playerY = bossSlime.getY();
-
-
-        ServerWorld world = target.getWorld() instanceof ServerWorld ? (ServerWorld) target.getWorld() : null;
-        if (world != null) {
-
-            BlockPos groundPos = new BlockPos((int) playerX, (int) playerY, (int) playerZ);
-
-            spawnParticleCircle(world, groundPos, ParticleTypes.GLOW, 1, 50);
-
-        }
-
         this.performSingleShot(spawn.add(0, 3, 0));
     }
 
     private void performSingleShot() {
-        this.performSingleShot(new Vec3d(0, 0, 0));
+        this.performSingleShot(new Vec3d(0, 3, 0));
     }
 
     private void performSingleShot(Vec3d offset) {
@@ -154,27 +143,15 @@ public class SlimeShootGoal extends Goal {
         if (target == null) return;
 
         Vec3d spawn = this.bossSlime.getPos();
-        Vec3d direction = new Vec3d(target.getX(), target.getY() + (double) target.getStandingEyeHeight() * 0.5, target.getZ());
 
-        double playerX = target.getX();
-        double playerZ = target.getZ();
-        double playerY = bossSlime.getY();
-
-
-        ServerWorld world = target.getWorld() instanceof ServerWorld ? (ServerWorld) target.getWorld() : null;
-        if (world != null) {
-
-            BlockPos groundPos = new BlockPos((int) playerX, (int) playerY, (int) playerZ);
-
-            spawnParticleCircle(world, groundPos, ParticleTypes.GLOW, 1, 50);
-
+        if (this.bossSlime.getWorld() instanceof ServerWorld serverWorld) {
+            spawnParticleCircle(serverWorld, BlockPos.ofFloored(spawn).withY((int) this.bossSlime.getY()), ParticleTypes.FLAME, 1, 50);
         }
 
-        this.shootSkullAt(spawn.add(offset), direction);
+        this.shootSkullAt(offset, target);
     }
 
     public void spawnParticleCircle(ServerWorld world, BlockPos center, ParticleEffect particle, double radius, int particleCount) {
-
         double centerX = center.getX();
         double centerY = center.getY();
         double centerZ = center.getZ();
@@ -183,13 +160,12 @@ public class SlimeShootGoal extends Goal {
             double angle = 2 * Math.PI * i / particleCount;
             double x = centerX + radius * Math.cos(angle);
             double z = centerZ + radius * Math.sin(angle);
-            double y = centerY;
 
-            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
+            world.spawnParticles(particle, x, centerY, z, 1, 0, 0, 0, 0);
         }
     }
 
-    private void spawnParticleCircleAroundProjectile(BlackSlimeProjectileEntity projectile, ServerWorld world) {
+    private void spawnParticleCircleAroundProjectile(SlimeBallProjectile projectile, ServerWorld world) {
         if (projectile == null) return;
 
         LivingEntity target = bossSlime.getTarget();

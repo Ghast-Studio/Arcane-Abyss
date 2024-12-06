@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.*;

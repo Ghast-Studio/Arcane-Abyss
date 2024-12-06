@@ -1,6 +1,5 @@
 package net.headnutandpasci.arcaneabyss.datagen;
 
-import com.eliotlash.mclib.math.functions.classic.Mod;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
@@ -8,7 +7,6 @@ import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
 import net.minecraft.data.client.Models;
-import net.minecraft.item.ArmorItem;
 
 public class ModModelProvider extends FabricModelProvider {
     public ModModelProvider(FabricDataOutput output) {
@@ -46,7 +44,7 @@ public class ModModelProvider extends FabricModelProvider {
 
         itemModelGenerator.register(ModItems.COOKED_SLIME_MEAT, Models.GENERATED);
 
-        itemModelGenerator.register(ModItems.RUBY_SWORD, Models.HANDHELD);
+        itemModelGenerator.register(ModItems.SLIME_SWORD, Models.HANDHELD);
 
         //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_HELMET));
         //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_CHESTPLATE));

@@ -1,7 +1,7 @@
 package net.headnutandpasci.arcaneabyss.item.enchantments;
 
 import net.headnutandpasci.arcaneabyss.item.ModEnchantments;
-import net.headnutandpasci.arcaneabyss.item.custom.RubySwordItem;
+import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentTarget;
@@ -65,7 +65,7 @@ public class SlimyStrike extends Enchantment {
                     nbt.putInt(STACK_KEY, 0);
                     float bonusDamage = 5 + (level * 2);
 
-                    if (weapon.getItem() instanceof RubySwordItem sword) {
+                    if (weapon.getItem() instanceof SlimeSwordItem sword) {
                         bonusDamage += sword.getUpgradeLevel(weapon) * 2;
                     }
 
@@ -84,6 +84,6 @@ public class SlimyStrike extends Enchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack);
+        return stack.getItem() instanceof SlimeSwordItem;
     }
 }

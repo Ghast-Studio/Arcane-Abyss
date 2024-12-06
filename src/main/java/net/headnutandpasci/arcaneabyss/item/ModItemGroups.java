@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 public class ModItemGroups {
     public static final ItemGroup RUBY_GROUP = Registry.register(Registries.ITEM_GROUP,
             new Identifier(ArcaneAbyss.MOD_ID, "ruby"),
-            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.ruby"))
+            FabricItemGroup.builder().displayName(Text.translatable("itemgroup.slime"))
                     .icon(() -> new ItemStack(ModItems.RUBY)).entries((displayContext, entries) -> {
                         entries.add(ModItems.RAW_RUBY);
                         entries.add(ModItems.RUBY);
@@ -28,8 +28,8 @@ public class ModItemGroups {
                         entries.add(ModBlocks.RAW_RUBY_BLOCK);
                         entries.add(ModBlocks.SLIMESTEEL_MACHINE);
 
-                        entries.add(ModItems.RUBY_SWORD);
-                        entries.add(ModItems.RUBY_STAFF);
+                        entries.add(ModItems.SLIME_SWORD);
+                        entries.add(ModItems.SLIME_STAFF);
 
                         //entries.add(ModItems.RUBY_HELMET);
                         //entries.add(ModItems.RUBY_CHESTPLATE);

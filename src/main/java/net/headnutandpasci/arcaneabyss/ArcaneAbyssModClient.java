@@ -21,7 +21,6 @@ import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeRenderer;
 import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileRenderer;
 import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeviathanProjectileRenderer;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectileRenderer;
-import net.minecraft.client.render.entity.AllayEntityRenderer;
 
 public class ArcaneAbyssModClient implements ClientModInitializer {
     @Override
@@ -38,7 +37,7 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanRenderer::new);
         EntityRendererRegistry.register(ModEntities.MAGMA_BALL_PROJECTILE, MagmaBallProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.BLACK_SLIME_PROJECTILE, BlackSlimeProjectileRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN_PROJECTLE, SlimeviathanProjectileRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN_PROJECTILE, SlimeviathanProjectileRenderer::new);
         HandledScreens.register(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, SlimeSteelMachineScreen::new);
 
 

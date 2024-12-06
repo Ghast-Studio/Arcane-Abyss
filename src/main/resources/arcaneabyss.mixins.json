@@ -3,6 +3,7 @@
     "package": "net.headnutandpasci.arcaneabyss.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "AnvilScreenMixin",
         "ExampleMixin"
     ],
     "client": [

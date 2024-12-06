@@ -18,7 +18,7 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     private final CopyOnWriteArrayList<Integer> summonedMobIds;
 
     public BlackSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
-        super(entityType, world);
+        super(entityType, world, 6);
         this.summonedMobIds = new CopyOnWriteArrayList<>();
     }
 

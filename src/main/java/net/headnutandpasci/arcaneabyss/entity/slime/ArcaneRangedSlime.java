@@ -24,6 +24,10 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
         super(entityType, world);
     }
 
+    public ArcaneRangedSlime(EntityType<? extends HostileEntity> entityType, World world, int size) {
+        super(entityType, world, size);
+    }
+
     public void attack(LivingEntity target, float pullProgress) {
         MagmaBallProjectile magmaBallEntity = new MagmaBallProjectile(ModEntities.MAGMA_BALL_PROJECTILE, this.getWorld());
 

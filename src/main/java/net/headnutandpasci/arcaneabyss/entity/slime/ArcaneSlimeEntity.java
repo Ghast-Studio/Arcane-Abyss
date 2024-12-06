@@ -1,25 +1,40 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 public abstract class ArcaneSlimeEntity extends HostileEntity {
+    private static final TrackedData<Integer> SLIME_SIZE;
+
+    static {
+        SLIME_SIZE = DataTracker.registerData(ArcaneSlimeEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    }
+
+    private final int initialSize;
     public float targetStretch;
     public float lastStretch;
     public float stretch;
@@ -28,6 +43,27 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
     public ArcaneSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
         this.moveControl = new ArcaneSlimeMoveControl(this);
+        this.initialSize = 2;
+    }
+
+    public ArcaneSlimeEntity(EntityType<? extends HostileEntity> entityType, World world, int size) {
+        super(entityType, world);
+        this.moveControl = new ArcaneSlimeMoveControl(this);
+        this.initialSize = size;
+    }
+
+    @Override
+    public @Nullable EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
+        this.setSize(this.initialSize);
+        this.refreshPosition();
+        this.calculateDimensions();
+        this.reinitDimensions();
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    }
+
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(SLIME_SIZE, this.initialSize);
     }
 
     protected ParticleEffect getParticles() {
@@ -48,7 +84,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
     }
 
     protected float getActiveEyeHeight(EntityPose pose, EntityDimensions dimensions) {
-        return 0.3F;
+        return 0.625F * dimensions.height;
     }
 
     @Override
@@ -75,6 +111,32 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
 
         this.onGroundLastTick = this.isOnGround();
         this.updateStretch();
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putInt("Size", this.getSize() - 1);
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        this.setSize(nbt.getInt("Size") + 1);
+    }
+
+    @Override
+    public void calculateDimensions() {
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        super.calculateDimensions();
+        this.setPosition(x, y, z);
+    }
+
+    @Override
+    public EntityDimensions getDimensions(EntityPose pose) {
+        return super.getDimensions(pose).scaled(0.255F * (float) this.getSize());
     }
 
     @Override
@@ -108,6 +170,37 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
 
     protected void updateStretch() {
         this.targetStretch *= 0.6F;
+    }
+
+    public int getSize() {
+        return this.dataTracker.get(SLIME_SIZE);
+    }
+
+    public void setSize(int size) {
+        int i = MathHelper.clamp(size, 1, 127);
+        this.dataTracker.set(SLIME_SIZE, i);
+        this.refreshPosition();
+        this.calculateDimensions();
+    }
+
+    public void onTrackedDataSet(TrackedData<?> data) {
+        if (SLIME_SIZE.equals(data)) {
+            this.calculateDimensions();
+            this.setYaw(this.headYaw);
+            this.bodyYaw = this.headYaw;
+            if (this.isTouchingWater() && this.random.nextInt(20) == 0) {
+                this.onSwimmingStart();
+            }
+        }
+
+        super.onTrackedDataSet(data);
+    }
+
+    @Override
+    protected Identifier getLootTableId() {
+        Identifier lootTable = new Identifier(ArcaneAbyss.MOD_ID, "entities/genericslimes");
+        System.out.println("Loot table ID: " + lootTable);
+        return lootTable;
     }
 
     /* AI Goals & Movement Controllers */
@@ -329,12 +422,5 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
             }
 
         }
-    }
-
-    @Override
-    protected Identifier getLootTableId() {
-        Identifier lootTable = new Identifier("arcaneabyss", "entities/genericslimes");
-        System.out.println("Loot table ID: " + lootTable);
-        return lootTable;
     }
 }

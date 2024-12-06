@@ -25,8 +25,8 @@ import net.minecraft.world.World;
 
 public class MagmaBallProjectile extends ExplosiveProjectileEntity {
     private int lifeTime = 50;
-    public MagmaBallProjectile(EntityType<? extends MagmaBallProjectile> entityType, World world) {
-        super((EntityType<? extends MagmaBallProjectile>)entityType, world);
+    public MagmaBallProjectile(EntityType<? extends ExplosiveProjectileEntity> entityType, World world) {
+        super(entityType, world);
     }
 
     public MagmaBallProjectile(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {

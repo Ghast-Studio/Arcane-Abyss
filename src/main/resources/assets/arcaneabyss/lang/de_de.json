@@ -2,9 +2,9 @@
     "item.arcaneabyss.ruby": "Ruby",
     "item.arcaneabyss.raw_ruby": "Raw Ruby",
     "item.arcaneabyss.slimesteel_ingot": "Slimesteel Ingot",
-    "item.arcaneabyss.slime_flesh":  "Slime Flesh",
-    "item.arcaneabyss.slime_juice":  "Slime Juice",
-    "item.arcaneabyss.cooked_slime_meat":  "Cooked Slime Meat",
+    "item.arcaneabyss.slime_flesh": "Slime Flesh",
+    "item.arcaneabyss.slime_juice": "Slime Juice",
+    "item.arcaneabyss.cooked_slime_meat": "Cooked Slime Meat",
     "item.arcaneabyss.tomato": "Tomato",
     "item.arcaneabyss.ruby_sword": "Ruby Sword",
     "tooltip.arcaneabyss.ruby_sword.tooltip": "A Red Sword Thingy",
@@ -25,5 +25,9 @@
     "itemgroup.ruby": "Ruby Menu",
     "itemgroup.dungeon": "ArcaneAbyss Blocks",
     "item.arcaneabyss.porcupine": "porcupine",
-    "entity.arcaneabyss.black_slime": "Black Slime"
+    "entity.arcaneabyss.black_slime": "Black Slime",
+    "enchantment.arcaneabyss.slimy_strike": "Slimy Strike",
+    "tooltip.arcaneabyss.ruby_sword.upgrade_level": "Level %s",
+    "tooltip.arcaneabyss.ruby_sword.slimy_strike": "+%s Attack Damage for Slimy Strike",
+    "tooltip.arcaneabyss.ruby_sword.stacks": "Stacks: %s/%s"
 }

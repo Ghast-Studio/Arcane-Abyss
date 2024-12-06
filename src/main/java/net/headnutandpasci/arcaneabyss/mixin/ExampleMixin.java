@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public class ExampleMixin {
-    /*@Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
+    @Inject(at = @At("HEAD"), method = "isInvulnerableTo", cancellable = true)
     private void init(DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true);
-    }*/
+    }
 }

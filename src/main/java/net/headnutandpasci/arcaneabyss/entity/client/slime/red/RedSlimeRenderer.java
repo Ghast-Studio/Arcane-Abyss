@@ -9,6 +9,7 @@ import net.minecraft.client.render.entity.feature.SlimeOverlayFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.SlimeEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -21,7 +22,7 @@ public class RedSlimeRenderer extends MobEntityRenderer<RedSlimeEntity, SlimeEnt
     }
 
     public void render(RedSlimeEntity slimeEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-        this.shadowRadius = 0.5f;
+        this.shadowRadius = 0.25F * (float)slimeEntity.getSize();
         super.render(slimeEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
@@ -30,10 +31,12 @@ public class RedSlimeRenderer extends MobEntityRenderer<RedSlimeEntity, SlimeEnt
         return TEXTURE;
     }
 
+    @Override
     protected void scale(RedSlimeEntity slimeEntity, MatrixStack matrixStack, float f) {
+        float g = 0.999F;
         matrixStack.scale(0.999F, 0.999F, 0.999F);
         matrixStack.translate(0.0F, 0.001F, 0.0F);
-        float h = 2.0f;
+        float h = (float)slimeEntity.getSize();
         float i = MathHelper.lerp(f, slimeEntity.lastStretch, slimeEntity.stretch) / (h * 0.5F + 1.0F);
         float j = 1.0F / (i + 1.0F);
         matrixStack.scale(j * h, 1.0F / j * h, j * h);

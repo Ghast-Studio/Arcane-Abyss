@@ -38,74 +38,55 @@ public class ModEntities {
     public static EntityType<SlimeviathanEntity> SLIMEVIATHAN;
     public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
     public static EntityType<BlackSlimeProjectileEntity> BLACK_SLIME_PROJECTILE;
-    public static EntityType<SlimeviathanProjectileEntity> SLIMEVIATHAN_PROJECTLE;
+    public static EntityType<SlimeviathanProjectileEntity> SLIMEVIATHAN_PROJECTILE;
     public static EntityType<YallaEntity> YALLA;
 
+    private static <T extends EntityType<?>> T register(T entityType, String id) {
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(ArcaneAbyss.MOD_ID, id), entityType);
+    }
+
     public static void registerModEntities() {
-        Test = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "test"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TestEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        Test = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TestEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "test");
 
-        BLUE_SLIME = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "blue_slime"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
-        SLIME_PILLAR = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "slime_pillar"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SlimePillarEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        BLUE_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "blue_slime");
 
-        RED_SLIME = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "red_slime"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
-        RED_SLIME_STATIONARY = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "red_slime_stationary"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeStationaryEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        SLIME_PILLAR = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SlimePillarEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "slime_pillar");
 
-        GREEN_SLIME = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "green_slime"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreenSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        RED_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "red_slime");
 
-        DARK_BLUE_SLIME = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "dark_blue_slime"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DarkBlueSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        RED_SLIME_STATIONARY = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RedSlimeStationaryEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "red_slime_stationary");
 
-        DARK_RED_SLIME = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "dark_red_slime"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DarkRedSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        GREEN_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreenSlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "green_slime");
 
-        BLACK_SLIME = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "black_slime"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlackSlimeEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        DARK_BLUE_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DarkBlueSlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "dark_blue_slime");
 
-        MAGMA_BALL_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "magma_ball_projectile"),
-                FabricEntityTypeBuilder.<MagmaBallProjectile>create(SpawnGroup.MISC, MagmaBallProjectile::new)
-                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
-        BLACK_SLIME_PROJECTILE = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "black_slime_projectile"),
-                FabricEntityTypeBuilder.<BlackSlimeProjectileEntity>create(SpawnGroup.MISC, BlackSlimeProjectileEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
-        SLIMEVIATHAN_PROJECTLE = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "slimeviathan_projectile"),
-                FabricEntityTypeBuilder.<SlimeviathanProjectileEntity>create(SpawnGroup.MISC, SlimeviathanProjectileEntity::new)
-                        .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build());
-        SLIMEVIATHAN = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "slimeviathan"),
-                FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
-        YALLA = Registry.register(Registries.ENTITY_TYPE,
-                new Identifier(ArcaneAbyss.MOD_ID, "yalla"),
-                FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, YallaEntity::new)
-                        .dimensions(EntityDimensions.fixed(1f, 1f)).build());
+        DARK_RED_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DarkRedSlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "dark_red_slime");
 
+        BLACK_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlackSlimeEntity::new)
+                .dimensions(EntityDimensions.changing(2f, 2f)).build(), "black_slime");
+
+        SLIMEVIATHAN = register(FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
+                .dimensions(EntityDimensions.changing(2f, 2f)).build(), "slimeviathan");
+
+        MAGMA_BALL_PROJECTILE = register(FabricEntityTypeBuilder.<MagmaBallProjectile>create(SpawnGroup.MISC, MagmaBallProjectile::new)
+                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "magma_ball_projectile");
+
+        BLACK_SLIME_PROJECTILE = register(FabricEntityTypeBuilder.<BlackSlimeProjectileEntity>create(SpawnGroup.MISC, BlackSlimeProjectileEntity::new)
+                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "black_slime_projectile");
+
+        SLIMEVIATHAN_PROJECTILE = register(FabricEntityTypeBuilder.<SlimeviathanProjectileEntity>create(SpawnGroup.MISC, SlimeviathanProjectileEntity::new)
+                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "slimeviathan_projectile");
+
+        YALLA = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, YallaEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "yalla");
 
         ArcaneAbyss.LOGGER.info("Registering Entities");
     }

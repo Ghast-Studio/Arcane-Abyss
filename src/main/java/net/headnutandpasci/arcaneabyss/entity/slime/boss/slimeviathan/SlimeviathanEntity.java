@@ -20,7 +20,7 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     private int x = 0;
 
     public SlimeviathanEntity(EntityType<? extends HostileEntity> entityType, World world) {
-        super(entityType, world);
+        super(entityType, world, 8);
         this.summonedMobIds = new CopyOnWriteArrayList<>();
         this.summonedPillarIds = new CopyOnWriteArrayList<>();
     }

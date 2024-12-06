@@ -22,7 +22,7 @@ public class SlimeviathanProjectileEntity extends ExplosiveProjectileEntity {
     }
 
     public SlimeviathanProjectileEntity(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
-        super(ModEntities.SLIMEVIATHAN_PROJECTLE, owner, directionX, directionY, directionZ, world);
+        super(ModEntities.SLIMEVIATHAN_PROJECTILE, owner, directionX, directionY, directionZ, world);
     }
 
 

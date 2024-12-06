@@ -60,8 +60,8 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
     @Nullable
     private Predicate<Entity> showBossBarPredicate;
 
-    public ArcaneBossSlime(EntityType<? extends HostileEntity> entityType, World world) {
-        super(entityType, world);
+    public ArcaneBossSlime(EntityType<? extends HostileEntity> entityType, World world, int size) {
+        super(entityType, world, size);
         this.moveControl = new DisabledMoveControl(this);
         this.jumpControl = new DisabledJumpControl(this);
         this.abilityPool = new ArrayList<>();
@@ -77,6 +77,10 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         this.bossBar.setPercent(0.0F);
 
         this.initAbilities();
+    }
+
+    public ArcaneBossSlime(EntityType<? extends HostileEntity> entityType, World world) {
+        this(entityType, world, 16);
     }
 
     @Override
@@ -148,9 +152,6 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
     @Override
     public void tick() {
         super.tick();
-
-        System.out.println("this.getState(): " + this.getState());
-        System.out.println("this.getAttackTimer(): " + this.getAttackTimer());
 
         if (--this.playerUpdateTimer < 1) {
             this.playerUpdateTimer = 20 * 2;

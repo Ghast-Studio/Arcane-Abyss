@@ -1,6 +1,5 @@
-package net.headnutandpasci.arcaneabyss.entity.slime.blue;
+package net.headnutandpasci.arcaneabyss.entity.slime;
 
-import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;

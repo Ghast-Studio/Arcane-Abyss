@@ -1,41 +1,35 @@
 {
-	"schemaVersion": 1,
-	"id": "arcaneabyss",
-	"version": "${version}",
-	"name": "Arcane Abyss",
-	"description": "Mod made by Headnutti and Pasci",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "MIT",
-	"icon": "assets/arcaneabyss/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"net.headnutandpasci.arcaneabyss.ArcaneAbyss"
-		],
-		"client": [
-			"net.headnutandpasci.arcaneabyss.ArcaneAbyssModClient"
-		],
-		"fabric-datagen": [
-			"net.headnutandpasci.arcaneabyss.ArcaneAbyssDataGenerator"
-		]
-	},
-	"mixins": [
-		"arcaneabyss.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.20.1",
-		"java": ">=17",
-		"geckolib": ">=4.4.6",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+    "schemaVersion": 1,
+    "id": "arcaneabyss",
+    "version": "${version}",
+    "name": "Arcane Abyss",
+    "description": "Mod made by Headnutti and Pasci and Luca",
+    "authors": [
+        "Luca",
+        "Headnutti",
+        "Pasci"
+    ],
+    "license": "MIT",
+    "icon": "assets/arcaneabyss/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "net.headnutandpasci.arcaneabyss.ArcaneAbyss"
+        ],
+        "client": [
+            "net.headnutandpasci.arcaneabyss.ArcaneAbyssModClient"
+        ],
+        "fabric-datagen": [
+            "net.headnutandpasci.arcaneabyss.ArcaneAbyssDataGenerator"
+        ]
+    },
+    "mixins": [
+        "arcaneabyss.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.15.11",
+        "minecraft": "~1.20.1",
+        "java": ">=17",
+        "fabric-api": "*"
+    }
 }

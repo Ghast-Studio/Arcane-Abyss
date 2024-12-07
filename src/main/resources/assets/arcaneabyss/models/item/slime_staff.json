@@ -1,6 +1,6 @@
 {
 	"parent": "minecraft:item/generated",
 	"textures": {
-		"layer0": "arcaneabyss:item/ruby_staff"
+		"layer0": "arcaneabyss:item/slime_staff"
 	}
 }

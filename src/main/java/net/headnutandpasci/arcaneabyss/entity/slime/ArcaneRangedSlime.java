@@ -1,7 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeBallProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;
@@ -29,7 +29,7 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
     }
 
     public void attack(LivingEntity target, float pullProgress) {
-        MagmaBallProjectile magmaBallEntity = new MagmaBallProjectile(ModEntities.MAGMA_BALL_PROJECTILE, this.getWorld());
+        SlimeBallProjectile magmaBallEntity = new SlimeBallProjectile(ModEntities.SLIME_BALL_PROJECTILE, this.getWorld());
 
         Vec3d forward = this.getRotationVector().multiply(1);
         double startX = this.getX() + forward.x;
@@ -44,10 +44,8 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
         double g = Math.sqrt(d * d + f * f);
         magmaBallEntity.setVelocity(d, e + g * 0.1, f, 1.35F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
 
-
-        this.playSound(SoundEvents.ENTITY_WITHER_SHOOT, 0.10F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(SoundEvents.ITEM_CROSSBOW_SHOOT, 0.10F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.getWorld().spawnEntity(magmaBallEntity);
-
 
         if (this.getWorld() instanceof ServerWorld serverWorld) {
             spawnVerticalCircularParticlesFacingPlayer(serverWorld, startX, startY, startZ, target);

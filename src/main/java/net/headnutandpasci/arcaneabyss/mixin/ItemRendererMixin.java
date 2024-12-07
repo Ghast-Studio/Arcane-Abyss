@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class ItemRendererMixin {
     @ModifyVariable(method = "renderItem", at = @At(value = "HEAD"), argsOnly = true)
     public BakedModel useRubyStaffModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        if (stack.isOf(ModItems.RUBY_STAFF) && renderMode != ModelTransformationMode.GUI) {
-            return ((ItemRendererAccessor) this).arcaneabyss$getModels().getModelManager().getModel(new ModelIdentifier(ArcaneAbyss.MOD_ID, "ruby_staff_3d", "inventory"));
+        if (stack.isOf(ModItems.SLIME_STAFF) && renderMode != ModelTransformationMode.GUI) {
+            return ((ItemRendererAccessor) this).arcaneabyss$getModels().getModelManager().getModel(new ModelIdentifier(ArcaneAbyss.MOD_ID, "slime_staff_3d", "inventory"));
         }
         return value;
     }

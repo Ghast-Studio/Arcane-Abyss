@@ -2,18 +2,15 @@ package net.headnutandpasci.arcaneabyss.entity;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.entity.client.TestEntity;
 import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
-import net.headnutandpasci.arcaneabyss.entity.projectile.BlackSlimeProjectileEntity;
-import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeviathanProjectileEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.blue.SlimePillarEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.red.MagmaBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeBallProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity;
 import net.minecraft.entity.EntityDimensions;
@@ -24,9 +21,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModEntities {
-
-    public static EntityType<TestEntity> Test;
-
     public static EntityType<BlueSlimeEntity> BLUE_SLIME;
     public static EntityType<SlimePillarEntity> SLIME_PILLAR;
     public static EntityType<RedSlimeEntity> RED_SLIME;
@@ -36,9 +30,7 @@ public class ModEntities {
     public static EntityType<RedSlimeStationaryEntity> RED_SLIME_STATIONARY;
     public static EntityType<BlackSlimeEntity> BLACK_SLIME;
     public static EntityType<SlimeviathanEntity> SLIMEVIATHAN;
-    public static EntityType<MagmaBallProjectile> MAGMA_BALL_PROJECTILE;
-    public static EntityType<BlackSlimeProjectileEntity> BLACK_SLIME_PROJECTILE;
-    public static EntityType<SlimeviathanProjectileEntity> SLIMEVIATHAN_PROJECTILE;
+    public static EntityType<SlimeBallProjectile> SLIME_BALL_PROJECTILE;
     public static EntityType<YallaEntity> YALLA;
 
     private static <T extends EntityType<?>> T register(T entityType, String id) {
@@ -46,9 +38,6 @@ public class ModEntities {
     }
 
     public static void registerModEntities() {
-        Test = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, TestEntity::new)
-                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "test");
-
         BLUE_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "blue_slime");
 
@@ -76,14 +65,8 @@ public class ModEntities {
         SLIMEVIATHAN = register(FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
                 .dimensions(EntityDimensions.changing(2f, 2f)).build(), "slimeviathan");
 
-        MAGMA_BALL_PROJECTILE = register(FabricEntityTypeBuilder.<MagmaBallProjectile>create(SpawnGroup.MISC, MagmaBallProjectile::new)
+        SLIME_BALL_PROJECTILE = register(FabricEntityTypeBuilder.<SlimeBallProjectile>create(SpawnGroup.MISC, SlimeBallProjectile::new)
                 .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "magma_ball_projectile");
-
-        BLACK_SLIME_PROJECTILE = register(FabricEntityTypeBuilder.<BlackSlimeProjectileEntity>create(SpawnGroup.MISC, BlackSlimeProjectileEntity::new)
-                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "black_slime_projectile");
-
-        SLIMEVIATHAN_PROJECTILE = register(FabricEntityTypeBuilder.<SlimeviathanProjectileEntity>create(SpawnGroup.MISC, SlimeviathanProjectileEntity::new)
-                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "slimeviathan_projectile");
 
         YALLA = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, YallaEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "yalla");

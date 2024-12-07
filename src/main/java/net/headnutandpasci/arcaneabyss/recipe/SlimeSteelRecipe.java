@@ -63,17 +63,15 @@ public class SlimeSteelRecipe implements Recipe<SimpleInventory> {
     }
 
     public static class Type implements RecipeType<SlimeSteelRecipe> {
-        private Type() {
-        }
-
         public static final Type INSTANCE = new Type();
         public static final String ID = "slime_steel";
+        private Type() {
+        }
     }
 
     public static class Serializer implements RecipeSerializer<SlimeSteelRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final String ID = "slime_steel";
-        // this is the name given in the json file
 
         @Override
         public SlimeSteelRecipe read(Identifier id, JsonObject json) {

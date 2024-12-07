@@ -22,15 +22,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class RubySwordItem extends SwordItem {
+public class SlimeSwordItem extends SwordItem {
     public static final int MAX_UPGRADE_LEVEL = 5;
     private static final String NBT_UPGRADE_LEVEL = "upgrade_level";
     private static final UUID ATTACK_DAMAGE_MODIFIER_UUID = UUID.fromString("e72fdb02-49b5-47b6-a4a7-ec4a4a0c2f9a");
     private static final UUID ATTACK_SPEED_MODIFIER_UUID = UUID.fromString("e3c33f90-3466-4c33-b182-2e4fa6a90b98");
 
 
-    public RubySwordItem(Settings settings) {
-        super(ModToolMaterial.RUBY, 2, -2.4F, settings);
+    public SlimeSwordItem(Settings settings) {
+        super(ModToolMaterial.RUBY, 0, -2.4F, settings);
     }
 
     public void upgradeSword(ItemStack stack) {
@@ -51,7 +51,7 @@ public class RubySwordItem extends SwordItem {
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot) {
         Multimap<EntityAttribute, EntityAttributeModifier> modifiers = HashMultimap.create(super.getAttributeModifiers(stack, slot));
 
-        if (slot == EquipmentSlot.MAINHAND) {
+        if (slot == EquipmentSlot.MAINHAND && stack.getItem() instanceof SlimeSwordItem && this.getUpgradeLevel(stack) > 0) {
             int upgradeLevel = getUpgradeLevel(stack);
 
             double additionalDamage = 2 * upgradeLevel;
@@ -85,17 +85,17 @@ public class RubySwordItem extends SwordItem {
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         int upgradeLevel = getUpgradeLevel(stack);
         if (upgradeLevel > 0) {
-            tooltip.add(Text.translatable("tooltip.arcaneabyss.ruby_sword.upgrade_level", upgradeLevel));
+            tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_sword.upgrade_level", upgradeLevel));
         }
 
         if (stack.getEnchantments().toString().contains(SlimyStrike.ID)) {
             int stacks = stack.getOrCreateNbt().getInt(SlimyStrike.STACK_KEY) / 2;
             int max_stack = SlimyStrike.calculateRequiredStacks(EnchantmentHelper.getLevel(ModEnchantments.SLIME_ENCHANTMENT, stack));
-            tooltip.add(Text.translatable("tooltip.arcaneabyss.ruby_sword.stacks", stacks, max_stack));
+            tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_sword.stacks", stacks, max_stack));
 
             if (upgradeLevel > 0) {
                 tooltip.add(Text.empty());
-                tooltip.add(Text.translatable("tooltip.arcaneabyss.ruby_sword.slimy_strike", upgradeLevel * 2).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_sword.slimy_strike", upgradeLevel * 2).formatted(Formatting.GRAY));
             }
         }
 

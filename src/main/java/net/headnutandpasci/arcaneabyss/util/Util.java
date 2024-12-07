@@ -2,9 +2,15 @@ package net.headnutandpasci.arcaneabyss.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 
@@ -50,5 +56,20 @@ public class Util {
             }
             return false;
         };
+    }
+
+    public static Text getStatusEffectDescription(StatusEffectInstance statusEffect, Text spacer, Formatting... formattings) {
+        MutableText mutableText = statusEffect.getEffectType().getName().copy();
+        if (statusEffect.getAmplifier() >= 1 && statusEffect.getAmplifier() <= 9) {
+            MutableText text = mutableText.append(ScreenTexts.SPACE);
+            int amplifier = statusEffect.getAmplifier();
+            text.append(Text.translatable("enchantment.level." + (amplifier + 1)));
+        }
+
+        return mutableText
+                .append(ScreenTexts.SPACE)
+                .append(spacer)
+                .append(ScreenTexts.SPACE)
+                .append(StatusEffectUtil.getDurationText(statusEffect, 1.0F)).formatted(formattings);
     }
 }

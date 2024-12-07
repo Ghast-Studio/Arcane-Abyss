@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.mixin;
 
+import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -34,6 +35,19 @@ public abstract class AnvilScreenMixin extends ForgingScreenHandler {
             if (mainLevel < SlimeSwordItem.MAX_UPGRADE_LEVEL && mainLevel == secondaryLevel) {
                 ItemStack upgradedSword = mainStack.copy();
                 ((SlimeSwordItem) upgradedSword.getItem()).upgradeSword(upgradedSword);
+                upgradedSword.setDamage(0);
+
+                this.output.setStack(0, upgradedSword);
+                this.levelCost.set(5 * (mainLevel + 1));
+                ci.cancel();
+            }
+        } else if (mainStack.getItem() instanceof SlimeStaffItem mainStaff && secondaryStack.getItem() instanceof SlimeStaffItem secondaryStaff) {
+            int mainLevel = mainStaff.getUpgradeLevel(mainStack);
+            int secondaryLevel = secondaryStaff.getUpgradeLevel(secondaryStack);
+
+            if (mainLevel < SlimeStaffItem.MAX_UPGRADE_LEVEL && mainLevel == secondaryLevel) {
+                ItemStack upgradedSword = mainStack.copy();
+                ((SlimeStaffItem) upgradedSword.getItem()).upgradeStaff(upgradedSword);
                 upgradedSword.setDamage(0);
 
                 this.output.setStack(0, upgradedSword);

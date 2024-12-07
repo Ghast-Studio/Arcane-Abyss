@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.minecraft.entity.EntityType;
@@ -10,6 +11,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -129,6 +131,11 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     @Override
     protected boolean isDistanceBasedAbility(State state) {
         return state == State.PUSH;
+    }
+
+    @Override
+    protected Identifier getLootTableId() {
+        return new Identifier(ArcaneAbyss.MOD_ID, "entities/black_slime");
     }
 
     public CopyOnWriteArrayList<Integer> getSummonedMobIds() {

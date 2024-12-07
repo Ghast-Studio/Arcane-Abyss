@@ -86,11 +86,9 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
         private final int minIntervalTicks;
         private final int maxIntervalTicks;
         private final float maxShootRange;
-        private final float squaredMaxShootRange;
         @Nullable
         private LivingEntity target;
         private int updateCountdownTicks;
-        private int seenTargetTicks;
 
         public ProjectileAttackGoal(RangedAttackMob mob, double mobSpeed, int intervalTicks, float maxShootRange) {
             this(mob, mobSpeed, intervalTicks, intervalTicks, maxShootRange);
@@ -107,7 +105,6 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
                 this.minIntervalTicks = minIntervalTicks;
                 this.maxIntervalTicks = maxIntervalTicks;
                 this.maxShootRange = maxShootRange;
-                this.squaredMaxShootRange = maxShootRange * maxShootRange;
                 this.setControls(EnumSet.of(Control.MOVE));
             }
         }
@@ -128,7 +125,6 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
 
         public void stop() {
             this.target = null;
-            this.seenTargetTicks = 0;
             this.updateCountdownTicks = -1;
         }
 
@@ -145,20 +141,16 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
             Vec3d targetPos = this.target.getPos();
             Vec3d direction = targetPos.subtract(this.mob.getPos()).normalize();
             Vec3d targetPosition = targetPos.subtract(direction.multiply(this.maxShootRange));
+            Vec3d toTarget = targetPosition.subtract(this.mob.getPos());
+
             if (this.mob.getWorld() instanceof ServerWorld serverWorld) {
                 serverWorld.spawnParticles(ParticleTypes.FLAME, targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), 1, 0, 0, 0, 0);
             }
 
             System.out.println("distance to target: " + this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()));
-            if (this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()) < 2) {
+            if (this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()) < 5 || this.mob.getRotationVec(1.0F).dotProduct(toTarget) <= 0) {
                 double distance = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
                 boolean bl = this.mob.getVisibilityCache().canSee(this.target);
-                if (bl) {
-                    ++this.seenTargetTicks;
-                } else {
-                    this.seenTargetTicks = 0;
-                }
-
 
                 if (--this.updateCountdownTicks == 0) {
                     if (!bl) {
@@ -173,7 +165,8 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
                     this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(distance) / (double) this.maxShootRange, this.minIntervalTicks, this.maxIntervalTicks));
                 }
             } else {
-                if (this.mob.getRotationVector().dotProduct(direction) < 0) return;
+                if(this.mob.getRotationVec(1.0F).dotProduct(toTarget) <= 0)
+                    return;
 
                 this.mob.getNavigation().startMovingTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), this.mobSpeed);
             }

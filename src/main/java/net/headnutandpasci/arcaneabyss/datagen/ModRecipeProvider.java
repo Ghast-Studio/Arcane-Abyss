@@ -4,11 +4,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
-import net.minecraft.block.CakeBlock;
-import net.minecraft.block.FurnaceBlock;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.util.Identifier;
 
@@ -25,12 +24,30 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
     @Override
     public void generate(Consumer<RecipeJsonProvider> exporter) {
-
         offerSmelting(exporter, RUBY_SMELTABLES, RecipeCategory.MISC, ModItems.RUBY, 0.7f, 200, "ruby");
         offerBlasting(exporter, RUBY_SMELTABLES, RecipeCategory.MISC, ModItems.RUBY, 0.7f, 100, "ruby");
         offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, ModItems.RUBY, RecipeCategory.DECORATIONS, ModBlocks.RUBY_BLOCK);
-        offerSmelting(exporter, SLIME_COOKABLES,RecipeCategory.FOOD, ModItems.COOKED_SLIME_MEAT,0.7f,200,"slime_meat");
+        offerSmelting(exporter, SLIME_COOKABLES, RecipeCategory.FOOD, ModItems.COOKED_SLIME_MEAT, 0.7f, 200, "slime_meat");
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SLIME_SWORD)
+                .pattern("R")
+                .pattern("R")
+                .pattern("N")
+                .input('R', ModItems.SLIMESTEEL_INGOT)
+                .input('N', Items.NETHERITE_INGOT)
+                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
+                .criterion(hasItem(Items.NETHERITE_INGOT), conditionsFromItem(Items.NETHERITE_INGOT))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SLIME_SWORD)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SLIME_STAFF)
+                .pattern("N")
+                .pattern("R")
+                .pattern("R")
+                .input('N', ModItems.SLIME_STEEL_BALL)
+                .input('R', ModItems.SLIMESTEEL_INGOT)
+                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
+                .criterion(hasItem(ModItems.SLIME_STEEL_BALL), conditionsFromItem(ModItems.SLIME_STEEL_BALL))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.SLIME_STAFF)));
 
         //createArmorRecipe(exporter, ModItems.RUBY_HELMET, "RRR", "R R", RecipeCategory.COMBAT, "ruby_helmet");
         //createArmorRecipe(exporter, ModItems.RUBY_CHESTPLATE, "R R", "RRR", "RRR", RecipeCategory.COMBAT, "ruby_chestplate");
@@ -39,7 +56,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
     }
 
 
-    private void createArmorRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible result, String row1, String row2, String row3, RecipeCategory category, String recipeName) {
+/*    private void createArmorRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible result, String row1, String row2, String row3, RecipeCategory category, String recipeName) {
         ShapedRecipeJsonBuilder.create(category, result)
                 .pattern(row1)
                 .pattern(row2)
@@ -56,5 +73,5 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .input('R', ModItems.SLIMESTEEL_INGOT)
                 .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
                 .offerTo(exporter, new Identifier(getRecipeName(result)));
-    }
+    }*/
 }

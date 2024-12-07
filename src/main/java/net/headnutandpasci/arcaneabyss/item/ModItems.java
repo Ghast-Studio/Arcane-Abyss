@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.item.custom.RubyStaffItem;
+import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
 
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
 
@@ -22,17 +22,12 @@ public class ModItems {
     public static final Item SLIMESTEEL_INGOT = registerItem("slimesteel_ingot", new Item(new FabricItemSettings()));
     public static final Item SLIME_FLESH = registerItem("slime_flesh", new Item(new FabricItemSettings()));
     public static final Item SLIME_JUICE = registerItem("slime_juice", new Item(new FabricItemSettings()));
-
-    //public static final Item TOMATO = registerItem("tomato", new Item(new FabricItemSettings().food(ModFoodComponents.TOMATO)));
-    //public static final Item SLIME_CAKE = registerItem("slime_cake", new Item(new FabricItemSettings().food(ModFoodComponents.SLIME_CAKE)));
     public static final Item COOKED_SLIME_MEAT = registerItem("cooked_slime_meat", new Item(new FabricItemSettings().food(ModFoodComponents.COOKED_SLIME_MEAT)));
 
-    public static final Item RUBY_STAFF = registerItem("ruby_staff", new RubyStaffItem(new FabricItemSettings().rarity(EPIC).maxCount(1)));
-
-    public static final Item SLIME_STAFF = registerItem("slime_staff", new Item(new FabricItemSettings().rarity(EPIC).maxCount(1)));
-
-
+    public static final Item SLIME_STAFF = registerItem("slime_staff", new SlimeStaffItem(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item SLIME_SWORD = registerItem("slime_sword", new SlimeSwordItem(new FabricItemSettings().rarity(EPIC)));
+
+    public static final Item SLIME_STEEL_BALL = registerItem("slime_steel_ball", new Item(new FabricItemSettings().rarity(EPIC).maxCount(1)));
 
     //public static final Item RUBY_HELMET = registerItem("ruby_helmet", new ModArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.HELMET, new FabricItemSettings()));
     //public static final Item RUBY_CHESTPLATE = registerItem("ruby_chestplate", new ArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
@@ -45,6 +40,7 @@ public class ModItems {
         entries.add(SLIMESTEEL_INGOT);
         entries.add(SLIME_FLESH);
         entries.add(SLIME_JUICE);
+        entries.add(SLIME_STEEL_BALL);
     }
 
     private static Item registerItem(String name, Item item) {

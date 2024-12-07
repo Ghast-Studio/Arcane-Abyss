@@ -198,9 +198,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
 
     @Override
     protected Identifier getLootTableId() {
-        Identifier lootTable = new Identifier(ArcaneAbyss.MOD_ID, "entities/genericslimes");
-        System.out.println("Loot table ID: " + lootTable);
-        return lootTable;
+        return new Identifier(ArcaneAbyss.MOD_ID, "entities/genericslimes");
     }
 
     /* AI Goals & Movement Controllers */

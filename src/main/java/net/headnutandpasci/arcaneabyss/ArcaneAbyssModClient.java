@@ -32,7 +32,7 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.DARK_RED_SLIME, DarkRedSlimeRenderer::new);
         EntityRendererRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeRenderer::new);
         EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanRenderer::new);
-        EntityRendererRegistry.register(ModEntities.SLIME_BALL_PROJECTILE, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntities.SLIME_PROJECTILE, FlyingItemEntityRenderer::new);
         //EntityRendererRegistry.register(ModEntities.SLIME_BALL_PROJECTILE, SlimeBallProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.YALLA, YallaRenderer::new);
 

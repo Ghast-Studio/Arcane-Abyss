@@ -140,8 +140,14 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
             });
 
             ArcaneBossSlime.State selectedState;
+            int maxTries = 10;
             do {
                 selectedState = attackPool.getRandom();
+                if (maxTries-- <= 0) {
+                    selectedState = State.IDLE;
+                    ArcaneAbyss.LOGGER.warn("Failed to select ability, defaulting to IDLE");
+                    break;
+                }
             } while (selectedState == this.lastState && !isDistanceBasedAbility(selectedState));
 
             this.setState(selectedState);

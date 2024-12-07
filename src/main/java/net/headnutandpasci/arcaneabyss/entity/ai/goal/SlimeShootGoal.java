@@ -1,11 +1,12 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
-import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.util.Math.VectorUtils;
 import net.headnutandpasci.arcaneabyss.util.random.WeightedRandomBag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -106,20 +107,19 @@ public class SlimeShootGoal extends Goal {
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
         if (world == null) return;
 
-        Vec3d forward = this.bossSlime.getRotationVector().multiply(1);
+        Vec3d forward = this.bossSlime.getRotationVector().multiply(2);
         double startX = this.bossSlime.getX() + offset.getX() + forward.x;
         double startY = this.bossSlime.getBodyY(1) + offset.getY();
         double startZ = this.bossSlime.getZ() + offset.getZ() + forward.z;
+        double x = target.getX() - startX - offset.getX();
+        double y = target.getBodyY(0.5) - startY - offset.getY();
+        double z = target.getZ() - startZ - offset.getZ();
+        double sqrt = Math.sqrt(x * x + z * z);
 
-        SlimeBallProjectile projectile = new SlimeBallProjectile(this.bossSlime, world, new Vec3d(startX, startY, startZ));
-
-        double d = target.getX() - projectile.getX();
-        double e = target.getBodyY(0.3333333333333333) - projectile.getY();
-        double f = target.getZ() - projectile.getZ();
-        double g = Math.sqrt(d * d + f * f);
-        projectile.setVelocity(d, e + g * 0.1, f, 1.35F, (float) (14 - this.bossSlime.getWorld().getDifficulty().getId() * 4));
-
+        SlimeProjectile projectile = new SlimeProjectile(world, this.bossSlime, x, y + sqrt * 0.1, z);
+        projectile.setItem(Items.MAGMA_CREAM.getDefaultStack());
         this.bossSlime.getWorld().spawnEntity(projectile);
+
         spawnParticleCircleAroundProjectile(projectile, world);
     }
 
@@ -165,7 +165,7 @@ public class SlimeShootGoal extends Goal {
         }
     }
 
-    private void spawnParticleCircleAroundProjectile(SlimeBallProjectile projectile, ServerWorld world) {
+    private void spawnParticleCircleAroundProjectile(SlimeProjectile projectile, ServerWorld world) {
         if (projectile == null) return;
 
         LivingEntity target = bossSlime.getTarget();

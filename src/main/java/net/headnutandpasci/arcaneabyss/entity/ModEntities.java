@@ -10,7 +10,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity;
 import net.minecraft.entity.EntityDimensions;
@@ -30,7 +30,7 @@ public class ModEntities {
     public static EntityType<RedSlimeStationaryEntity> RED_SLIME_STATIONARY;
     public static EntityType<BlackSlimeEntity> BLACK_SLIME;
     public static EntityType<SlimeviathanEntity> SLIMEVIATHAN;
-    public static EntityType<SlimeBallProjectile> SLIME_BALL_PROJECTILE;
+    public static EntityType<SlimeProjectile> SLIME_PROJECTILE;
     public static EntityType<YallaEntity> YALLA;
 
     private static <T extends EntityType<?>> T register(T entityType, String id) {
@@ -65,8 +65,8 @@ public class ModEntities {
         SLIMEVIATHAN = register(FabricEntityTypeBuilder.create(SpawnGroup.MISC, SlimeviathanEntity::new)
                 .dimensions(EntityDimensions.changing(2f, 2f)).build(), "slimeviathan");
 
-        SLIME_BALL_PROJECTILE = register(FabricEntityTypeBuilder.<SlimeBallProjectile>create(SpawnGroup.MISC, SlimeBallProjectile::new)
-                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "magma_ball_projectile");
+        SLIME_PROJECTILE = register(FabricEntityTypeBuilder.<SlimeProjectile>create(SpawnGroup.MISC, SlimeProjectile::new)
+                .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).build(), "slime_projectile");
 
         YALLA = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, YallaEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "yalla");

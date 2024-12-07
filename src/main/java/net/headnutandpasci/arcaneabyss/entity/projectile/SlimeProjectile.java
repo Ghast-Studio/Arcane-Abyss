@@ -21,16 +21,27 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.Vector3f;
 
-public class SlimeBallProjectile extends ExplosiveProjectileEntity implements FlyingItemEntity {
-    public SlimeBallProjectile(EntityType<? extends ExplosiveProjectileEntity> entityType, World world) {
+public class SlimeProjectile extends ExplosiveProjectileEntity implements FlyingItemEntity {
+    private static final TrackedData<ItemStack> ITEM;
+
+    static {
+        ITEM = DataTracker.registerData(SlimeProjectile.class, TrackedDataHandlerRegistry.ITEM_STACK);
+    }
+
+    public SlimeProjectile(EntityType<? extends ExplosiveProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public SlimeBallProjectile(LivingEntity owner, World world, Vec3d pos) {
-        super(ModEntities.SLIME_BALL_PROJECTILE, world);
-        this.setOwner(owner);
-        this.updatePosition(pos.x, pos.y, pos.z);
+    public SlimeProjectile(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
+        super(ModEntities.SLIME_PROJECTILE, owner, directionX, directionY, directionZ, world);
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.getDataTracker().startTracking(ITEM, Items.SLIME_BALL.getDefaultStack());
     }
 
 
@@ -38,32 +49,16 @@ public class SlimeBallProjectile extends ExplosiveProjectileEntity implements Fl
     public void tick() {
         super.tick();
 
-        if(this.age % 5 == 0) {
-            if(this.getWorld() instanceof ServerWorld serverWorld)
-                serverWorld.addParticle(ParticleTypes.ITEM_SLIME, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
-        }
-
-        if (this.age >= 100) {
+        if (this.age >= 50) {
             this.discard();
         }
-    }
-
-    private ParticleEffect getParticleParameters() {
-        return ParticleTypes.ITEM_SLIME;
-    }
-
-    @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
     }
 
     @Override
     public void handleStatus(byte status) {
         if (status == 3) {
-            ParticleEffect particleEffect = this.getParticleParameters();
-
             for (int i = 0; i < 8; ++i) {
-                this.getWorld().addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+                this.getWorld().addParticle(ParticleTypes.ITEM_SLIME, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
             }
         }
     }
@@ -85,13 +80,22 @@ public class SlimeBallProjectile extends ExplosiveProjectileEntity implements Fl
     }
 
     @Override
-    public boolean isOnFire() {
+    protected ParticleEffect getParticleType() {
+        return ParticleTypes.ITEM_SLIME;
+    }
+
+    @Override
+    protected boolean isBurning() {
         return false;
     }
 
     @Override
     public ItemStack getStack() {
-        return Items.SLIME_BALL.getDefaultStack();
+        return this.getDataTracker().get(ITEM);
+    }
+
+    public void setItem(ItemStack stack) {
+        this.getDataTracker().set(ITEM, stack);
     }
 }
 

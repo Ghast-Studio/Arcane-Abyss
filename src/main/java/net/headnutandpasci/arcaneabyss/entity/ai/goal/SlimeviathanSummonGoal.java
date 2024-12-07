@@ -32,7 +32,6 @@ public class SlimeviathanSummonGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        System.out.println("can summon: " + (bossSlime.isInState(ArcaneBossSlime.State.SUMMON) && bossSlime.hasTarget() && this.canSummonSlimes()));
         return (bossSlime.isInState(ArcaneBossSlime.State.SUMMON) && bossSlime.hasTarget() && this.canSummonSlimes());
     }
 

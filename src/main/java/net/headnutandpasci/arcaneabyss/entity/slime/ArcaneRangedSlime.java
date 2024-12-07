@@ -1,16 +1,15 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
-import net.headnutandpasci.arcaneabyss.entity.ModEntities;
-import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeBallProjectile;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -29,23 +28,18 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
     }
 
     public void attack(LivingEntity target, float pullProgress) {
-        SlimeBallProjectile magmaBallEntity = new SlimeBallProjectile(ModEntities.SLIME_BALL_PROJECTILE, this.getWorld());
-
-        Vec3d forward = this.getRotationVector().multiply(1);
+        Vec3d forward = this.getRotationVector().multiply(2);
         double startX = this.getX() + forward.x;
-        double startY = this.getBodyY(0.5);
+        double startY = this.getBodyY(1);
         double startZ = this.getZ() + forward.z;
-        magmaBallEntity.setPos(startX, startY, startZ);
+        double x = target.getX() - startX;
+        double y = target.getBodyY(0.5) - startY;
+        double z = target.getZ() - startZ;
+        double sqrt = Math.sqrt(x * x + z * z);
 
-
-        double d = target.getX() - magmaBallEntity.getX();
-        double e = target.getBodyY(0.3333333333333333) - magmaBallEntity.getY();
-        double f = target.getZ() - magmaBallEntity.getZ();
-        double g = Math.sqrt(d * d + f * f);
-        magmaBallEntity.setVelocity(d, e + g * 0.1, f, 1.35F, (float) (14 - this.getWorld().getDifficulty().getId() * 4));
-
-        this.playSound(SoundEvents.ITEM_CROSSBOW_SHOOT, 0.10F, 0.3F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.getWorld().spawnEntity(magmaBallEntity);
+        SlimeProjectile projectile = new SlimeProjectile(this.getWorld(), this, x, y + sqrt * 0.1, z);
+        projectile.setItem(Items.SLIME_BALL.getDefaultStack());
+        this.getWorld().spawnEntity(projectile);
 
         if (this.getWorld() instanceof ServerWorld serverWorld) {
             spawnVerticalCircularParticlesFacingPlayer(serverWorld, startX, startY, startZ, target);
@@ -148,9 +142,16 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
                 return;
             }
 
-            if (squaredMaxShootRange > this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ())) {
+            Vec3d targetPos = this.target.getPos();
+            Vec3d direction = targetPos.subtract(this.mob.getPos()).normalize();
+            Vec3d targetPosition = targetPos.subtract(direction.multiply(this.maxShootRange));
+            if (this.mob.getWorld() instanceof ServerWorld serverWorld) {
+                serverWorld.spawnParticles(ParticleTypes.FLAME, targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), 1, 0, 0, 0, 0);
+            }
 
-                double d = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
+            System.out.println("distance to target: " + this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()));
+            if (this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()) < 2) {
+                double distance = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
                 boolean bl = this.mob.getVisibilityCache().canSee(this.target);
                 if (bl) {
                     ++this.seenTargetTicks;
@@ -164,15 +165,17 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
                         return;
                     }
 
-                    float f = (float) Math.sqrt(d) / this.maxShootRange;
+                    float f = (float) Math.sqrt(distance) / this.maxShootRange;
                     float g = MathHelper.clamp(f, 0.1F, 1.0F);
                     this.owner.attack(this.target, g);
                     this.updateCountdownTicks = MathHelper.floor(f * (float) (this.maxIntervalTicks - this.minIntervalTicks) + (float) this.minIntervalTicks);
                 } else if (this.updateCountdownTicks < 0) {
-                    this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(d) / (double) this.maxShootRange, this.minIntervalTicks, this.maxIntervalTicks));
-                } else {
-                    this.mob.getNavigation().startMovingTo(this.target, this.mobSpeed);
+                    this.updateCountdownTicks = MathHelper.floor(MathHelper.lerp(Math.sqrt(distance) / (double) this.maxShootRange, this.minIntervalTicks, this.maxIntervalTicks));
                 }
+            } else {
+                if (this.mob.getRotationVector().dotProduct(direction) < 0) return;
+
+                this.mob.getNavigation().startMovingTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), this.mobSpeed);
             }
         }
     }

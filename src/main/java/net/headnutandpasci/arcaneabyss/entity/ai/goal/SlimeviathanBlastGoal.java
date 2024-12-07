@@ -122,13 +122,13 @@ public class SlimeviathanBlastGoal extends Goal {
         double h = direction.y - spawn.y - 4.0f;
         double i = direction.z - spawn.z;
 
-        // Create and spawn the projectile
+
         BlackSlimeProjectileEntity witherSkullEntity = new BlackSlimeProjectileEntity(this.slimeviathanEntity.getWorld(), this.slimeviathanEntity, g, h, i);
         witherSkullEntity.setOwner(this.slimeviathanEntity);
         witherSkullEntity.setPos(spawn.x, spawn.y + 4.0f, spawn.z);
         this.slimeviathanEntity.getWorld().spawnEntity(witherSkullEntity);
 
-        // Add particle circle effect around the projectile
+
         spawnParticleCircleAroundProjectile(witherSkullEntity, world);
     }
 

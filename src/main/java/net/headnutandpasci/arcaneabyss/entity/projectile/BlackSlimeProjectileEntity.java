@@ -26,10 +26,6 @@ public class BlackSlimeProjectileEntity extends ExplosiveProjectileEntity {
     public BlackSlimeProjectileEntity(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
         super(ModEntities.BLACK_SLIME_PROJECTILE, owner, directionX, directionY, directionZ, world);
     }
-
-
-
-
     private ParticleEffect getParticleParameters() {
         return ParticleTypes.ASH;
     }

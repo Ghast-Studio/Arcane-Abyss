@@ -29,7 +29,7 @@ public class ModItemGroups {
                         entries.add(ModBlocks.SLIMESTEEL_MACHINE);
 
                         entries.add(ModItems.SLIME_SWORD);
-                        entries.add(ModItems.SLIME_STAFF);
+                        entries.add(ModItems.RUBY_STAFF);
 
                         //entries.add(ModItems.RUBY_HELMET);
                         //entries.add(ModItems.RUBY_CHESTPLATE);

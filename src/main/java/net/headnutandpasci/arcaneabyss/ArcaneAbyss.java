@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
@@ -19,6 +20,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity
 import net.headnutandpasci.arcaneabyss.item.ModEnchantments;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
+import net.headnutandpasci.arcaneabyss.item.enchantments.StickyDefense;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.recipe.ModRecipes;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
@@ -46,6 +48,11 @@ public class ArcaneAbyss implements ModInitializer {
         ModStructures.registerStructureType();
 
         ModRecipes.registerRecipes();
+
+        // Register tick event for checking StickyDefense
+        ServerTickEvents.END_WORLD_TICK.register(world -> {
+            world.getPlayers().forEach(StickyDefense::tick);
+        });
 
         FabricDefaultAttributeRegistry.register(ModEntities.BLUE_SLIME, BlueSlimeEntity.setAttributesBlueSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.SLIME_PILLAR, SlimePillarEntity.setAttributesSlimePillar());

@@ -27,12 +27,12 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
 
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 800.0f)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 1400.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 20.0f)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 40.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4f)
-                .add(EntityAttributes.GENERIC_ARMOR, 20)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
+                .add(EntityAttributes.GENERIC_ARMOR, 40)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
     }
 

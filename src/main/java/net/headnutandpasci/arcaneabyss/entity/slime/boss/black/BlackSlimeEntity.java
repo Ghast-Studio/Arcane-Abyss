@@ -26,7 +26,7 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
 
     public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
         return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 400.0f)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 600.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 15.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)

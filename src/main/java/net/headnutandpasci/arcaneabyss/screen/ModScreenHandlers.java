@@ -8,12 +8,11 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 
 public class ModScreenHandlers {
-    public static ScreenHandlerType<SlimeSteelMaschineScreenHandler> SLIMESTEEL_SCREEN_HANDLER;
+    public static ScreenHandlerType<SlimeSteelMachineScreenHandler> SLIMESTEEL_SCREEN_HANDLER;
 
     public static void registerScreenHandlers() {
-        SLIMESTEEL_SCREEN_HANDLER =
-        Registry.register(Registries.SCREEN_HANDLER, new Identifier(ArcaneAbyss.MOD_ID, "slimesteel_crafting"),
-                new ExtendedScreenHandlerType<>(SlimeSteelMaschineScreenHandler::new));
+        SLIMESTEEL_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, new Identifier(ArcaneAbyss.MOD_ID, "slimesteel_crafting"),
+                new ExtendedScreenHandlerType<>(SlimeSteelMachineScreenHandler::new));
 
         ArcaneAbyss.LOGGER.info("Registering Mod Screen Handlers" + ArcaneAbyss.MOD_ID);
     }

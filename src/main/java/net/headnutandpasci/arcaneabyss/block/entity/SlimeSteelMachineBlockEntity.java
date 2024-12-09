@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
 import net.headnutandpasci.arcaneabyss.block.entity.interfaces.ImplementedInventory;
 import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
-import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMaschineScreenHandler;
+import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMachineScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,14 +28,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class SlimeSteelMachineBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory {
-    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
-
     private static final int INPUT_SLOT1 = 0;
     private static final int INPUT_SLOT2 = 1;
     private static final int INPUT_SLOT3 = 2;
     private static final int OUTPUT_SLOT = 3;
-
     protected final PropertyDelegate propertyDelegate;
+    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
     private int progress = 0;
     private int maxProgress = 72;
 
@@ -64,6 +62,29 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
                 return 2;
             }
         };
+    }
+
+    public static void tick(@NotNull World world, BlockPos pos, BlockState state, SlimeSteelMachineBlockEntity entity) {
+        if (world.isClient()) {
+            return;
+        }
+
+        if (entity.isOutputSlotEmptyOrReceivable()) {
+            if (entity.hasRecipe()) {
+                entity.increaseCraftProgress();
+                markDirty(world, pos, state);
+
+                if (entity.hasCraftingFinished()) {
+                    entity.craftItem();
+                    entity.resetProgress();
+                }
+            } else {
+                entity.resetProgress();
+            }
+        } else {
+            entity.resetProgress();
+            markDirty(world, pos, state);
+        }
     }
 
     @Override
@@ -98,7 +119,7 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
     @Nullable
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new SlimeSteelMaschineScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
+        return new SlimeSteelMachineScreenHandler(syncId, playerInventory, this, this.propertyDelegate, this);
     }
 
     private void resetProgress() {
@@ -115,7 +136,9 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
             inventory.setStack(i, this.getStack(i));
         }
 
-        Optional<SlimeSteelRecipe> recipe = this.getWorld().getRecipeManager()
+        return;
+
+/*        Optional<SlimeSteelRecipe> recipe = this.getWorld().getRecipeManager()
                 .getFirstMatch(SlimeSteelRecipe.Type.INSTANCE, inventory, this.getWorld());
 
         if (hasRecipe()) {
@@ -128,7 +151,7 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
                     this.getStack(OUTPUT_SLOT).getCount() + 1));
 
             this.resetProgress();
-        }
+        }*/
     }
 
     private void removeInputs() {
@@ -155,13 +178,15 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
             inventory.setStack(i, this.getStack(i));
         }
 
-        Optional<SlimeSteelRecipe> match = this.getWorld().getRecipeManager()
+        return false;
+
+/*        Optional<SlimeSteelRecipe> match = this.getWorld().getRecipeManager()
                 .getFirstMatch(SlimeSteelRecipe.Type.INSTANCE, inventory, this.getWorld());
 
         if (match.isEmpty()) return false;
         ItemStack output = match.get().getOutput(null);
 
-        return canInsertAmountIntoOutputSlot(output) && canInsertItemIntoOutputSlot(output.getItem());
+        return canInsertAmountIntoOutputSlot(output) && canInsertItemIntoOutputSlot(output.getItem());*/
     }
 
     private boolean canInsertItemIntoOutputSlot(@NotNull Item item) {
@@ -174,28 +199,5 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
 
     private boolean isOutputSlotEmptyOrReceivable() {
         return this.getStack(OUTPUT_SLOT).isEmpty() || this.getStack(OUTPUT_SLOT).getCount() < this.getStack(OUTPUT_SLOT).getMaxCount();
-    }
-
-    public static void tick(@NotNull World world, BlockPos pos, BlockState state, SlimeSteelMachineBlockEntity entity) {
-        if (world.isClient()) {
-            return;
-        }
-
-        if (entity.isOutputSlotEmptyOrReceivable()) {
-            if (entity.hasRecipe()) {
-                entity.increaseCraftProgress();
-                markDirty(world, pos, state);
-
-                if (entity.hasCraftingFinished()) {
-                    entity.craftItem();
-                    entity.resetProgress();
-                }
-            } else {
-                entity.resetProgress();
-            }
-        } else {
-            entity.resetProgress();
-            markDirty(world, pos, state);
-        }
     }
 }

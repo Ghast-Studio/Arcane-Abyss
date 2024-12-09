@@ -1,5 +1,7 @@
 package net.headnutandpasci.arcaneabyss;
 
+import com.google.common.collect.Lists;
+import me.melontini.dark_matter.api.recipe_book.RecipeBookHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -15,12 +17,20 @@ import net.headnutandpasci.arcaneabyss.entity.client.slime.red.DarkRedSlimeRende
 import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeRenderer;
 import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeStationaryRenderer;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
+import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMachineScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.recipebook.RecipeBookGroup;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
+import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 public class ArcaneAbyssModClient implements ClientModInitializer {
+
+    public static RecipeBookGroup MAIN_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/main"), Items.SLIME_BALL.getDefaultStack());
+    public static RecipeBookGroup SEARCH_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/search"), Items.MAGMA_CREAM.getDefaultStack());
+
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.BLUE_SLIME, BlueSlimeRenderer::new);
@@ -33,8 +43,13 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeRenderer::new);
         EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanRenderer::new);
         EntityRendererRegistry.register(ModEntities.SLIME_PROJECTILE, FlyingItemEntityRenderer::new);
-        //EntityRendererRegistry.register(ModEntities.SLIME_BALL_PROJECTILE, SlimeBallProjectileRenderer::new);
         EntityRendererRegistry.register(ModEntities.YALLA, YallaRenderer::new);
+
+        RecipeBookHelper.registerAndAddToSearch(ArcaneAbyss.SLIME_STEEL_CATEGORY, MAIN_GROUP, Lists.newArrayList(MAIN_GROUP, SEARCH_GROUP));
+        RecipeBookHelper.registerGroupLookup(SlimeSteelRecipe.Type.INSTANCE, recipe -> {
+            System.out.println("Recipe: " + recipe);
+            return SEARCH_GROUP;
+        });
 
         HandledScreens.register(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, SlimeSteelMachineScreen::new);
 

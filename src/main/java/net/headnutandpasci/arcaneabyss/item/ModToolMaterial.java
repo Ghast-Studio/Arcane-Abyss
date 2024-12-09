@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.item;
 
+import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
@@ -7,8 +8,9 @@ import java.util.function.Supplier;
 
 public enum ModToolMaterial implements ToolMaterial {
 
-    RUBY(4,1800,4.5f,4,26,
-            () -> Ingredient.ofItems(ModItems.RUBY));
+    SLIME(4, 2100, 9.0f, 4, 15,
+            () -> Ingredient.ofItems(Items.SLIME_BALL));
+
     private final int miningLevel;
     private final int itemDurability;
     private final float miningSpeed;
@@ -24,7 +26,6 @@ public enum ModToolMaterial implements ToolMaterial {
         this.enchantability = enchantability;
         this.repairIngredient = repairIngredient;
     }
-
 
     @Override
     public int getDurability() {

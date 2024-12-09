@@ -1,40 +1,52 @@
 package net.headnutandpasci.arcaneabyss.screen;
 
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.block.entity.SlimeSteelMachineBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeInputProvider;
+import net.minecraft.recipe.RecipeMatcher;
+import net.minecraft.recipe.book.RecipeBookCategory;
+import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.FurnaceOutputSlot;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.world.World;
 
-public class SlimeSteelMaschineScreenHandler extends ScreenHandler {
+public class SlimeSteelMachineScreenHandler extends AbstractRecipeScreenHandler<Inventory> {
 
     public final SlimeSteelMachineBlockEntity blockEntity;
     private final Inventory inventory;
+    private final World world;
     private final PropertyDelegate propertyDelegate;
 
-    public SlimeSteelMaschineScreenHandler(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
+    public SlimeSteelMachineScreenHandler(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
         this(syncId, inventory, inventory.player.getWorld().getBlockEntity(buf.readBlockPos()),
-                new ArrayPropertyDelegate(2));
+                new ArrayPropertyDelegate(2), new SimpleInventory(4));
     }
 
-    public SlimeSteelMaschineScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate arrayPropertyDelegate) {
+    public SlimeSteelMachineScreenHandler(int syncId, PlayerInventory playerInventory, BlockEntity blockEntity, PropertyDelegate arrayPropertyDelegate, Inventory inventory) {
         super(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, syncId);
-        checkSize(((Inventory) blockEntity), 4);
-        this.inventory = ((Inventory) blockEntity);
-        playerInventory.onOpen(playerInventory.player);
+        checkSize(inventory, 4);
+        checkDataCount(arrayPropertyDelegate, 2);
+
+        this.inventory = inventory;
         this.propertyDelegate = arrayPropertyDelegate;
         this.blockEntity = ((SlimeSteelMachineBlockEntity) blockEntity);
+        this.world = playerInventory.player.getWorld();
 
         this.addSlot(new Slot(inventory, 0, 80, 11));
         this.addSlot(new Slot(inventory, 1, 50, 11));
         this.addSlot(new Slot(inventory, 2, 110, 11));
-        this.addSlot(new Slot(inventory, 3, 80, 59));
+
+        this.addSlot(new FurnaceOutputSlot(playerInventory.player, inventory, 3, 80, 59));
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -96,6 +108,53 @@ public class SlimeSteelMaschineScreenHandler extends ScreenHandler {
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
+    }
+
+    @Override
+    public void populateRecipeFinder(RecipeMatcher finder) {
+        System.out.println("Populating recipe finder");
+        if (this.inventory instanceof RecipeInputProvider) {
+            ((RecipeInputProvider)this.inventory).provideRecipeInputs(finder);
+        }
+    }
+
+    @Override
+    public void clearCraftingSlots() {
+        this.inventory.clear();
+    }
+
+    public boolean matches(Recipe<? super Inventory> recipe) {
+        return recipe.matches(this.inventory, this.world);
+    }
+
+    @Override
+    public int getCraftingResultSlotIndex() {
+        return 3;
+    }
+
+    @Override
+    public int getCraftingWidth() {
+        return 3;
+    }
+
+    @Override
+    public int getCraftingHeight() {
+        return 1;
+    }
+
+    @Override
+    public int getCraftingSlotCount() {
+        return 4;
+    }
+
+    @Override
+    public RecipeBookCategory getCategory() {
+        return ArcaneAbyss.SLIME_STEEL_CATEGORY;
+    }
+
+    @Override
+    public boolean canInsertIntoSlot(int index) {
+        return true;
     }
 }
 

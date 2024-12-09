@@ -405,6 +405,8 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
 
     protected abstract void initAbilities();
 
+    public abstract void reset();
+
     public enum State {
         SPAWNING(0),
         AWAKENING(1),

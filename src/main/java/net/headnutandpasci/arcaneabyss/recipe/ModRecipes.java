@@ -1,5 +1,6 @@
 package net.headnutandpasci.arcaneabyss.recipe;
 
+import me.melontini.dark_matter.api.recipe_book.RecipeBookHelper;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -9,6 +10,7 @@ public class ModRecipes {
     public static void registerRecipes() {
         Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ArcaneAbyss.MOD_ID, SlimeSteelRecipe.Serializer.ID),
                 SlimeSteelRecipe.Serializer.INSTANCE);
+
         Registry.register(Registries.RECIPE_TYPE, new Identifier(ArcaneAbyss.MOD_ID, SlimeSteelRecipe.Type.ID),
                 SlimeSteelRecipe.Type.INSTANCE);
     }

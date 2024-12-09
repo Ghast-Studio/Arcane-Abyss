@@ -139,6 +139,29 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     }
 
     @Override
+    public void reset() {
+        this.getSummonedMobIds().forEach(id -> {
+            if (this.getWorld().getEntityById(id) != null) {
+                this.getWorld().getEntityById(id).discard();
+            }
+        });
+
+        this.getSummonedPillarIds().forEach(id -> {
+            if (this.getWorld().getEntityById(id) != null) {
+                this.getWorld().getEntityById(id).discard();
+            }
+        });
+
+        this.setState(ArcaneBossSlime.State.SPAWNING);
+        this.setAwakeningTimer(0);
+        this.getBossBar().clearPlayers();
+        this.setAttackTimer(0);
+        this.setPhase(0);
+        this.setTarget(null);
+        this.setHealth(this.getMaxHealth());
+    }
+
+    @Override
     protected boolean inAttackState() {
         return this.isInState(State.SHOOT_SLIME_BULLET) ||
                 this.isInState(State.SUMMON) ||

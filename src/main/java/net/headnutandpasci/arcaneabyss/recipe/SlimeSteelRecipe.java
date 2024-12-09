@@ -62,9 +62,30 @@ public class SlimeSteelRecipe implements Recipe<SimpleInventory> {
         return Type.INSTANCE;
     }
 
+    @Override
+    public boolean isIgnoredInRecipeBook() {
+        return false;
+    }
+
+    @Override
+    public ItemStack createIcon() {
+        return new ItemStack(output.getItem());
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    @Override
+    public String getGroup() {
+        return "arcaneabyss:slime_steel_machine/main";
+    }
+
     public static class Type implements RecipeType<SlimeSteelRecipe> {
         public static final Type INSTANCE = new Type();
         public static final String ID = "slime_steel";
+
         private Type() {
         }
     }

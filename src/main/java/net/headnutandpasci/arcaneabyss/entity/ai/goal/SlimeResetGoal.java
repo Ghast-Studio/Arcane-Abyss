@@ -12,35 +12,54 @@ import net.minecraft.world.World;
 import java.util.List;
 
 
-public class SlimeResetGoal extends Goal{
+public class SlimeResetGoal extends Goal {
     private final ArcaneBossSlime bossSlime;
     private final double range;
+    private long noPlayersStartTime;
+    private static final long RESET_DELAY = 10 * 1000; // 10 seconds in milliseconds
 
     public SlimeResetGoal(ArcaneBossSlime bossSlime, double range) {
         this.bossSlime = bossSlime;
         this.range = range;
+        this.noPlayersStartTime = 0;
     }
 
     @Override
     public boolean canStart() {
-        if (!bossSlime.isSleeping()) {
+        if (!bossSlime.isInState(ArcaneBossSlime.State.SPAWNING) || !bossSlime.isInState(ArcaneBossSlime.State.AWAKENING)) {
             World world = bossSlime.getWorld();
             BlockPos blockPos = bossSlime.getBlockPos();
             Box box = new Box(blockPos).expand(range);
 
             // Get a list of PlayerEntity instances within the Box
             List<PlayerEntity> playerList = world.getEntitiesByClass(PlayerEntity.class, box, player -> true);
-            // Remove players that are not alive
-            playerList.removeIf(player -> !player.isAlive());
 
-            // Return true if the list is empty, false otherwise
-            return playerList.isEmpty();
+            // Remove players that are not alive and creative or spectator
+            playerList.removeIf(player -> !player.isAlive());
+            playerList.removeIf(player -> player.isCreative() || player.isSpectator());
+
+            // If no players are in the area
+            if (playerList.isEmpty()) {
+                // If this is the first time no players were detected, record the start time
+                if (noPlayersStartTime == 0) {
+                    noPlayersStartTime = System.currentTimeMillis();
+                }
+
+                // Check if 10 seconds have passed since no players were detected
+                return System.currentTimeMillis() - noPlayersStartTime >= RESET_DELAY;
+            } else {
+                // Reset the no players start time if players are found
+                noPlayersStartTime = 0;
+            }
         }
         return false;
     }
 
     @Override
     public void start() {
+        if (bossSlime.isInState(ArcaneBossSlime.State.SPAWNING) || bossSlime.isInState(ArcaneBossSlime.State.AWAKENING))
+            return;
+
         World world = bossSlime.getWorld();
         if (world instanceof ServerWorld) {
             for (int i = 0; i < 50; ++i) {
@@ -56,12 +75,7 @@ public class SlimeResetGoal extends Goal{
             }
         }
 
-        bossSlime.setState(ArcaneBossSlime.State.SPAWNING);
-        bossSlime.setAwakeningTimer(0);
-        bossSlime.getBossBar().clearPlayers();
-        bossSlime.setAttackTimer(0);
-        bossSlime.setPhase(0);
-        bossSlime.setTarget(null);
-        bossSlime.setHealth(bossSlime.getMaxHealth());
+        bossSlime.reset();
+        noPlayersStartTime = 0;
     }
 }

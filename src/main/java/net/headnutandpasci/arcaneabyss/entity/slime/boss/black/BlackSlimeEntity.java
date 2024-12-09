@@ -37,7 +37,7 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
 
     @Override
     protected void initGoals() {
-        //this.goalSelector.add(1, new SlimeResetGoal(this, 50));
+        this.goalSelector.add(1, new SlimeResetGoal(this, 50));
         this.goalSelector.add(2, new TargetSwitchGoal(this, 10000));
         this.goalSelector.add(2, new SlimeShootGoal(this));
         this.goalSelector.add(2, new SlimeCurseGoal(this));
@@ -131,6 +131,23 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     @Override
     protected boolean isDistanceBasedAbility(State state) {
         return state == State.PUSH;
+    }
+
+    @Override
+    public void reset() {
+        this.getSummonedMobIds().forEach(id -> {
+            if (this.getWorld().getEntityById(id) != null) {
+                this.getWorld().getEntityById(id).discard();
+            }
+        });
+
+        this.setState(ArcaneBossSlime.State.SPAWNING);
+        this.getBossBar().clearPlayers();
+        this.setAwakeningTimer(0);
+        this.setAttackTimer(0);
+        this.setPhase(0);
+        this.setTarget(null);
+        this.setHealth(this.getMaxHealth());
     }
 
     @Override

@@ -3,13 +3,14 @@ package net.headnutandpasci.arcaneabyss.item.custom;
 import com.google.common.collect.ImmutableList;
 import net.headnutandpasci.arcaneabyss.item.ModToolMaterial;
 import net.headnutandpasci.arcaneabyss.util.Util;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
+import net.minecraft.item.Vanishable;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -21,6 +22,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
@@ -28,12 +30,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SlimeStaffItem extends ToolItem {
+public class SlimeStaffItem extends ToolItem implements Vanishable {
     public static final int MAX_UPGRADE_LEVEL = 3;
     private static final String NBT_UPGRADE_LEVEL = "upgrade_level";
 
     public SlimeStaffItem(Settings settings) {
-        super(ModToolMaterial.RUBY, settings);
+        super(ModToolMaterial.SLIME, settings);
     }
 
     public void upgradeStaff(ItemStack stack) {
@@ -57,10 +59,10 @@ public class SlimeStaffItem extends ToolItem {
             tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_staff.upgrade_level", upgradeLevel));
         }
 
-        tooltip.add(Text.translatable("tooltip.arcaneabyss.ruby_staff.radius", this.getRadiusForLevel(upgradeLevel)));
-        tooltip.add(Text.translatable("tooltip.arcaneabyss.ruby_staff.cooldown", StringHelper.formatTicks(this.getCoolDownForLevel(upgradeLevel))));
+        tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_staff.radius", this.getRadiusForLevel(upgradeLevel)));
+        tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_staff.cooldown", StringHelper.formatTicks(this.getCoolDownForLevel(upgradeLevel))));
         tooltip.add(Text.empty());
-        tooltip.add(Text.translatable("tooltip.arcaneabyss.ruby_staff.description").formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable("tooltip.arcaneabyss.slime_staff.description").formatted(Formatting.GRAY));
 
         ImmutableList<StatusEffectInstance> effects = getStatusEffectsForLevel(upgradeLevel);
         effects.forEach(effect -> tooltip.add(Util.getStatusEffectDescription(effect, Text.of("for"), Formatting.BLUE)));
@@ -69,6 +71,11 @@ public class SlimeStaffItem extends ToolItem {
             tooltip.add(Text.empty());
 
         super.appendTooltip(stack, world, tooltip, context);
+    }
+
+    @Override
+    public boolean canMine(BlockState state, World world, BlockPos pos, PlayerEntity miner) {
+        return !miner.isCreative();
     }
 
     @Override

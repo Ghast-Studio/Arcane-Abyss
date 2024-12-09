@@ -10,7 +10,8 @@
         "ItemRendererAccessor",
         "ItemRendererMixin",
         "ModelLoaderMixin",
-        "client.ClientInputMixin"
+        "client.ClientInputMixin",
+        "groups.RecipeBookGroupMixin"
     ],
     "injectors": {
         "defaultRequire": 1

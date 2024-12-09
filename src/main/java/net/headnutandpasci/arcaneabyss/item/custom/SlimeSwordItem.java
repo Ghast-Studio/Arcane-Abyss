@@ -30,7 +30,7 @@ public class SlimeSwordItem extends SwordItem {
 
 
     public SlimeSwordItem(Settings settings) {
-        super(ModToolMaterial.RUBY, 0, -2.4F, settings);
+        super(ModToolMaterial.SLIME, 0, -2.4F, settings);
     }
 
     public void upgradeSword(ItemStack stack) {

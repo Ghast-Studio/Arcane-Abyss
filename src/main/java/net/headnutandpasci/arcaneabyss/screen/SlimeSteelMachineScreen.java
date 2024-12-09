@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -31,6 +30,7 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
     @Override
     public void init() {
         super.init();
+        System.out.println(this.width);
         this.narrow = this.width < 379;
         this.recipeBook.initialize(this.width, this.height, this.client, this.narrow, this.handler);
         this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);
@@ -40,6 +40,7 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
             button.setPosition(this.x + 20, this.height / 2 - 49);
         }));
         this.titleX = (this.backgroundWidth - this.textRenderer.getWidth(this.title)) / 2;
+        this.titleY = 4;
     }
 
     @Override
@@ -71,12 +72,12 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
         RenderSystem.setShaderTexture(0, TEXTURE);
 
         context.drawTexture(TEXTURE, x, y, 0, 0, backgroundWidth, backgroundHeight);
-        renderProgressArrow(context, x, y);
+        this.renderProgressArrow(context, x, y);
     }
 
     private void renderProgressArrow(DrawContext context, int x, int y) {
         if (handler.isCrafting()) {
-            context.drawTexture(TEXTURE, x + 85, y + 30, 176, 0, 8, handler.getScaledProgress());
+            context.drawTexture(TEXTURE, x + 79, y + 34, 176, 14, handler.getScaledProgress(), 16);
         }
     }
 
@@ -93,7 +94,7 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
     }
 
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
-        boolean bl = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
+        boolean bl = mouseX < (double) left || mouseY < (double) top || mouseX >= (double) (left + this.backgroundWidth) || mouseY >= (double) (top + this.backgroundHeight);
         return this.recipeBook.isClickOutsideBounds(mouseX, mouseY, this.x, this.y, this.backgroundWidth, this.backgroundHeight, button) && bl;
     }
 

@@ -4,8 +4,7 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "AnvilScreenMixin",
-        "ExampleMixin",
-        "groups.RecipeBookMixin"
+        "ExampleMixin"
     ],
     "client": [
         "ItemRendererAccessor",

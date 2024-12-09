@@ -1,8 +1,9 @@
 package net.headnutandpasci.arcaneabyss.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookProvider;
@@ -10,13 +11,13 @@ import net.minecraft.client.gui.screen.recipebook.RecipeBookWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+@Environment(EnvType.CLIENT)
 public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScreenHandler> implements RecipeBookProvider {
     private static final Identifier TEXTURE = new Identifier(ArcaneAbyss.MOD_ID, "textures/gui/slimesteel_machine_gui.png");
     private static final Identifier RECIPE_BUTTON_TEXTURE = new Identifier("textures/gui/recipe_button.png");
@@ -28,7 +29,7 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
     }
 
     @Override
-    protected void init() {
+    public void init() {
         super.init();
         this.narrow = this.width < 379;
         this.recipeBook.initialize(this.width, this.height, this.client, this.narrow, this.handler);
@@ -48,6 +49,22 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
     }
 
     @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        if (this.recipeBook.isOpen() && this.narrow) {
+            this.drawBackground(context, delta, mouseX, mouseY);
+            this.recipeBook.render(context, mouseX, mouseY, delta);
+        } else {
+            this.recipeBook.render(context, mouseX, mouseY, delta);
+            super.render(context, mouseX, mouseY, delta);
+            this.recipeBook.drawGhostSlots(context, this.x, this.y, true, delta);
+        }
+
+        drawMouseoverTooltip(context, mouseX, mouseY);
+        this.recipeBook.drawTooltip(context, this.x, this.y, mouseX, mouseY);
+    }
+
+    @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
@@ -61,23 +78,6 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
         if (handler.isCrafting()) {
             context.drawTexture(TEXTURE, x + 85, y + 30, 176, 0, 8, handler.getScaledProgress());
         }
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context);
-
-        if (this.recipeBook.isOpen() && this.narrow) {
-            this.drawBackground(context, delta, mouseX, mouseY);
-            this.recipeBook.render(context, mouseX, mouseY, delta);
-        } else {
-            this.recipeBook.render(context, mouseX, mouseY, delta);
-            super.render(context, mouseX, mouseY, delta);
-            this.recipeBook.drawGhostSlots(context, this.x, this.y, true, delta);
-        }
-
-        drawMouseoverTooltip(context, mouseX, mouseY);
-        this.recipeBook.drawTooltip(context, this.x, this.y, mouseX, mouseY);
     }
 
     protected boolean isPointWithinBounds(int x, int y, int width, int height, double pointX, double pointY) {

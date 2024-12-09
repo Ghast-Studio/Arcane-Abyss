@@ -29,7 +29,7 @@ import net.minecraft.util.Identifier;
 public class ArcaneAbyssModClient implements ClientModInitializer {
 
     public static RecipeBookGroup MAIN_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/main"), Items.SLIME_BALL.getDefaultStack());
-    public static RecipeBookGroup SEARCH_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/search"), Items.MAGMA_CREAM.getDefaultStack());
+    public static RecipeBookGroup SEARCH_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/search"), Items.COMPASS.getDefaultStack());
 
     @Override
     public void onInitializeClient() {
@@ -45,11 +45,8 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SLIME_PROJECTILE, FlyingItemEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.YALLA, YallaRenderer::new);
 
-        RecipeBookHelper.registerAndAddToSearch(ArcaneAbyss.SLIME_STEEL_CATEGORY, MAIN_GROUP, Lists.newArrayList(MAIN_GROUP, SEARCH_GROUP));
-        RecipeBookHelper.registerGroupLookup(SlimeSteelRecipe.Type.INSTANCE, recipe -> {
-            System.out.println("Recipe: " + recipe);
-            return SEARCH_GROUP;
-        });
+        RecipeBookHelper.registerAndAddToSearch(ArcaneAbyss.SLIME_STEEL_CATEGORY, SEARCH_GROUP, Lists.newArrayList(SEARCH_GROUP, MAIN_GROUP));
+        RecipeBookHelper.registerGroupLookup(SlimeSteelRecipe.Type.INSTANCE, recipe -> MAIN_GROUP);
 
         HandledScreens.register(ModScreenHandlers.SLIMESTEEL_SCREEN_HANDLER, SlimeSteelMachineScreen::new);
 

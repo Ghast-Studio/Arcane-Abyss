@@ -2,7 +2,7 @@ package net.headnutandpasci.arcaneabyss.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.stream.IntStream;
 
-public class SlimeSteelRecipe implements Recipe<SimpleInventory> {
+public class SlimeSteelRecipe implements Recipe<Inventory> {
     private final Identifier id;
     private final ItemStack output;
     private final DefaultedList<Ingredient> input;
@@ -26,15 +26,15 @@ public class SlimeSteelRecipe implements Recipe<SimpleInventory> {
     }
 
     @Override
-    public boolean matches(SimpleInventory inventory, World world) {
+    public boolean matches(Inventory inventory, World world) {
         if (world.isClient) return false;
 
         return IntStream.range(0, 3).allMatch(i -> this.input.get(i).test(inventory.getStack(i)));
     }
 
     @Override
-    public ItemStack craft(SimpleInventory inventory, DynamicRegistryManager registryManager) {
-        return this.output;
+    public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
+        return this.output.copy();
     }
 
     @Override
@@ -80,6 +80,11 @@ public class SlimeSteelRecipe implements Recipe<SimpleInventory> {
     @Override
     public String getGroup() {
         return "arcaneabyss:slime_steel_machine/main";
+    }
+
+    @Override
+    public DefaultedList<Ingredient> getIngredients() {
+        return this.input;
     }
 
     public static class Type implements RecipeType<SlimeSteelRecipe> {

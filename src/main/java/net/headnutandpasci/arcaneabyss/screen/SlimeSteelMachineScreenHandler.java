@@ -42,11 +42,11 @@ public class SlimeSteelMachineScreenHandler extends AbstractRecipeScreenHandler<
         this.blockEntity = ((SlimeSteelMachineBlockEntity) blockEntity);
         this.world = playerInventory.player.getWorld();
 
-        this.addSlot(new Slot(inventory, 0, 80, 11));
-        this.addSlot(new Slot(inventory, 1, 50, 11));
-        this.addSlot(new Slot(inventory, 2, 110, 11));
+        this.addSlot(new FurnaceOutputSlot(playerInventory.player, inventory, 0, 80, 59));
 
-        this.addSlot(new FurnaceOutputSlot(playerInventory.player, inventory, 3, 80, 59));
+        this.addSlot(new Slot(inventory, 1, 80, 11));
+        this.addSlot(new Slot(inventory, 2, 50, 11));
+        this.addSlot(new Slot(inventory, 3, 110, 11));
 
         addPlayerInventory(playerInventory);
         addPlayerHotbar(playerInventory);
@@ -60,14 +60,15 @@ public class SlimeSteelMachineScreenHandler extends AbstractRecipeScreenHandler<
 
     public int getScaledProgress() {
         int progress = this.propertyDelegate.get(0);
-        int maxProgress = this.propertyDelegate.get(1);  // Max Progress
-        int progressArrowSize = 26; // This is the width in pixels of your arrow
+        int maxProgress = this.propertyDelegate.get(1);
+        int progressArrowSize = 26;
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
     }
 
     @Override
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
+        System.out.println("Quick move");
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
         if (slot.hasStack()) {
@@ -114,7 +115,7 @@ public class SlimeSteelMachineScreenHandler extends AbstractRecipeScreenHandler<
     public void populateRecipeFinder(RecipeMatcher finder) {
         System.out.println("Populating recipe finder");
         if (this.inventory instanceof RecipeInputProvider) {
-            ((RecipeInputProvider)this.inventory).provideRecipeInputs(finder);
+            ((RecipeInputProvider) this.inventory).provideRecipeInputs(finder);
         }
     }
 
@@ -123,13 +124,14 @@ public class SlimeSteelMachineScreenHandler extends AbstractRecipeScreenHandler<
         this.inventory.clear();
     }
 
+    @Override
     public boolean matches(Recipe<? super Inventory> recipe) {
         return recipe.matches(this.inventory, this.world);
     }
 
     @Override
     public int getCraftingResultSlotIndex() {
-        return 3;
+        return 0;
     }
 
     @Override

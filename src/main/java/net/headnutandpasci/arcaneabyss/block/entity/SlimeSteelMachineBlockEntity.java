@@ -28,10 +28,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class SlimeSteelMachineBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory {
-    private static final int INPUT_SLOT1 = 0;
-    private static final int INPUT_SLOT2 = 1;
-    private static final int INPUT_SLOT3 = 2;
-    private static final int OUTPUT_SLOT = 3;
+    private static final int OUTPUT_SLOT = 0;
+    private static final int INPUT_SLOT1 = 1;
+    private static final int INPUT_SLOT2 = 2;
+    private static final int INPUT_SLOT3 = 3;
     protected final PropertyDelegate propertyDelegate;
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
     private int progress = 0;
@@ -131,14 +131,12 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
             return;
         }
 
-        SimpleInventory inventory = new SimpleInventory(this.size());
-        for (int i = 0; i < this.size(); i++) {
-            inventory.setStack(i, this.getStack(i));
-        }
+        SimpleInventory inventory = new SimpleInventory(this.size() - 1);
+        inventory.setStack(0, this.getStack(INPUT_SLOT1));
+        inventory.setStack(1, this.getStack(INPUT_SLOT2));
+        inventory.setStack(2, this.getStack(INPUT_SLOT3));
 
-        return;
-
-/*        Optional<SlimeSteelRecipe> recipe = this.getWorld().getRecipeManager()
+        Optional<SlimeSteelRecipe> recipe = this.getWorld().getRecipeManager()
                 .getFirstMatch(SlimeSteelRecipe.Type.INSTANCE, inventory, this.getWorld());
 
         if (hasRecipe()) {
@@ -151,7 +149,7 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
                     this.getStack(OUTPUT_SLOT).getCount() + 1));
 
             this.resetProgress();
-        }*/
+        }
     }
 
     private void removeInputs() {
@@ -173,20 +171,18 @@ public class SlimeSteelMachineBlockEntity extends BlockEntity implements Extende
             return false;
         }
 
-        SimpleInventory inventory = new SimpleInventory(this.size());
-        for (int i = 0; i < this.size(); i++) {
-            inventory.setStack(i, this.getStack(i));
-        }
+        SimpleInventory inventory = new SimpleInventory(this.size() - 1);
+        inventory.setStack(0, this.getStack(INPUT_SLOT1));
+        inventory.setStack(1, this.getStack(INPUT_SLOT2));
+        inventory.setStack(2, this.getStack(INPUT_SLOT3));
 
-        return false;
-
-/*        Optional<SlimeSteelRecipe> match = this.getWorld().getRecipeManager()
+        Optional<SlimeSteelRecipe> match = this.getWorld().getRecipeManager()
                 .getFirstMatch(SlimeSteelRecipe.Type.INSTANCE, inventory, this.getWorld());
 
         if (match.isEmpty()) return false;
         ItemStack output = match.get().getOutput(null);
 
-        return canInsertAmountIntoOutputSlot(output) && canInsertItemIntoOutputSlot(output.getItem());*/
+        return canInsertAmountIntoOutputSlot(output) && canInsertItemIntoOutputSlot(output.getItem());
     }
 
     private boolean canInsertItemIntoOutputSlot(@NotNull Item item) {

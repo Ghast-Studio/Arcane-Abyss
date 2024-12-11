@@ -107,16 +107,19 @@ public class SlimeShootGoal extends Goal {
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
         if (world == null) return;
 
-        Vec3d forward = this.bossSlime.getRotationVector().multiply(2);
+        Vec3d forward = this.bossSlime.getRotationVector().multiply(this.bossSlime.getForwardDistance());
+
         double startX = this.bossSlime.getX() + offset.getX() + forward.x;
         double startY = this.bossSlime.getBodyY(1) + offset.getY();
         double startZ = this.bossSlime.getZ() + offset.getZ() + forward.z;
-        double x = target.getX() - startX - offset.getX();
-        double y = target.getBodyY(0.5) - startY - offset.getY();
-        double z = target.getZ() - startZ - offset.getZ();
-        double sqrt = Math.sqrt(x * x + z * z);
 
-        SlimeProjectile projectile = new SlimeProjectile(world, this.bossSlime, x, y + sqrt * 0.1, z);
+        double velocityX = target.getX() - startX;
+        double velocityY = target.getBodyY(0.3) - startY;
+        double velocityZ = target.getZ() - startZ;
+
+        SlimeProjectile projectile = new SlimeProjectile(this.bossSlime.getWorld(), this.bossSlime);
+        projectile.setPos(startX, startY, startZ);
+        projectile.setVelocity(velocityX, velocityY, velocityZ, 1.6F, 0);
         projectile.setItem(Items.MAGMA_CREAM.getDefaultStack());
         this.bossSlime.getWorld().spawnEntity(projectile);
 
@@ -142,41 +145,18 @@ public class SlimeShootGoal extends Goal {
         LivingEntity target = bossSlime.getTarget();
         if (target == null) return;
 
-        Vec3d spawn = this.bossSlime.getPos();
-
-        if (this.bossSlime.getWorld() instanceof ServerWorld serverWorld) {
-            spawnParticleCircle(serverWorld, BlockPos.ofFloored(spawn).withY((int) this.bossSlime.getY()), ParticleTypes.FLAME, 1, 50);
-        }
-
         this.shootSkullAt(offset, target);
     }
 
-    public void spawnParticleCircle(ServerWorld world, BlockPos center, ParticleEffect particle, double radius, int particleCount) {
-        double centerX = center.getX();
-        double centerY = center.getY();
-        double centerZ = center.getZ();
-
-        for (int i = 0; i < particleCount; i++) {
-            double angle = 2 * Math.PI * i / particleCount;
-            double x = centerX + radius * Math.cos(angle);
-            double z = centerZ + radius * Math.sin(angle);
-
-            world.spawnParticles(particle, x, centerY, z, 1, 0, 0, 0, 0);
-        }
-    }
-
     private void spawnParticleCircleAroundProjectile(SlimeProjectile projectile, ServerWorld world) {
-        if (projectile == null) return;
-
         LivingEntity target = bossSlime.getTarget();
+        if (projectile == null) return;
         if (target == null) return;
-
 
         Vec3d projectilePos = projectile.getPos();
         Vec3d targetPos = target.getPos();
         Vec3d normal = targetPos.subtract(projectilePos).normalize();
 
-        // Update these vectors to make particle spawn positions smoother
         Vec3d up = new Vec3d(0, 1, 0);
         Vec3d right = normal.crossProduct(up).normalize();
         Vec3d forward = right.crossProduct(normal).normalize();
@@ -187,13 +167,11 @@ public class SlimeShootGoal extends Goal {
         for (int i = 0; i < particleCount; i++) {
             double angle = 2 * Math.PI * i / particleCount;
 
-            // Smoothly add to the position for better effect
             Vec3d circlePos = projectilePos.add(
                     right.multiply(radius * Math.cos(angle))
                             .add(forward.multiply(radius * Math.sin(angle)))
             );
 
-            // Spawn particles with a smooth fade effect
             world.spawnParticles(
                     ParticleTypes.SMALL_FLAME,
                     circlePos.x, circlePos.y, circlePos.z,

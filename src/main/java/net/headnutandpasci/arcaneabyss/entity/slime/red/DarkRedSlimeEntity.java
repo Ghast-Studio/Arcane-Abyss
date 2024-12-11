@@ -28,12 +28,15 @@ public class DarkRedSlimeEntity extends ArcaneRangedSlime {
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SwimmingGoal(this));
-        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 40, 15.0F));
+        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 40, 13.0F));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
         this.goalSelector.add(4, new RandomLookGoal(this));
         this.goalSelector.add(5, new MoveGoal(this, 1.5));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
+    @Override
+    public double getForwardDistance() {
+        return 0.7;
+    }
 }

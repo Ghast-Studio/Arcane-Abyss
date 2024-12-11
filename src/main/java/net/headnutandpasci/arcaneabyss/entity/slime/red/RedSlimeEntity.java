@@ -1,7 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneRangedSlime;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -29,11 +29,15 @@ public class RedSlimeEntity extends ArcaneRangedSlime {
     @Override
     protected void initGoals() {
         this.goalSelector.add(1, new SwimmingGoal(this));
-        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 40, 5.0f));
+        this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 30, 50, 8.0f));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
         this.goalSelector.add(4, new RandomLookGoal(this));
         this.goalSelector.add(5, new MoveGoal(this, 1.0));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
     }
 
+    @Override
+    public double getForwardDistance() {
+        return 0.7;
+    }
 }

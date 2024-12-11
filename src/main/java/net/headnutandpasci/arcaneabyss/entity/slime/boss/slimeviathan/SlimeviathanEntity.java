@@ -173,6 +173,11 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     }
 
     @Override
+    public double getForwardDistance() {
+        return 2.5;
+    }
+
+    @Override
     protected boolean isDistanceBasedAbility(State state) {
         return state == State.PUSH;
     }

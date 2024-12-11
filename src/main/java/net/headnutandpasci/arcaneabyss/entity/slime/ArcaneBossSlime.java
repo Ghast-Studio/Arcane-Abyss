@@ -77,6 +77,10 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         this.bossBar.setPercent(0.0F);
 
         this.initAbilities();
+        if(this.abilityPool.isEmpty()) {
+            ArcaneAbyss.LOGGER.warn("[ArcaneBossSlime] No abilities registered for boss slime, defaulting to IDLE");
+            this.registerAbility(State.IDLE, 1);
+        }
     }
 
     public ArcaneBossSlime(EntityType<? extends HostileEntity> entityType, World world) {

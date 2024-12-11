@@ -10,21 +10,20 @@ import net.minecraft.util.Identifier;
 
 public class ModComponents implements EntityComponentInitializer {
 
-    public static final ComponentKey<DungeonXpComponent> DUNGEON_XP =
-            ComponentRegistry.getOrCreate(
-                    new Identifier(ArcaneAbyss.MOD_ID, "dungeon_xp"),
-                    DungeonXpComponent.class
-            );
+    public static final ComponentKey<DungeonXpComponent> DUNGEON_XP = ComponentRegistry.getOrCreate(
+            new Identifier(ArcaneAbyss.MOD_ID, "dungeon_xp"),
+            DungeonXpComponent.class
+    );
 
     private ModComponents() {
+    }
+
+    public static DungeonXpComponent get(PlayerEntity player) {
+        return DUNGEON_XP.get(player);
     }
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
 
-    }
-
-    public static DungeonXpComponent get(PlayerEntity player) {
-        return DUNGEON_XP.get(player);
     }
 }

@@ -53,7 +53,6 @@ public class SlimeSummonGoal extends Goal {
 
         for (int i = 0; i < 2; i++) {
             if (bossSlime.getPhase() == 0) {
-                System.out.println("Phase 0");
                 Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                 BlockPos summonPos = bossSlime.getBlockPos().offset(direction, 5);
                 this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);
@@ -62,7 +61,6 @@ public class SlimeSummonGoal extends Goal {
                 this.summonMob(ModEntities.GREEN_SLIME, world, summonPos);
             }
             if (bossSlime.getPhase() == 1) {
-                System.out.println("Phase 1");
                 Direction direction = MOB_SUMMON_POS.get(Math.min(i, MOB_SUMMON_POS.size() - 1));
                 BlockPos summonPos = bossSlime.getBlockPos().offset(direction, 5);
                 this.summonMob(ModEntities.BLUE_SLIME, world, summonPos);

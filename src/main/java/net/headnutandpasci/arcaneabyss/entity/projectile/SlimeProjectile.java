@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.projectile;
 
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
+import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingItemEntity;
@@ -28,8 +29,8 @@ public class SlimeProjectile extends ExplosiveProjectileEntity implements Flying
         super(entityType, world);
     }
 
-    public SlimeProjectile(World world, LivingEntity owner, double directionX, double directionY, double directionZ) {
-        super(ModEntities.SLIME_PROJECTILE, owner, directionX, directionY, directionZ, world);
+    public SlimeProjectile(World world, LivingEntity owner) {
+        super(ModEntities.SLIME_PROJECTILE, owner, 0, 0, 0, world);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class SlimeProjectile extends ExplosiveProjectileEntity implements Flying
     public void tick() {
         super.tick();
 
-        if (this.age >= 50) {
+        if (this.age >= 40) {
             this.discard();
         }
     }
@@ -52,16 +53,26 @@ public class SlimeProjectile extends ExplosiveProjectileEntity implements Flying
     public void handleStatus(byte status) {
         if (status == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.getWorld().addParticle(ParticleTypes.ITEM_SLIME, this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
+                this.getWorld().addParticle(this.getParticleType(), this.getX(), this.getY(), this.getZ(), 0.0, 0.0, 0.0);
             }
         }
     }
 
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
+        if (entityHitResult.getEntity() == this.getOwner())
+            return;
+
+        if (entityHitResult.getEntity() instanceof ArcaneSlimeEntity)
+            return;
+
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
         entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 4.0f);
+
+        if (this.isBurning()) {
+            entity.setOnFireFor(2);
+        }
     }
 
     @Override
@@ -75,12 +86,12 @@ public class SlimeProjectile extends ExplosiveProjectileEntity implements Flying
 
     @Override
     protected ParticleEffect getParticleType() {
-        return ParticleTypes.ITEM_SLIME;
+        return this.getStack().isOf(Items.MAGMA_CREAM) ? ParticleTypes.FLAME : ParticleTypes.ITEM_SLIME;
     }
 
     @Override
     protected boolean isBurning() {
-        return false;
+        return this.getStack().isOf(Items.MAGMA_CREAM);
     }
 
     @Override

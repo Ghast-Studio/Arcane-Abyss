@@ -40,18 +40,10 @@ public class DarkBlueSlimeEntity extends ArcaneSlimeEntity {
         this.goalSelector.add(3, new RandomLookGoal(this));
         this.goalSelector.add(4, new MoveGoal(this, 2.5));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
-    }
-
-    @Nullable
-    @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
     public void onPlayerCollision(PlayerEntity player) {
-
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 100, 10),this);
+        player.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 50, 2),this);
     }
 }

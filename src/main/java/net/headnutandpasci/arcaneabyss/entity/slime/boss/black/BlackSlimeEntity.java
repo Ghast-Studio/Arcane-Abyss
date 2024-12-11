@@ -82,7 +82,7 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     @Override
     protected void phaseUpdateTick() {
         if (this.getHealth() < (this.getMaxHealth() * 0.5)) {
-            this.setPhase(2);
+            this.setPhase(1);
         }
     }
 

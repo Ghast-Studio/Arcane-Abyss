@@ -3,7 +3,7 @@
     "fallback": "arcaneabyss:dungeon/segment_fallbacks",
     "elements": [
         {
-            "weight": 10,
+            "weight": 5,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",
@@ -68,7 +68,7 @@
             }
         },
         {
-            "weight": 3,
+            "weight": 6,
             "element": {
                 "element_type": "minecraft:single_pool_element",
                 "projection": "rigid",
@@ -91,6 +91,32 @@
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_yalla"
+            }
+        },
+        {
+            "weight": 5,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_vertical"
+            }
+        },
+        {
+            "weight": 8,
+            "element": {
+                "element_type": "minecraft:single_pool_element",
+                "projection": "rigid",
+                "processors": [
+                    {
+                        "processor_type": "minecraft:nop"
+                    }
+                ],
+                "location": "arcaneabyss:dungeon/room/room_peaceful"
             }
         }
     ]

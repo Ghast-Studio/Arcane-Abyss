@@ -116,7 +116,7 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
             Vec3d targetPosition = targetPos.subtract(direction.multiply(this.maxShootRange));
             Vec3d toTarget = targetPosition.subtract(this.mob.getPos());
 
-            if (this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()) < 5 || this.mob.getRotationVec(1.0F).dotProduct(toTarget) <= 0) {
+            if (this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()) < this.maxShootRange || this.mob.getRotationVec(1.0F).dotProduct(toTarget) <= 0) {
                 double distance = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
                 boolean bl = this.mob.getVisibilityCache().canSee(this.target);
 

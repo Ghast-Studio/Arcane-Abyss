@@ -145,7 +145,7 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
                 selectedState = attackPool.getRandom();
                 if (maxTries-- <= 0) {
                     selectedState = State.IDLE;
-                    ArcaneAbyss.LOGGER.warn("Failed to select ability, defaulting to IDLE");
+                    ArcaneAbyss.LOGGER.warn("[ArcaneBossSlime] Failed to select ability, defaulting to IDLE");
                     break;
                 }
             } while (selectedState == this.lastState && !isDistanceBasedAbility(selectedState));
@@ -218,7 +218,6 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
 
     @Override
     public void kill() {
-        ArcaneAbyss.LOGGER.info("Black Slime Killed");
         this.setState(State.DEATH);
         this.bossBar.clearPlayers();
         this.bossBar.setPercent(0.0F);
@@ -404,6 +403,8 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
     protected abstract boolean isDistanceBasedAbility(State state);
 
     protected abstract void initAbilities();
+
+    public abstract void reset();
 
     public enum State {
         SPAWNING(0),

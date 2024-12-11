@@ -15,10 +15,6 @@ import net.minecraft.util.Identifier;
 
 
 public class ModBlocks {
-
-
-    public static Block RUBY_BLOCK;
-    public static Block RAW_RUBY_BLOCK;
     public static Block DUNGEON_WALL_BLOCK;
     public static Block DUNGEON_BRICK;
     public static Block DUNGEON_BRICK_CRACKED;
@@ -46,12 +42,6 @@ public class ModBlocks {
     }
 
     public static void registerModBlocks() {
-        RUBY_BLOCK = registerBlock("ruby_block",
-                new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).sounds(BlockSoundGroup.AMETHYST_BLOCK)));
-
-        RAW_RUBY_BLOCK = registerBlock("raw_ruby_block",
-                new Block(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK)));
-
         DUNGEON_WALL_BLOCK = registerBlock("dungeon_wall_block",
                 new Block(FabricBlockSettings.copyOf(Blocks.BEDROCK).noBlockBreakParticles()));
 

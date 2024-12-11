@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.ai.goal;
 
 import com.google.common.collect.ImmutableList;
+import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
@@ -51,7 +52,7 @@ public class SlimeviathanSummonGoal extends Goal {
         ServerWorld world = bossSlime.getWorld() instanceof ServerWorld ? ((ServerWorld) bossSlime.getWorld()) : null;
         this.bossSlime.playSound(SoundEvents.ENTITY_PIGLIN_ANGRY, 500.0F, 40.0F);
         if (world == null) {
-            System.out.println("World is null");
+            ArcaneAbyss.LOGGER.warn("[SlimeviathanSummonGoal] World is null");
             return;
         }
 

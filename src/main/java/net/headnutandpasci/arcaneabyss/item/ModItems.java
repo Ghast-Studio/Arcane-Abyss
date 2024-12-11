@@ -17,8 +17,6 @@ import static net.minecraft.util.Rarity.EPIC;
 
 
 public class ModItems {
-    public static final Item RUBY = registerItem("ruby", new Item(new FabricItemSettings()));
-    public static final Item RAW_RUBY = registerItem("raw_ruby", new Item(new FabricItemSettings()));
     public static final Item SLIMESTEEL_INGOT = registerItem("slimesteel_ingot", new Item(new FabricItemSettings()));
     public static final Item SLIME_FLESH = registerItem("slime_flesh", new Item(new FabricItemSettings()));
     public static final Item SLIME_JUICE = registerItem("slime_juice", new Item(new FabricItemSettings()));
@@ -35,8 +33,6 @@ public class ModItems {
     //public static final Item RUBY_BOOTS = registerItem("ruby_boots", new ArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
     private static void addItemsToIngredientTabItemGroup(FabricItemGroupEntries entries) {
-        entries.add(RUBY);
-        entries.add(RAW_RUBY);
         entries.add(SLIMESTEEL_INGOT);
         entries.add(SLIME_FLESH);
         entries.add(SLIME_JUICE);

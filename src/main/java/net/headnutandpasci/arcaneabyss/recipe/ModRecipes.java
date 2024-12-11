@@ -9,6 +9,7 @@ public class ModRecipes {
     public static void registerRecipes() {
         Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(ArcaneAbyss.MOD_ID, SlimeSteelRecipe.Serializer.ID),
                 SlimeSteelRecipe.Serializer.INSTANCE);
+
         Registry.register(Registries.RECIPE_TYPE, new Identifier(ArcaneAbyss.MOD_ID, SlimeSteelRecipe.Type.ID),
                 SlimeSteelRecipe.Type.INSTANCE);
     }

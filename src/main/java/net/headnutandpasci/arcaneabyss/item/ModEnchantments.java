@@ -12,11 +12,8 @@ public class ModEnchantments {
     public static final Enchantment SLIME_ENCHANTMENT = new SlimyStrike();
     public static final Enchantment STICKY_DEFENSE = new StickyDefense();
 
-
     public static void registerEnchantments() {
         Registry.register(Registries.ENCHANTMENT, new Identifier(ArcaneAbyss.MOD_ID, "slimy_strike"), SLIME_ENCHANTMENT);
         Registry.register(Registries.ENCHANTMENT, new Identifier(ArcaneAbyss.MOD_ID, "sticky_defense"), STICKY_DEFENSE);
-
-
     }
 }

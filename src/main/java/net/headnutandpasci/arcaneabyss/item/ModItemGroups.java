@@ -12,20 +12,15 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class ModItemGroups {
-    public static final ItemGroup RUBY_GROUP = Registry.register(Registries.ITEM_GROUP,
-            new Identifier(ArcaneAbyss.MOD_ID, "ruby"),
+    public static final ItemGroup SLIME_GROUP = Registry.register(Registries.ITEM_GROUP,
+            new Identifier(ArcaneAbyss.MOD_ID, "slime_group"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.slime"))
-                    .icon(() -> new ItemStack(ModItems.RUBY)).entries((displayContext, entries) -> {
-                        entries.add(ModItems.RAW_RUBY);
-                        entries.add(ModItems.RUBY);
+                    .icon(() -> new ItemStack(Items.SLIME_BALL)).entries((displayContext, entries) -> {
                         entries.add(ModItems.SLIMESTEEL_INGOT);
                         entries.add(ModItems.SLIME_JUICE);
                         entries.add(ModItems.SLIME_FLESH);
-
                         entries.add(ModItems.COOKED_SLIME_MEAT);
 
-                        entries.add(ModBlocks.RUBY_BLOCK);
-                        entries.add(ModBlocks.RAW_RUBY_BLOCK);
                         entries.add(ModBlocks.SLIMESTEEL_MACHINE);
 
                         entries.add(ModItems.SLIME_SWORD);
@@ -36,13 +31,22 @@ public class ModItemGroups {
                         //entries.add(ModItems.RUBY_LEGGINGS);
                         //entries.add(ModItems.RUBY_BOOTS);
                     }).build());
+
     public static final ItemGroup DUNGEON_GROUP = Registry.register(Registries.ITEM_GROUP,
             new Identifier(ArcaneAbyss.MOD_ID, "dungeon"),
             FabricItemGroup.builder().displayName(Text.translatable("itemgroup.dungeon"))
                     .icon(() -> new ItemStack(Items.NETHER_STAR)).entries((displayContext, entries) -> {
-
                         entries.add(ModBlocks.DUNGEON_WALL_BLOCK);
-
+                        entries.add(ModBlocks.DUNGEON_BRICK);
+                        entries.add(ModBlocks.DUNGEON_BRICK_CRACKED);
+                        entries.add(ModBlocks.DUNGEON_BRICK_SLAB);
+                        entries.add(ModBlocks.DUNGEON_BRICK_STAIR);
+                        entries.add(ModBlocks.DUNGEON_STONE);
+                        entries.add(ModBlocks.DUNGEON_STONE_CHISELED);
+                        entries.add(ModBlocks.DUNGEON_COBBLE);
+                        entries.add(ModBlocks.DUNGEON_COBBLE_SLAB);
+                        entries.add(ModBlocks.DUNGEON_COBBLE_STAIR);
+                        entries.add(ModBlocks.DUNGEON_BRICK_WALL);
                     }).build());
 
     public static void registerItemGroups() {

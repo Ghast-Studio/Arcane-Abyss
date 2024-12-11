@@ -13,10 +13,8 @@ import net.minecraft.util.Identifier;
 
 public class MovementControlPacket {
     public static final Identifier ID = new Identifier(ArcaneAbyss.MOD_ID, "movement_control");
-    private final boolean disableMovement;
 
-    public MovementControlPacket(boolean disableMovement) {
-        this.disableMovement = disableMovement;
+    public MovementControlPacket() {
     }
 
     public static void send(boolean disableMovement, ServerPlayerEntity player) {
@@ -25,9 +23,8 @@ public class MovementControlPacket {
         ServerPlayNetworking.send(player, ID, buf);
     }
 
-    public static void handle(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender packetSender) {
+    public static void handle(MinecraftClient client, ClientPlayNetworkHandler ignoredHandler, PacketByteBuf buf, PacketSender ignoredPacketSender) {
         boolean disableMovement = buf.readBoolean();
-        ArcaneAbyss.LOGGER.info("Received movement control packet: {}", disableMovement);
         client.execute(() -> {
             if (client.player != null && client.player.input instanceof MovementControlAccess access) {
                 access.arcane_Abyss$setMovementDisabled(disableMovement);

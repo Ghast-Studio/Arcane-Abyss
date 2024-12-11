@@ -34,13 +34,6 @@ public class WeightedRandomBag<T> {
         return null; // Should never happen if weights are correct
     }
 
-    private static class Entry<T> {
-        T object;
-        double weight;
-
-        Entry(T object, double weight) {
-            this.object = object;
-            this.weight = weight;
-        }
+    private record Entry<T>(T object, double weight) {
     }
 }

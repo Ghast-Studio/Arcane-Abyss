@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -37,7 +38,7 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
 
     @Override
     protected void initGoals() {
-        //this.goalSelector.add(1, new SlimeResetGoal(this, 50));
+        this.goalSelector.add(1, new SlimeResetGoal(this, 50));
         this.goalSelector.add(2, new TargetSwitchGoal(this, 10000));
         this.goalSelector.add(2, new SlimeShootGoal(this));
         this.goalSelector.add(2, new SlimeCurseGoal(this));
@@ -62,7 +63,6 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     @Override
     protected void startBossFight() {
         if (this.isAlive() && this.isInState(ArcaneBossSlime.State.SPAWNING)) {
-            System.out.println("Starting Boss Fight");
             this.recalculateAttributes();
             this.setAwakeningTimer(160);
             this.setState(State.AWAKENING);
@@ -131,6 +131,23 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     @Override
     protected boolean isDistanceBasedAbility(State state) {
         return state == State.PUSH;
+    }
+
+    @Override
+    public void reset() {
+        this.getSummonedMobIds().stream().map(id -> this.getWorld().getEntityById(id)).forEach(entityById -> {
+            if (entityById != null) {
+                entityById.discard();
+            }
+        });
+
+        this.setState(ArcaneBossSlime.State.SPAWNING);
+        this.getBossBar().clearPlayers();
+        this.setAwakeningTimer(0);
+        this.setAttackTimer(0);
+        this.setPhase(0);
+        this.setTarget(null);
+        this.setHealth(this.getMaxHealth());
     }
 
     @Override

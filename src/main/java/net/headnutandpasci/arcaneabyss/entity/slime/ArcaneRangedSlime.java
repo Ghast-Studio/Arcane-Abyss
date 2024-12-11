@@ -120,7 +120,7 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
         }
 
         public boolean shouldContinue() {
-            return this.canStart() || this.target.isAlive() && !this.mob.getNavigation().isIdle();
+            return this.canStart() || (this.target != null && this.target.isAlive()) && !this.mob.getNavigation().isIdle();
         }
 
         public void stop() {
@@ -147,7 +147,6 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
                 serverWorld.spawnParticles(ParticleTypes.FLAME, targetPosition.getX(), targetPosition.getY(), targetPosition.getZ(), 1, 0, 0, 0, 0);
             }
 
-            System.out.println("distance to target: " + this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()));
             if (this.mob.squaredDistanceTo(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ()) < 5 || this.mob.getRotationVec(1.0F).dotProduct(toTarget) <= 0) {
                 double distance = this.mob.squaredDistanceTo(this.target.getX(), this.target.getY(), this.target.getZ());
                 boolean bl = this.mob.getVisibilityCache().canSee(this.target);

@@ -2,6 +2,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan;
 
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -136,6 +137,29 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         this.registerAbility(State.SHOOT_SLIME_BULLET, 45);
         this.registerAbility(State.STRIKE_SUMMON, 35);
         this.registerAbility(State.CURSE, 25);
+    }
+
+    @Override
+    public void reset() {
+        this.getSummonedMobIds().stream().map(id -> this.getWorld().getEntityById(id)).forEach(entityById -> {
+            if (entityById != null) {
+                entityById.discard();
+            }
+        });
+
+        this.getSummonedPillarIds().stream().map(id -> this.getWorld().getEntityById(id)).forEach(entityById -> {
+            if (entityById != null) {
+                entityById.discard();
+            }
+        });
+
+        this.setState(ArcaneBossSlime.State.SPAWNING);
+        this.setAwakeningTimer(0);
+        this.getBossBar().clearPlayers();
+        this.setAttackTimer(0);
+        this.setPhase(0);
+        this.setTarget(null);
+        this.setHealth(this.getMaxHealth());
     }
 
     @Override

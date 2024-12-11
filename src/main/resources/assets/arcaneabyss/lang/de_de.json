@@ -1,28 +1,33 @@
 {
-    "item.arcaneabyss.ruby": "Ruby",
-    "item.arcaneabyss.raw_ruby": "Raw Ruby",
     "item.arcaneabyss.slimesteel_ingot": "Slimesteel Ingot",
     "item.arcaneabyss.slime_flesh": "Slime Flesh",
     "item.arcaneabyss.slime_juice": "Slime Juice",
     "item.arcaneabyss.cooked_slime_meat": "Cooked Slime Meat",
-    "item.arcaneabyss.slime_sword": "Ruby Sword",
-    "item.arcaneabyss.slime_staff": "Ruby Staff",
+    "item.arcaneabyss.slime_sword": "Slime Sword",
+    "item.arcaneabyss.slime_staff": "Slime Staff",
     "item.arcaneabyss.slime_steel_ball": "Slimesteel Sphere",
-    "block.arcaneabyss.ruby_block": "Block of Ruby",
-    "block.arcaneabyss.raw_ruby_block": "Raw Block of Ruby",
+
     "block.arcaneabyss.dungeon_wall_block": "Dungeon Wall",
     "block.arcaneabyss.dungeon_brick": "Dungeon Wall",
     "block.arcaneabyss.slimesteel_machine": "Slime Steel Producer",
+
     "displayname.arcaneabyss.slimesteel_machine.displayname": "Slime Steel Producer",
-    "itemgroup.slime": "Ruby Menu",
+
+    "itemgroup.slime": "Slime Menu",
     "itemgroup.dungeon": "ArcaneAbyss Blocks",
+
     "entity.arcaneabyss.black_slime": "Black Slime",
+    "entity.arcaneabyss.slimeviathan": "Slimeviathan",
+
     "enchantment.arcaneabyss.slimy_strike": "Slimy Strike",
+    "enchantment.arcaneabyss.sticky_defense": "Sticky Defense",
+
     "tooltip.arcaneabyss.slime_sword.upgrade_level": "Level %s",
     "tooltip.arcaneabyss.slime_sword.slimy_strike": "+%s Attack Damage for Slimy Strike",
     "tooltip.arcaneabyss.slime_sword.stacks": "Stacks: %s/%s",
-    "tooltip.arcaneabyss.slime_staff.upgrade_level": "Level %s",
-    "tooltip.arcaneabyss.ruby_staff.description": "When used, applies the following effects:",
-    "tooltip.arcaneabyss.ruby_staff.cooldown": "Cooldown on use: %s",
-    "tooltip.arcaneabyss.ruby_staff.radius": "Radius: %sm"
+
+    "tooltip.arcaneabyss.slime_staff.upgrade_level": "Level: %s",
+    "tooltip.arcaneabyss.slime_staff.description": "When used, applies the following effects:",
+    "tooltip.arcaneabyss.slime_staff.cooldown": "Cooldown on use: %s",
+    "tooltip.arcaneabyss.slime_staff.radius": "Radius: %sm"
 }

@@ -1,10 +1,13 @@
 package net.headnutandpasci.arcaneabyss.util;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.world.ServerWorld;
@@ -71,5 +74,14 @@ public class Util {
                 .append(spacer)
                 .append(ScreenTexts.SPACE)
                 .append(StatusEffectUtil.getDurationText(statusEffect, 1.0F)).formatted(formattings);
+    }
+
+    public static boolean hasEnchantment(Enchantment enchantment, Iterable<ItemStack> armorItems) {
+        for (ItemStack armor : armorItems) {
+            if (EnchantmentHelper.getLevel(enchantment, armor) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 }

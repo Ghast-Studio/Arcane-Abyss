@@ -15,9 +15,7 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-        //Block Models
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RUBY_BLOCK);
-        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.RAW_RUBY_BLOCK);
+        // Dungeon Blocks
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_WALL_BLOCK);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_CRACKED);
@@ -29,15 +27,14 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE_SLAB);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE_STAIR);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_WALL);
-        blockStateModelGenerator.registerSimpleState(ModBlocks.SLIMESTEEL_MACHINE);
 
+        // Slimesteel Blocks
+        blockStateModelGenerator.registerSimpleState(ModBlocks.SLIMESTEEL_MACHINE);
     }
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         //Item Models
-        itemModelGenerator.register(ModItems.RUBY, Models.GENERATED);
-        itemModelGenerator.register(ModItems.RAW_RUBY, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIMESTEEL_INGOT, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIME_FLESH, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIME_JUICE, Models.GENERATED);
@@ -46,15 +43,5 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.SLIME_STEEL_BALL, Models.GENERATED);
 
         itemModelGenerator.register(ModItems.SLIME_SWORD, Models.HANDHELD);
-
-        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_HELMET));
-        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_CHESTPLATE));
-        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_LEGGINGS));
-        //itemModelGenerator.registerArmor(((ArmorItem) ModItems.RUBY_BOOTS));
     }
-
-
-
-
-
 }

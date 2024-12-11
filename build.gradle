@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.7.2'
 	id 'maven-publish'
 }
 
@@ -11,7 +11,13 @@ base {
 }
 
 repositories {
-	maven { url = "https://maven.kyrptonaught.dev" }
+	maven {
+		url 'https://jitpack.io'
+	}
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://maven.ladysnake.org/releases'
+	}
 }
 
 fabricApi {
@@ -26,6 +32,14 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	def dmModules = ["base", "minecraft", "enums", "recipe-book"]
+	for (final def module in dmModules) {
+		modApi include("me.melontini.dark-matter:dark-matter-${module}:${project.dark_matter}")
+	}
+
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_api}"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api}"
 }
 
 processResources {

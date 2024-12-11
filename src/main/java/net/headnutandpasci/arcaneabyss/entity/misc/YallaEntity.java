@@ -333,9 +333,7 @@ public class YallaEntity extends HostileEntity implements Vibrations {
         DataResult<NbtElement> result = ListenerData.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationListenerData);
         Logger logger = LOGGER;
         Objects.requireNonNull(logger);
-        result.resultOrPartial(logger::error).ifPresent((nbtElement) -> {
-            nbt.put("listener", nbtElement);
-        });
+        result.resultOrPartial(logger::error).ifPresent((nbtElement) -> nbt.put("listener", nbtElement));
     }
 
     public void readCustomDataFromNbt(NbtCompound nbt) {
@@ -344,9 +342,7 @@ public class YallaEntity extends HostileEntity implements Vibrations {
             DataResult<ListenerData> listener = ListenerData.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, nbt.getCompound("listener")));
             Logger logger = LOGGER;
             Objects.requireNonNull(logger);
-            listener.resultOrPartial(logger::error).ifPresent((listenerData) -> {
-                this.vibrationListenerData = listenerData;
-            });
+            listener.resultOrPartial(logger::error).ifPresent((listenerData) -> this.vibrationListenerData = listenerData);
         }
     }
 

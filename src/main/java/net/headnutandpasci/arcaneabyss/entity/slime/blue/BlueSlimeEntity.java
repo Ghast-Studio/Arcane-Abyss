@@ -34,6 +34,5 @@ public class BlueSlimeEntity extends ArcaneSlimeEntity {
         this.goalSelector.add(3, new RandomLookGoal(this));
         this.goalSelector.add(4, new MoveGoal(this, 1.0));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
 }

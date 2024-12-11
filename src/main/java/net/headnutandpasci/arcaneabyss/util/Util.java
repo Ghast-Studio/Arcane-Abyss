@@ -8,7 +8,9 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
@@ -83,5 +85,30 @@ public class Util {
             }
         }
         return false;
+    }
+
+    public static void spawnVerticalCircularParticlesFacingPlayer(ServerWorld world, double centerX, double centerY, double centerZ, LivingEntity target, DefaultParticleType particleType, double radius) {
+        int particleCount = 20;
+
+        Vec3d directionToPlayer = target.getPos().subtract(centerX, centerY, centerZ).normalize();
+        Vec3d up = new Vec3d(0, 1, 0);
+        Vec3d right = directionToPlayer.crossProduct(up).normalize();
+        Vec3d vertical = right.crossProduct(directionToPlayer).normalize();
+
+        for (int i = 0; i < particleCount; i++) {
+            double angle = 2 * Math.PI * i / particleCount;
+            double offsetX = radius * (Math.cos(angle) * right.x + Math.sin(angle) * vertical.x);
+            double offsetY = radius * (Math.cos(angle) * right.y + Math.sin(angle) * vertical.y);
+            double offsetZ = radius * (Math.cos(angle) * right.z + Math.sin(angle) * vertical.z);
+
+            world.spawnParticles(
+                    particleType,
+                    centerX + offsetX,
+                    centerY + offsetY,
+                    centerZ + offsetZ,
+                    1,
+                    0, 0, 0, 0
+            );
+        }
     }
 }

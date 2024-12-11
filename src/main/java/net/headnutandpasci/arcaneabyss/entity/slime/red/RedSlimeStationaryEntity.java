@@ -52,9 +52,7 @@ public class RedSlimeStationaryEntity extends ArcaneRangedSlime {
         this.goalSelector.add(2, new ProjectileAttackGoal(this, 1.0, 20, 20.0F));
         this.goalSelector.add(3, new FaceTowardTargetGoal(this));
         this.goalSelector.add(4, new RandomLookGoal(this));
-        this.goalSelector.add(5, new MoveGoal(this, 1.0));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
     @Override
@@ -73,6 +71,11 @@ public class RedSlimeStationaryEntity extends ArcaneRangedSlime {
     @Override
     protected void playSecondaryStepSound(BlockState state) {
 
+    }
+
+    @Override
+    public double getForwardDistance() {
+        return 0.7;
     }
 
     @Override

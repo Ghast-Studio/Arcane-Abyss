@@ -55,7 +55,6 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
         this.goalSelector.add(4, new RandomLookGoal(this));
         this.goalSelector.add(5, new MoveGoal(this, 1.0));
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
     protected void initDataTracker() {

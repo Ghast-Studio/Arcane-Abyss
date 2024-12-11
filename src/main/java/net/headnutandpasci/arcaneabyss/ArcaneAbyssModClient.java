@@ -28,8 +28,8 @@ import net.minecraft.util.Identifier;
 
 public class ArcaneAbyssModClient implements ClientModInitializer {
 
-    public static RecipeBookGroup MAIN_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/main"), Items.SLIME_BALL.getDefaultStack());
-    public static RecipeBookGroup SEARCH_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/search"), Items.COMPASS.getDefaultStack());
+    public static final RecipeBookGroup MAIN_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/main"), Items.SLIME_BALL.getDefaultStack());
+    public static final RecipeBookGroup SEARCH_GROUP = RecipeBookHelper.createGroup(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine/search"), Items.COMPASS.getDefaultStack());
 
     @Override
     public void onInitializeClient() {

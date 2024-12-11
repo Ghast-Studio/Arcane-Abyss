@@ -9,7 +9,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
+
 import net.minecraft.world.World;
 
 public class BlueSlimeEntity extends ArcaneSlimeEntity {

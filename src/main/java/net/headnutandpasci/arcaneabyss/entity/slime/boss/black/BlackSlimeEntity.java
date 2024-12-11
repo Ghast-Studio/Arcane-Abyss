@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -62,7 +63,6 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
     @Override
     protected void startBossFight() {
         if (this.isAlive() && this.isInState(ArcaneBossSlime.State.SPAWNING)) {
-            System.out.println("Starting Boss Fight");
             this.recalculateAttributes();
             this.setAwakeningTimer(160);
             this.setState(State.AWAKENING);
@@ -135,9 +135,9 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
 
     @Override
     public void reset() {
-        this.getSummonedMobIds().forEach(id -> {
-            if (this.getWorld().getEntityById(id) != null) {
-                this.getWorld().getEntityById(id).discard();
+        this.getSummonedMobIds().stream().map(id -> this.getWorld().getEntityById(id)).forEach(entityById -> {
+            if (entityById != null) {
+                entityById.discard();
             }
         });
 

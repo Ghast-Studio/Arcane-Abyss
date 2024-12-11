@@ -30,7 +30,6 @@ public class SlimeSteelMachineScreen extends HandledScreen<SlimeSteelMachineScre
     @Override
     public void init() {
         super.init();
-        System.out.println(this.width);
         this.narrow = this.width < 379;
         this.recipeBook.initialize(this.width, this.height, this.client, this.narrow, this.handler);
         this.x = this.recipeBook.findLeftEdge(this.width, this.backgroundWidth);

@@ -195,27 +195,13 @@ public class SlimeviathanSummonPillarGoal extends Goal {
     }
 
     private BlockPos findSolidGround(ServerWorld world, BlockPos targetPos, int bossYLevel) {
-
         BlockPos.Mutable mutablePos = targetPos.mutableCopy();
         mutablePos.setY(bossYLevel);
-
-
-        int previousY = mutablePos.getY();
-
 
         for (int y = bossYLevel; y >= world.getBottomY(); y--) {
             mutablePos.setY(y);
 
-
             if (world.getBlockState(mutablePos).isSolidBlock(world, mutablePos)) {
-                int x = mutablePos.getX();
-                int yFound = mutablePos.getY();
-                int z = mutablePos.getZ();
-
-
-                System.out.println("Found solid ground at - X: " + x + ", Y: " + yFound + ", Z: " + z);
-                System.out.println("Previous Y was: " + previousY);
-
                 return mutablePos.toImmutable();
             }
         }
@@ -234,9 +220,8 @@ public class SlimeviathanSummonPillarGoal extends Goal {
             double angle = 2 * Math.PI * i / particleCount;
             double x = centerX + radius * Math.cos(angle);
             double z = centerZ + radius * Math.sin(angle);
-            double y = centerY;
 
-            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
+            world.spawnParticles(particle, x, centerY, z, 1, 0, 0, 0, 0);
         }
     }
 

@@ -21,8 +21,6 @@ public abstract class RecipeBookGroupMixin {
 
     @Inject(at = @At("HEAD"), method = "isInitialized", cancellable = true)
     public void getGroups(CallbackInfoReturnable<Boolean> cir) {
-        this.recipes.stream().filter(recipe -> recipe instanceof SlimeSteelRecipe).findFirst().ifPresent(recipe -> {
-            cir.setReturnValue(true);
-        });
+        this.recipes.stream().filter(recipe -> recipe instanceof SlimeSteelRecipe).findFirst().ifPresent(recipe -> cir.setReturnValue(true));
     }
 }

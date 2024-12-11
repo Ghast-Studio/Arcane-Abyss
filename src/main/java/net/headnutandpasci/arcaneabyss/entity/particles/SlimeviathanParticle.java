@@ -1,11 +1,9 @@
 package net.headnutandpasci.arcaneabyss.entity.particles;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.SpriteBillboardParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 
 public class SlimeviathanParticle extends SpriteBillboardParticle {
 

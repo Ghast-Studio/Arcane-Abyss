@@ -1,6 +1,5 @@
 package net.headnutandpasci.arcaneabyss.recipe;
 
-import me.melontini.dark_matter.api.recipe_book.RecipeBookHelper;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

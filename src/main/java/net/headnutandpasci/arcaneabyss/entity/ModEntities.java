@@ -71,7 +71,7 @@ public class ModEntities {
         YALLA = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, YallaEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "yalla");
 
-        ArcaneAbyss.LOGGER.info("Registering Entities");
+        ArcaneAbyss.LOGGER.info("Registering Entities for " + ArcaneAbyss.MOD_ID);
     }
 
 }

@@ -2,7 +2,6 @@ package net.headnutandpasci.arcaneabyss.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.headnutandpasci.arcaneabyss.block.ModBlocks;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;

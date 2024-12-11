@@ -17,7 +17,7 @@ public class GenericMobFeature extends Feature<EntityTypeConfig> {
     public boolean generate(FeatureContext<EntityTypeConfig> context) {
         MobEntity entity = (MobEntity) context.getConfig().type().create(context.getWorld().toServerWorld(), null, null, context.getOrigin(), SpawnReason.COMMAND, true, true);
         if (entity == null) {
-            ArcaneAbyss.LOGGER.warn("Failed to create entity {}", context.getConfig().type());
+            ArcaneAbyss.LOGGER.warn("[GenericMobFeature] Failed to create entity {}", context.getConfig().type());
             return false;
         }
 

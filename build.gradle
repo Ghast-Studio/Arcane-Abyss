@@ -14,6 +14,10 @@ repositories {
 	maven {
 		url 'https://jitpack.io'
 	}
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://maven.ladysnake.org/releases'
+	}
 }
 
 fabricApi {
@@ -33,6 +37,9 @@ dependencies {
 	for (final def module in dmModules) {
 		modApi include("me.melontini.dark-matter:dark-matter-${module}:${project.dark_matter}")
 	}
+
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_api}"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_api}"
 }
 
 processResources {

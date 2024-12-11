@@ -35,7 +35,7 @@ public class ArcaneAbyss implements ModInitializer {
     public static final String MOD_ID = "arcaneabyss";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static RecipeBookCategory SLIME_STEEL_CATEGORY = RecipeBookHelper.createCategory(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine"));
+    public static final RecipeBookCategory SLIME_STEEL_CATEGORY = RecipeBookHelper.createCategory(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine"));
 
     @Override
     public void onInitialize() {
@@ -55,9 +55,7 @@ public class ArcaneAbyss implements ModInitializer {
         ModRecipes.registerRecipes();
 
         // Register tick event for checking StickyDefense
-        ServerTickEvents.END_WORLD_TICK.register(world -> {
-            world.getPlayers().forEach(StickyDefense::tick);
-        });
+        ServerTickEvents.END_WORLD_TICK.register(world -> world.getPlayers().forEach(StickyDefense::tick));
 
         FabricDefaultAttributeRegistry.register(ModEntities.BLUE_SLIME, BlueSlimeEntity.setAttributesBlueSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.SLIME_PILLAR, SlimePillarEntity.setAttributesSlimePillar());

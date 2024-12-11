@@ -112,7 +112,6 @@ public class SlimeSteelMachineScreenHandler extends AbstractRecipeScreenHandler<
 
     @Override
     public void populateRecipeFinder(RecipeMatcher finder) {
-        System.out.println("Populating recipe finder");
         if (this.inventory instanceof RecipeInputProvider) {
             ((RecipeInputProvider) this.inventory).provideRecipeInputs(finder);
         }

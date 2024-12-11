@@ -55,7 +55,6 @@ public class SlimeviathanStrikeGoal extends Goal {
 
     @Override
     public void start() {
-        ArcaneAbyss.LOGGER.info("SlimeviathanStrikeGoal started");
         super.start();
         isCharging = false;
         chargeUpTimer = 0;
@@ -78,7 +77,7 @@ public class SlimeviathanStrikeGoal extends Goal {
         this.entity.getPlayerNearby().forEach(target -> {
             this.strikeTargets.add(target);
             Util.pushPlayer(this.entity, target, 10, 2.0f);
-            MovementControlPacket.send(true, (ServerPlayerEntity) target);
+            MovementControlPacket.send(true, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
             for (int i = 0; i < 50; i++) {
                 double offsetX = (this.entity.getRandom().nextDouble() - 0.5) * 2.0;
@@ -146,14 +145,10 @@ public class SlimeviathanStrikeGoal extends Goal {
 
     private void shootStrike() {
         this.particleTimer = 80;
-        this.strikeTargets.forEach(target -> {
-            this.strikePositions.add(target.getPos());
-        });
+        this.strikeTargets.forEach(target -> this.strikePositions.add(target.getPos()));
 
         switch (entity.getPhase()) {
-            case 0 -> this.strikeTargets.forEach(target -> {
-                this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos());
-            });
+            case 0 -> this.strikeTargets.forEach(target -> this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos()));
             case 1 -> this.strikeTargets.forEach(target -> {
                 for (int i = 0; i < 4; i++) {
                     Direction direction = MOB_SUMMON_POS.get(i);

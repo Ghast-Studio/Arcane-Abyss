@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.mixin;
+package net.headnutandpasci.arcaneabyss.mixin.client;
 
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;

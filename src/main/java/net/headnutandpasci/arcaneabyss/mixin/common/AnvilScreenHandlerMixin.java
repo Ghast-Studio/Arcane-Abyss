@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.mixin;
+package net.headnutandpasci.arcaneabyss.mixin.common;
 
 import net.headnutandpasci.arcaneabyss.components.ModComponents;
 import net.headnutandpasci.arcaneabyss.item.ModItems;

@@ -42,7 +42,7 @@ public class ArcaneAbyss implements ModInitializer {
     public static final String MOD_ID = "arcaneabyss";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static final RecipeBookCategory SLIME_STEEL_CATEGORY = RecipeBookHelper.createCategory(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine"));
-    public static int x = 0;
+    public static boolean disableDamage = false;
 
     @Override
     public void onInitialize() {
@@ -79,7 +79,6 @@ public class ArcaneAbyss implements ModInitializer {
             // No-op, handled client-side
         });
 
-        //create a command to add or remove dungeon xp
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(literal("dungeonxp")
                     .requires(source -> source.hasPermissionLevel(2))
@@ -107,12 +106,16 @@ public class ArcaneAbyss implements ModInitializer {
             );
         });
 
-        /*ServerTickEvents.START_SERVER_TICK.register(server -> {
-            if (x++ % 20 == 0) {
-                server.getPlayerManager().getPlayerList().forEach(serverPlayerEntity -> {
-                    serverPlayerEntity.getComponent(ModComponents.DUNGEON_XP).addDungeonXp(1);
-                });
-            }
-        });*/
+        // create a command to disable damage
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            dispatcher.register(literal("disableDamage")
+                    .requires(source -> source.hasPermissionLevel(2))
+                    .executes(context -> {
+                        disableDamage = !disableDamage;
+                        context.getSource().sendFeedback(() -> Text.literal("Damage is now " + (disableDamage ? "disabled" : "enabled")), false);
+                        return 1;
+                    })
+            );
+        });
     }
 }

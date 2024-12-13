@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.mixin.groups;
+package net.headnutandpasci.arcaneabyss.mixin.client.groups;
 
 import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
 import net.minecraft.client.gui.screen.recipebook.RecipeResultCollection;

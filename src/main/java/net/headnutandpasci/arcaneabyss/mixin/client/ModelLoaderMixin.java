@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.mixin;
+package net.headnutandpasci.arcaneabyss.mixin.client;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.minecraft.client.color.block.BlockColors;

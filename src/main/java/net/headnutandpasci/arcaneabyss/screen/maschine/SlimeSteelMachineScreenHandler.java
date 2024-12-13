@@ -1,7 +1,8 @@
-package net.headnutandpasci.arcaneabyss.screen;
+package net.headnutandpasci.arcaneabyss.screen.maschine;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.block.entity.SlimeSteelMachineBlockEntity;
+import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;

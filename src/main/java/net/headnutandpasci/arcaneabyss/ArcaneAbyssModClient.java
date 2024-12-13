@@ -19,7 +19,7 @@ import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeStationar
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
-import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMachineScreen;
+import net.headnutandpasci.arcaneabyss.screen.maschine.SlimeSteelMachineScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.recipebook.RecipeBookGroup;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;

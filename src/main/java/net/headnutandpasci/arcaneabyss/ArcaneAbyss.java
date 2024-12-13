@@ -1,12 +1,15 @@
 package net.headnutandpasci.arcaneabyss;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import me.melontini.dark_matter.api.recipe_book.RecipeBookHelper;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
 import net.headnutandpasci.arcaneabyss.block.ModBlocks;
+import net.headnutandpasci.arcaneabyss.components.ModComponents;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.SlimePillarEntity;
@@ -30,15 +33,19 @@ import net.headnutandpasci.arcaneabyss.world.structures.ModStructures;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.book.RecipeBookCategory;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 public class ArcaneAbyss implements ModInitializer {
     public static final String MOD_ID = "arcaneabyss";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
     public static final RecipeBookCategory SLIME_STEEL_CATEGORY = RecipeBookHelper.createCategory(new Identifier(ArcaneAbyss.MOD_ID, "slime_steel_machine"));
+    public static int x = 0;
 
     @Override
     public void onInitialize() {
@@ -73,6 +80,34 @@ public class ArcaneAbyss implements ModInitializer {
 
         ServerPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, (server, player, handler, buf, responseSender) -> {
             // No-op, handled client-side
+        });
+
+        //create a command to add or remove dungeon xp
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            dispatcher.register(literal("dungeonxp")
+                    .requires(source -> source.hasPermissionLevel(2))
+                    .executes(context -> {
+                        context.getSource().sendFeedback(() -> Text.literal("Called /dungeonxp without sub-command"), false);
+                        return 1;
+                    })
+                    .then(literal("add")
+                            .then(argument("amount", IntegerArgumentType.integer())
+                                    .executes(context -> {
+                                        int amount = IntegerArgumentType.getInteger(context, "amount");
+                                        context.getSource().getEntityOrThrow().getComponent(ModComponents.DUNGEON_XP).addDungeonXp(amount);
+                                        return 1;
+                                    })
+                            )
+                    )
+                    .then(literal("remove").then(argument("amount", IntegerArgumentType.integer())
+                                    .executes(context -> {
+                                        int amount = IntegerArgumentType.getInteger(context, "amount");
+                                        context.getSource().getEntityOrThrow().getComponent(ModComponents.DUNGEON_XP).addDungeonXp(-amount);
+                                        return 1;
+                                    })
+                            )
+                    )
+            );
         });
 
     }

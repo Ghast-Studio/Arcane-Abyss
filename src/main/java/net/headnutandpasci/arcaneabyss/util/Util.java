@@ -1,8 +1,10 @@
 package net.headnutandpasci.arcaneabyss.util;
 
+import net.headnutandpasci.arcaneabyss.components.ModComponents;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
@@ -10,7 +12,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
@@ -109,6 +110,18 @@ public class Util {
                     1,
                     0, 0, 0, 0
             );
+        }
+    }
+
+    public static void spawnDungeonXp(ServerWorld world, Vec3d pos, int amount) {
+        while (amount > 0) {
+            int i = ExperienceOrbEntity.roundToOrbSize(amount);
+            amount -= i;
+            if (!ExperienceOrbEntity.wasMergedIntoExistingOrb(world, pos, i)) {
+                ExperienceOrbEntity experienceOrbEntity = new ExperienceOrbEntity(world, pos.getX(), pos.getY(), pos.getZ(), i);
+                world.spawnEntity(experienceOrbEntity);
+                experienceOrbEntity.getComponent(ModComponents.DUNGEON_EXPERIENCE_COMPONENT).setDungeonExperience(true);
+            }
         }
     }
 }

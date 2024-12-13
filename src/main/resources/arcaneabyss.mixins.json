@@ -5,13 +5,20 @@
     "mixins": [
         "AnvilScreenMixin",
         "PlayerEntityMixin",
-        "ExampleMixin"
+        "ExampleMixin",
+        "AnvilScreenHandlerMixin",
+        "ExampleMixin",
+        "common.ExperienceOrbMixin"
+
     ],
     "client": [
         "ItemRendererAccessor",
         "ItemRendererMixin",
         "ModelLoaderMixin",
+        "client.AnvilScreenMixin",
         "client.ClientInputMixin",
+        "client.DungeonExperienceBarMixin",
+        "client.DungeonExperienceOrbEntityRendererMixin",
         "groups.RecipeBookGroupMixin"
     ],
     "injectors": {

@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.block.custom;
+package net.headnutandpasci.arcaneabyss.block.custom.dungeon;
 
 import net.minecraft.block.WallBlock;
 

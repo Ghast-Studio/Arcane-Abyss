@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.util.Util;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.Goal;
@@ -15,14 +16,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
+import net.minecraft.world.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
@@ -137,6 +136,18 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
     @Override
     public EntityDimensions getDimensions(EntityPose pose) {
         return super.getDimensions(pose).scaled(0.255F * (float) this.getSize());
+    }
+
+    @Override
+    protected void dropXp() {
+        if (this.getWorld() instanceof ServerWorld &&
+                !this.isExperienceDroppingDisabled() &&
+                (this.shouldAlwaysDropXp() ||
+                        this.playerHitTimer > 0 &&
+                                this.shouldDropXp() &&
+                                this.getWorld().getGameRules().getBoolean(GameRules.DO_MOB_LOOT))) {
+            Util.spawnDungeonXp((ServerWorld) this.getWorld(), this.getPos(), this.getXpToDrop());
+        }
     }
 
     @Override

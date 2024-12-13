@@ -1,0 +1,2 @@
+accessWidener v2 named
+accessible method net/minecraft/entity/ExperienceOrbEntity wasMergedIntoExistingOrb (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;I)Z

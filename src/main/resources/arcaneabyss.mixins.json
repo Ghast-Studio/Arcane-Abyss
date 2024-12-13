@@ -3,18 +3,19 @@
     "package": "net.headnutandpasci.arcaneabyss.mixin",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "PlayerEntityMixin",
         "common.AnvilScreenHandlerMixin",
-        "common.ExperienceOrbMixin",
-        "common.DisableDamageMixin"
+        "common.DisableDamageMixin",
+        "common.ExperienceOrbMixin"
     ],
     "client": [
-        "client.ItemRendererAccessor",
-        "client.ItemRendererMixin",
-        "client.ModelLoaderMixin",
         "client.AnvilScreenMixin",
         "client.ClientInputMixin",
         "client.DungeonExperienceBarMixin",
         "client.DungeonExperienceOrbEntityRendererMixin",
+        "client.ItemRendererAccessor",
+        "client.ItemRendererMixin",
+        "client.ModelLoaderMixin",
         "client.groups.RecipeBookGroupMixin"
     ],
     "injectors": {

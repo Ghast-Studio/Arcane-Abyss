@@ -121,10 +121,10 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
 
     @Override
     protected void initAbilities() {
-        //this.registerAbility(State.PUSH, 200, bossSlime -> bossSlime.getWorld().getClosestPlayer(bossSlime, 3.0D) != null);
-//
-        //this.registerAbility(ArcaneBossSlime.State.CURSE, 15);
-        //this.registerAbility(ArcaneBossSlime.State.SUMMON, 15);
+        this.registerAbility(State.PUSH, 200, bossSlime -> bossSlime.getWorld().getClosestPlayer(bossSlime, 3.0D) != null);
+
+        this.registerAbility(ArcaneBossSlime.State.CURSE, 15);
+        this.registerAbility(ArcaneBossSlime.State.SUMMON, 15);
         this.registerAbility(ArcaneBossSlime.State.SHOOT_SLIME_BULLET, 15);
     }
 

@@ -21,11 +21,14 @@ import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity
 import net.headnutandpasci.arcaneabyss.item.ModEnchantments;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
+import net.headnutandpasci.arcaneabyss.item.custom.RingOfDefense;
 import net.headnutandpasci.arcaneabyss.item.enchantments.StickyDefense;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.recipe.ModRecipes;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.world.structures.ModStructures;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -71,5 +74,6 @@ public class ArcaneAbyss implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, (server, player, handler, buf, responseSender) -> {
             // No-op, handled client-side
         });
+
     }
 }

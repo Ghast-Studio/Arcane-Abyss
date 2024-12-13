@@ -36,6 +36,8 @@ public class ModModelProvider extends FabricModelProvider {
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         //Item Models
         itemModelGenerator.register(ModItems.SLIMESTEEL_INGOT, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SLIME_CRYSTALLISATION, Models.GENERATED);
+        itemModelGenerator.register(ModItems.OBSIDIANSTEEL_INGOT, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIME_FLESH, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIME_JUICE, Models.GENERATED);
 

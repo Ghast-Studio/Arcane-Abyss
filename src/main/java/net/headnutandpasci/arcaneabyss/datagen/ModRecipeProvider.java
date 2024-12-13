@@ -36,6 +36,37 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(Items.NETHERITE_INGOT), conditionsFromItem(Items.NETHERITE_INGOT))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SLIME_SWORD)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.RING_OF_DEFENSE)
+                .pattern("ODO")
+                .pattern("O O")
+                .pattern("OOO")
+                .input('O', ModItems.OBSIDIANSTEEL_INGOT)
+                .input('D', Items.DIAMOND_BLOCK)
+                .criterion(hasItem(ModItems.OBSIDIANSTEEL_INGOT), conditionsFromItem(ModItems.OBSIDIANSTEEL_INGOT))
+                .criterion(hasItem(Items.DIAMOND_BLOCK), conditionsFromItem(Items.DIAMOND_BLOCK))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.RING_OF_DEFENSE)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.STOMP_RING)
+                .pattern("OCO")
+                .pattern("O O")
+                .pattern("OOO")
+                .input('O', ModItems.OBSIDIANSTEEL_INGOT)
+                .input('C', ModItems.SLIME_CRYSTALLISATION)
+                .criterion(hasItem(ModItems.OBSIDIANSTEEL_INGOT), conditionsFromItem(ModItems.OBSIDIANSTEEL_INGOT))
+                .criterion(hasItem(ModItems.SLIME_CRYSTALLISATION), conditionsFromItem(ModItems.SLIME_CRYSTALLISATION))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.STOMP_RING)));
+
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.BULWARK_STOMP_RING)
+                .pattern("S")
+                .pattern("N")
+                .pattern("D")
+                .input('S', ModItems.STOMP_RING)
+                .input('D', ModItems.RING_OF_DEFENSE)
+                .input('N', Items.NETHERITE_INGOT)
+                .criterion(hasItem(ModItems.STOMP_RING), conditionsFromItem(ModItems.STOMP_RING))
+                .criterion(hasItem(ModItems.RING_OF_DEFENSE), conditionsFromItem(ModItems.RING_OF_DEFENSE))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.BULWARK_STOMP_RING)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SLIME_STAFF)
                 .pattern("N")
                 .pattern("R")

@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.screen;
+package net.headnutandpasci.arcaneabyss.screen.maschine;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;

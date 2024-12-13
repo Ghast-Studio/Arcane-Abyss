@@ -5,10 +5,9 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
-
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
-
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -18,6 +17,7 @@ import static net.minecraft.util.Rarity.EPIC;
 
 public class ModItems {
     public static final Item SLIMESTEEL_INGOT = registerItem("slimesteel_ingot", new Item(new FabricItemSettings()));
+
     public static final Item SLIME_FLESH = registerItem("slime_flesh", new Item(new FabricItemSettings()));
     public static final Item SLIME_JUICE = registerItem("slime_juice", new Item(new FabricItemSettings()));
     public static final Item COOKED_SLIME_MEAT = registerItem("cooked_slime_meat", new Item(new FabricItemSettings().food(ModFoodComponents.COOKED_SLIME_MEAT)));
@@ -41,7 +41,6 @@ public class ModItems {
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registries.ITEM, new Identifier(ArcaneAbyss.MOD_ID, name), item);
-
     }
 
     public static void registerModItems() {

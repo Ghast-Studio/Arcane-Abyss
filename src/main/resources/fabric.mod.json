@@ -12,6 +12,7 @@
     "license": "MIT",
     "icon": "assets/arcaneabyss/icon.png",
     "environment": "*",
+    "accessWidener": "arcaneabyss.accesswidener",
     "entrypoints": {
         "main": [
             "net.headnutandpasci.arcaneabyss.ArcaneAbyss"
@@ -21,6 +22,9 @@
         ],
         "fabric-datagen": [
             "net.headnutandpasci.arcaneabyss.ArcaneAbyssDataGenerator"
+        ],
+        "cardinal-components": [
+            "net.headnutandpasci.arcaneabyss.components.ModComponents"
         ]
     },
     "mixins": [
@@ -31,5 +35,11 @@
         "minecraft": "~1.20.1",
         "java": ">=17",
         "fabric-api": "*"
+    },
+    "custom": {
+        "cardinal-components": [
+            "arcaneabyss:dungeon_xp",
+            "arcaneabyss:dungeon_experience"
+        ]
     }
 }

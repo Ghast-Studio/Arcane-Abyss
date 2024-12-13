@@ -2,6 +2,7 @@ package net.headnutandpasci.arcaneabyss.screen;
 
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
+import net.headnutandpasci.arcaneabyss.screen.maschine.SlimeSteelMachineScreenHandler;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerType;

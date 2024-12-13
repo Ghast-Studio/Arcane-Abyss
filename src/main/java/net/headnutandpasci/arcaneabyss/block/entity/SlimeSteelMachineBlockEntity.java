@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.headnutandpasci.arcaneabyss.block.ModBlockEntities;
 import net.headnutandpasci.arcaneabyss.block.entity.interfaces.ImplementedInventory;
 import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
-import net.headnutandpasci.arcaneabyss.screen.SlimeSteelMachineScreenHandler;
+import net.headnutandpasci.arcaneabyss.screen.maschine.SlimeSteelMachineScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

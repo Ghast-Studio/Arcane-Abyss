@@ -31,12 +31,17 @@
                 {
                     "type": "minecraft:item",
                     "name": "arcaneabyss:slime_flesh",
-                    "weight": 30
+                    "weight": 60
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "arcaneabyss:slime_crystallisation",
+                    "weight": 0.25
                 },
                 {
                     "type": "minecraft:item",
                     "name": "arcaneabyss:slime_juice",
-                    "weight": 5
+                    "weight": 10
                 }
             ]
         }

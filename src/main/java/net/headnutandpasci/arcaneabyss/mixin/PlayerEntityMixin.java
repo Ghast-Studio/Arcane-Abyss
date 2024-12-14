@@ -1,12 +1,9 @@
 package net.headnutandpasci.arcaneabyss.mixin;
 
-import net.headnutandpasci.arcaneabyss.item.custom.BulwarkStompRing;
-import net.headnutandpasci.arcaneabyss.item.custom.RingOfDefense;
-import net.headnutandpasci.arcaneabyss.item.custom.StompRing;
+import dev.emi.trinkets.api.TrinketsApi;
+import net.headnutandpasci.arcaneabyss.util.interfaces.RingAttackable;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,16 +15,10 @@ public abstract class PlayerEntityMixin {
     public void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         PlayerEntity player = (PlayerEntity) (Object) this;
 
-        for (ItemStack stack : player.getInventory().main) {
-            if (stack.getItem() instanceof RingOfDefense ring) {
-                ring.onPlayerAttacked(player, source);
+        TrinketsApi.getTrinketComponent(player).ifPresent(component -> component.getAllEquipped().forEach(pair -> {
+            if (pair.getRight().getItem() instanceof RingAttackable) {
+                ((RingAttackable) pair.getRight().getItem()).onPlayerAttacked(player, source);
             }
-            if (stack.getItem() instanceof StompRing ring) {
-                ring.onPlayerDamaged(player);
-            }
-            if (stack.getItem() instanceof BulwarkStompRing ring) {
-                ring.onPlayerAttacked(player, source);
-            }
-        }
+        }));
     }
 }

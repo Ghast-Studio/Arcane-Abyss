@@ -1,0 +1,10 @@
+{
+    "replace": false,
+    "values": [
+        "arcaneabyss:teleport_ring",
+        "arcaneabyss:stomp_ring",
+        "arcaneabyss:ring_of_defense",
+        "arcaneabyss:teleport_ring",
+        "arcaneabyss:bulwark_stomp_ring"
+    ]
+}

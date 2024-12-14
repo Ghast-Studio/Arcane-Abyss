@@ -27,7 +27,7 @@ public class ModItemGroups {
 
                         entries.add(ModItems.SLIME_SWORD);
                         entries.add(ModItems.SLIME_STAFF);
-                        entries.add(ModItems.RING_OF_DEFENSE);
+                        entries.add(ModItems.DEFENSE_RING);
                         entries.add(ModItems.STOMP_RING);
                         entries.add(ModItems.BULWARK_STOMP_RING);
                         entries.add(ModItems.TELEPORT_RING);

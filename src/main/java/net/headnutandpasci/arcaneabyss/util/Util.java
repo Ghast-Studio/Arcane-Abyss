@@ -24,10 +24,11 @@ import java.util.function.Predicate;
 
 public class Util {
 
-    public static void pushPlayer(LivingEntity attacker, PlayerEntity target, float baseDamage, double powah) {
-        if (target.isBlocking()) {
-            target.disableShield(true);
+    public static void pushEntityAwayFrom(LivingEntity attacker, LivingEntity target, float baseDamage, double powah) {
+        if (target instanceof PlayerEntity player && player.isBlocking()) {
+            player.disableShield(true);
             baseDamage *= 0.3F;
+            powah *= 0.7F;
         }
 
         Vec3d direction = new Vec3d(target.getX() - attacker.getX(), 0, target.getZ() - attacker.getZ()).normalize();

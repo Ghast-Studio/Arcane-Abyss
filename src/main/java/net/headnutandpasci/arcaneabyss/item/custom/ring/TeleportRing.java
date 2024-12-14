@@ -1,7 +1,7 @@
-package net.headnutandpasci.arcaneabyss.item.custom;
+package net.headnutandpasci.arcaneabyss.item.custom.ring;
 
+import dev.emi.trinkets.api.TrinketItem;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.particle.ParticleTypes;
@@ -16,9 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class TeleportRing extends Item {
+public class TeleportRing extends TrinketItem {
     private BlockPos savedLocation;
-    private ItemUsageContext player;
 
     public TeleportRing(Settings settings) {
         super(settings);
@@ -31,8 +30,7 @@ public class TeleportRing extends Item {
         BlockPos pos = context.getBlockPos();
 
         assert player != null;
-        if (world instanceof ServerWorld) {
-            ServerWorld serverWorld = (ServerWorld) world;
+        if (world instanceof ServerWorld serverWorld) {
             double x = player.getX();
             double y = player.getY() + 1.0;
             double z = player.getZ();
@@ -65,7 +63,6 @@ public class TeleportRing extends Item {
         return ActionResult.SUCCESS;
     }
 
-
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         if (!world.isClient && player instanceof ServerPlayerEntity) {
@@ -74,12 +71,11 @@ public class TeleportRing extends Item {
                         SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                         player.getSoundCategory(), 0.75F, 1.0F);
                 Vec3d teleportPos = Vec3d.ofBottomCenter(savedLocation);
-                ((ServerPlayerEntity) player).teleport(teleportPos.x, teleportPos.y + 2, teleportPos.z);
+                player.teleport(teleportPos.x, teleportPos.y + 2, teleportPos.z);
                 player.sendMessage(Text.literal("Teleported to: " + savedLocation.toShortString()), true);
 
 
-                if (world instanceof ServerWorld) {
-                    ServerWorld serverWorld = (ServerWorld) world;
+                if (world instanceof ServerWorld serverWorld) {
                     double x = player.getX();
                     double y = player.getY() + 1.0;
                     double z = player.getZ();
@@ -103,5 +99,4 @@ public class TeleportRing extends Item {
         }
         return TypedActionResult.success(player.getStackInHand(hand));
     }
-
 }

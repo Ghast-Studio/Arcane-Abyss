@@ -67,6 +67,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(ModItems.RING_OF_DEFENSE), conditionsFromItem(ModItems.RING_OF_DEFENSE))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.BULWARK_STOMP_RING)));
 
+        ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.OBSIDIANSTEEL_INGOT)
+                .pattern("OCO")
+                .pattern("   ")
+                .pattern("   ")
+                .input('O', Items.IRON_INGOT)
+                .input('C', Items.OBSIDIAN)
+                .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
+                .criterion(hasItem(Items.OBSIDIAN), conditionsFromItem(Items.OBSIDIAN))
+                .offerTo(exporter, new Identifier(getRecipeName(ModItems.OBSIDIANSTEEL_INGOT)));
+
         ShapedRecipeJsonBuilder.create(RecipeCategory.COMBAT, ModItems.SLIME_STAFF)
                 .pattern("N")
                 .pattern("R")

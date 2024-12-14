@@ -41,15 +41,14 @@ public class BulwarkStompRing extends Item {
             double y = player.getY() + 1.0;
             double z = player.getZ();
 
-            // Play sound safely
+
             serverWorld.playSound(null, x, y, z,
 
                     SoundEvents.ITEM_SHIELD_BLOCK,
                     player.getSoundCategory(), 1F, 1.0F);
 
-            // Prevent division by zero or invalid values
-            double knockbackStrength = 2.0 / Math.max(ringCount, 2); // Clamp division logic
-            Vec3d knockbackDirection = mob.getPos().subtract(player.getPos()).normalize().multiply(knockbackStrength);
+
+            Vec3d knockbackDirection = mob.getPos().subtract(player.getPos()).normalize().multiply((double) 2 / ringCount / 1.25);
 
             for (int i = 0; i < 5; i++) {
                 serverWorld.spawnParticles(
@@ -63,8 +62,7 @@ public class BulwarkStompRing extends Item {
                 );
             }
 
-            // Safeguard mob velocity to avoid invalid physics
-            mob.addVelocity(knockbackDirection.x, 1, knockbackDirection.z);
+            mob.addVelocity(knockbackDirection.x, 0.33 / ringCount, knockbackDirection.z);
             mob.velocityModified = true;
         }
     }

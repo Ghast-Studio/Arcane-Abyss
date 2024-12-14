@@ -132,11 +132,11 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     protected void initAbilities() {
         this.registerAbility(State.PUSH, 200, bossSlime -> bossSlime.getWorld().getClosestPlayer(bossSlime, 3.0D) != null);
 
-        this.registerAbility(State.SUMMON, 20);
-        this.registerAbility(State.PILLAR_SUMMON, 20);
+        //this.registerAbility(State.SUMMON, 20);
+        //this.registerAbility(State.PILLAR_SUMMON, 20);
         this.registerAbility(State.SHOOT_SLIME_BULLET, 45);
-        this.registerAbility(State.STRIKE_SUMMON, 35);
-        this.registerAbility(State.CURSE, 25);
+        //this.registerAbility(State.STRIKE_SUMMON, 35);
+        //this.registerAbility(State.CURSE, 25);
     }
 
     @Override

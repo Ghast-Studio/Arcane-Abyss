@@ -83,7 +83,7 @@ public class SlimeShootGoal extends Goal {
                 if (bossSlime.getAttackTimer() % 20 == 0) performSingleShot();
             }
             case "RapidSingle" -> {
-                if (bossSlime.getAttackTimer() % 10 == 0) performSingleShot();
+                if (bossSlime.getAttackTimer() % 5 == 0) performSingleShot();
             }
             case "MultiShot" -> {
                 if (bossSlime.getAttackTimer() % 20 == 0) {
@@ -92,7 +92,7 @@ public class SlimeShootGoal extends Goal {
                 }
             }
             case "RapidMultiShot" -> {
-                if (bossSlime.getAttackTimer() % 10 == 0) {
+                if (bossSlime.getAttackTimer() % 5 == 0) {
                     performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount + 120)));
                     performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 240));
                     performSingleRotatedShot((float) Math.toRadians(((360f / 10) * this.rotatedShootAmount) + 360));

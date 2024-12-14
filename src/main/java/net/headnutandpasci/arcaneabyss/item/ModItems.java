@@ -5,9 +5,10 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 
-import net.headnutandpasci.arcaneabyss.item.custom.*;
-
-import net.minecraft.item.*;
+import net.headnutandpasci.arcaneabyss.item.custom.ring.BulwarkStompRing;
+import net.headnutandpasci.arcaneabyss.item.custom.ring.DefenseRing;
+import net.headnutandpasci.arcaneabyss.item.custom.ring.StompRing;
+import net.headnutandpasci.arcaneabyss.item.custom.ring.TeleportRing;
 
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
@@ -27,14 +28,12 @@ public class ModItems {
     public static final Item SLIME_CRYSTALLISATION = registerItem("slime_crystallisation", new Item(new FabricItemSettings()));
     public static final Item OBSIDIANSTEEL_INGOT = registerItem("obsidiansteel_ingot", new Item(new FabricItemSettings()));
 
-
-
     public static final Item SLIME_FLESH = registerItem("slime_flesh", new Item(new FabricItemSettings()));
     public static final Item SLIME_JUICE = registerItem("slime_juice", new Item(new FabricItemSettings()));
     public static final Item COOKED_SLIME_MEAT = registerItem("cooked_slime_meat", new Item(new FabricItemSettings().food(ModFoodComponents.COOKED_SLIME_MEAT)));
 
     public static final Item SLIME_STAFF = registerItem("slime_staff", new SlimeStaffItem(new FabricItemSettings().rarity(EPIC).maxCount(1)));
-    public static final Item RING_OF_DEFENSE = registerItem("ring_of_defense", new RingOfDefense(new FabricItemSettings().rarity(EPIC).maxCount(1)));
+    public static final Item DEFENSE_RING = registerItem("ring_of_defense", new DefenseRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item STOMP_RING = registerItem("stomp_ring", new StompRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item TELEPORT_RING = registerItem("teleport_ring", new TeleportRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item BULWARK_STOMP_RING = registerItem("bulwark_stomp_ring", new BulwarkStompRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));

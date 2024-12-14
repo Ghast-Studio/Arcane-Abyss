@@ -76,7 +76,7 @@ public class SlimeviathanStrikeGoal extends Goal {
 
         this.entity.getPlayerNearby().forEach(target -> {
             this.strikeTargets.add(target);
-            Util.pushPlayer(this.entity, target, 10, 2.0f);
+            Util.pushEntityAwayFrom(this.entity, target, 10, 2.0f);
             MovementControlPacket.send(true, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
             for (int i = 0; i < 50; i++) {

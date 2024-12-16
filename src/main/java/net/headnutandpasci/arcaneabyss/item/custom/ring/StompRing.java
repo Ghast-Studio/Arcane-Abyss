@@ -1,6 +1,8 @@
 package net.headnutandpasci.arcaneabyss.item.custom.ring;
 
 import dev.emi.trinkets.api.TrinketItem;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.util.Util;
 import net.headnutandpasci.arcaneabyss.util.interfaces.RingAttackable;
 import net.minecraft.entity.damage.DamageSource;
@@ -16,6 +18,9 @@ public class StompRing extends TrinketItem implements RingAttackable {
     @Override
     public void onPlayerAttacked(PlayerEntity player, DamageSource source) {
         if (!player.world.isClient) {
+
+            if (source.getAttacker() instanceof SlimeviathanEntity || source.getAttacker() instanceof BlackSlimeEntity){ return; }
+
             player.world.getEntitiesByClass(MobEntity.class, player.getBoundingBox().expand(5), mob -> true)
                     .forEach(mob -> Util.pushEntityAwayFrom(player, mob, 1, 1));
         }

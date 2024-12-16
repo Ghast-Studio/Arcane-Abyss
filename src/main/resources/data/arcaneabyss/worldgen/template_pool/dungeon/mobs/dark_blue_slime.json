@@ -6,7 +6,7 @@
       "element": {
         "element_type": "minecraft:feature_pool_element",
         "projection": "rigid",
-        "feature": "arcaneabyss:slime/dark_blue_slime"
+        "feature": "arcaneabyss:slime/blue/dark_blue_slime"
       }
     }
   ]

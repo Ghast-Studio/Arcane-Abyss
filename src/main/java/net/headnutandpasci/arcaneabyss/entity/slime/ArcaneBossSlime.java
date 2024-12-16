@@ -260,6 +260,7 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
         }
     }
 
+
     @Override
     public void onStartedTrackingBy(ServerPlayerEntity player) {
         super.onStartedTrackingBy(player);
@@ -395,6 +396,7 @@ public abstract class ArcaneBossSlime extends ArcaneRangedSlime implements SkinO
 
         super.attack(target, pullProgress);
     }
+
 
     protected abstract void recalculateAttributes();
 

@@ -2,7 +2,6 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan;
 
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -26,9 +25,9 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         this.summonedPillarIds = new CopyOnWriteArrayList<>();
     }
 
-    public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
+    public static DefaultAttributeContainer.Builder setAttributesSlimeviathan() {
         return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 1400.0f)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 1600.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 40.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
@@ -105,8 +104,8 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         int playerCount = this.getPlayerNearby().size();
         double scalingFactor = Math.max(1.0, playerCount);
 
-        double baseHealth = 800.0;
-        double scaledHealth = baseHealth * scalingFactor;
+
+        double scaledHealth = getHealth() * scalingFactor;
 
         EntityAttributeInstance maxHealthAttr = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (maxHealthAttr != null) {
@@ -121,10 +120,10 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
             this.heal((float) (scaledHealth - this.getHealth()));
         }
 
-        double baseArmor = 20.0;
+
         EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
         if (armorAttr != null) {
-            armorAttr.setBaseValue(baseArmor * scalingFactor);
+            armorAttr.setBaseValue(getArmor() * scalingFactor);
         }
     }
 

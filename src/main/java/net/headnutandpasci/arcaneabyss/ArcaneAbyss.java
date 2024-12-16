@@ -71,8 +71,8 @@ public class ArcaneAbyss implements ModInitializer {
         FabricDefaultAttributeRegistry.register(ModEntities.GREEN_SLIME, GreenSlimeEntity.setAttributesGreenSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.DARK_BLUE_SLIME, DarkBlueSlimeEntity.setAttributesDarkBlueSlime());
         FabricDefaultAttributeRegistry.register(ModEntities.DARK_RED_SLIME, DarkRedSlimeEntity.setAttributesDarkRedSlime());
-        FabricDefaultAttributeRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeEntity.setAttributesGreenSlime());
-        FabricDefaultAttributeRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanEntity.setAttributesGreenSlime());
+        FabricDefaultAttributeRegistry.register(ModEntities.BLACK_SLIME, BlackSlimeEntity.setAttributesBlackSlime());
+        FabricDefaultAttributeRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanEntity.setAttributesSlimeviathan());
         FabricDefaultAttributeRegistry.register(ModEntities.YALLA, YallaEntity.setAttributesYalla());
 
         ServerPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, (server, player, handler, buf, responseSender) -> {

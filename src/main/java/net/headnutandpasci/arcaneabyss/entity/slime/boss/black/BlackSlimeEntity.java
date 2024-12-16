@@ -25,14 +25,14 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
         this.summonedMobIds = new CopyOnWriteArrayList<>();
     }
 
-    public static DefaultAttributeContainer.Builder setAttributesGreenSlime() {
+    public static DefaultAttributeContainer.Builder setAttributesBlackSlime() {
         return AnimalEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 600.0f)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 800.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 15.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
-                .add(EntityAttributes.GENERIC_ARMOR, 10)
+                .add(EntityAttributes.GENERIC_ARMOR, 20)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
     }
 
@@ -86,6 +86,9 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
         }
     }
 
+    public void pushAwayFrom(Entity entity) {
+    }
+
     @Override
     protected void recalculateAttributes() {
         if (this.getPlayerNearby() == null) {
@@ -96,8 +99,8 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
         int playerCount = this.getPlayerNearby().size();
         double scalingFactor = Math.max(1.0, playerCount);
 
-        double baseHealth = 800.0;
-        double scaledHealth = baseHealth * scalingFactor;
+
+        double scaledHealth = getHealth() * scalingFactor;
 
         EntityAttributeInstance maxHealthAttr = this.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (maxHealthAttr != null) {
@@ -112,10 +115,10 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
             this.heal((float) (scaledHealth - this.getHealth()));
         }
 
-        double baseArmor = 20.0;
+
         EntityAttributeInstance armorAttr = this.getAttributeInstance(EntityAttributes.GENERIC_ARMOR);
         if (armorAttr != null) {
-            armorAttr.setBaseValue(baseArmor * scalingFactor);
+            armorAttr.setBaseValue(getArmor() * scalingFactor);
         }
     }
 

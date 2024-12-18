@@ -38,7 +38,7 @@ public class SlimeviathanStrikeGoal extends Goal {
     private final List<PlayerEntity> strikeTargets;
     private final List<Vec3d> strikePositions;
     private int particleTimer = 0;
-    private int chargeUpTimer = 0; 
+    private int chargeUpTimer = 0;
     private boolean isCharging = false;
     private boolean firstTrigger = false;
 
@@ -79,11 +79,6 @@ public class SlimeviathanStrikeGoal extends Goal {
             Util.pushEntityAwayFrom(this.entity, target, 10, 2.0f);
             MovementControlPacket.send(true, target);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, StatusEffectInstance.INFINITE, 4, false, false));
-            for (int i = 0; i < 50; i++) {
-                double offsetX = (this.entity.getRandom().nextDouble() - 0.5) * 2.0;
-                double offsetY = this.entity.getRandom().nextDouble() * 2.0;
-                double offsetZ = (this.entity.getRandom().nextDouble() - 0.5) * 2.0;
-                ((ServerWorld) target.getWorld()).spawnParticles(ParticleTypes.END_ROD, target.getX() + offsetX, target.getY() + offsetY, target.getZ() + offsetZ, 3, 0.5, 0.5, 0.5, 0.1); }
         });
         this.entity.setAttackTimer(20);
     }
@@ -148,7 +143,8 @@ public class SlimeviathanStrikeGoal extends Goal {
         this.strikeTargets.forEach(target -> this.strikePositions.add(target.getPos()));
 
         switch (entity.getPhase()) {
-            case 0 -> this.strikeTargets.forEach(target -> this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos()));
+            case 0 ->
+                    this.strikeTargets.forEach(target -> this.shootStrike(this.entity.getPos().add(0, 3, 0), target.getPos()));
             case 1 -> this.strikeTargets.forEach(target -> {
                 for (int i = 0; i < 4; i++) {
                     Direction direction = MOB_SUMMON_POS.get(i);

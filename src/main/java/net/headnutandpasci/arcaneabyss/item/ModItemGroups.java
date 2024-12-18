@@ -30,12 +30,7 @@ public class ModItemGroups {
                         entries.add(ModItems.DEFENSE_RING);
                         entries.add(ModItems.STOMP_RING);
                         entries.add(ModItems.BULWARK_STOMP_RING);
-                        entries.add(ModItems.TELEPORT_RING);
-
-                        //entries.add(ModItems.RUBY_HELMET);
-                        //entries.add(ModItems.RUBY_CHESTPLATE);
-                        //entries.add(ModItems.RUBY_LEGGINGS);
-                        //entries.add(ModItems.RUBY_BOOTS);
+                        entries.add(ModItems.TELEPORT_BELT);
                     }).build());
 
     public static final ItemGroup DUNGEON_GROUP = Registry.register(Registries.ITEM_GROUP,

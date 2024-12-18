@@ -1,6 +1,6 @@
 {
     "name": "arcaneabyss:dungeon/segment_fallbacks",
-    "fallback": "arcaneabyss:dungeon/segment_fallbacks",
+    "fallback": "minecraft:empty",
     "elements": [
         {
             "weight": 100,

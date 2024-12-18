@@ -20,7 +20,6 @@ import net.minecraft.world.RaycastContext;
 import java.util.List;
 
 public class StickyDefense extends Enchantment {
-    private static PlayerEntity player;
     private static int particleTimer = 0;
 
     public StickyDefense() {
@@ -28,15 +27,14 @@ public class StickyDefense extends Enchantment {
     }
 
     public static void tick(LivingEntity wearer) {
-        if (wearer.getWorld() instanceof ServerWorld serverWorld) {
-            boolean hasStickyDefense = Util.hasEnchantment(ModEnchantments.STICKY_DEFENSE, wearer.getArmorItems());
-            if (!hasStickyDefense) return;
+        boolean hasStickyDefense = Util.hasEnchantment(ModEnchantments.STICKY_DEFENSE, wearer.getArmorItems());
+        if (!hasStickyDefense) return;
 
+        if (wearer.getWorld() instanceof ServerWorld serverWorld) {
             Box detectionBox = wearer.getBoundingBox().expand(3);
             List<HostileEntity> nearbyHostile = serverWorld.getOtherEntities(wearer, detectionBox, entity -> entity instanceof HostileEntity).stream().map(entity -> (HostileEntity) entity).toList();
 
             if (!nearbyHostile.isEmpty()) {
-
                 //TODO: check for multiple players
                 if (--particleTimer <= 0) {
                     spawnParticles(serverWorld, wearer.getPos(), wearer);

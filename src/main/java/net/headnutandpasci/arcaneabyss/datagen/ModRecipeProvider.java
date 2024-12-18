@@ -87,29 +87,5 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .criterion(hasItem(ModItems.SLIME_STEEL_BALL), conditionsFromItem(ModItems.SLIME_STEEL_BALL))
                 .offerTo(exporter, new Identifier(getRecipeName(ModItems.SLIME_STAFF)));
 
-        //createArmorRecipe(exporter, ModItems.RUBY_HELMET, "RRR", "R R", RecipeCategory.COMBAT, "ruby_helmet");
-        //createArmorRecipe(exporter, ModItems.RUBY_CHESTPLATE, "R R", "RRR", "RRR", RecipeCategory.COMBAT, "ruby_chestplate");
-        //createArmorRecipe(exporter, ModItems.RUBY_LEGGINGS, "RRR", "R R", "R R", RecipeCategory.COMBAT, "ruby_leggings");
-        //createArmorRecipe(exporter, ModItems.RUBY_BOOTS, "R R", "R R", RecipeCategory.COMBAT, "ruby_boots");
     }
-
-
-/*    private void createArmorRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible result, String row1, String row2, String row3, RecipeCategory category, String recipeName) {
-        ShapedRecipeJsonBuilder.create(category, result)
-                .pattern(row1)
-                .pattern(row2)
-                .pattern(row3)
-                .input('R', ModItems.SLIMESTEEL_INGOT)
-                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
-                .offerTo(exporter, new Identifier(getRecipeName(result)));
-    }
-
-    private void createArmorRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible result, String row1, String row2, RecipeCategory category, String recipeName) {
-        ShapedRecipeJsonBuilder.create(category, result)
-                .pattern(row1)
-                .pattern(row2)
-                .input('R', ModItems.SLIMESTEEL_INGOT)
-                .criterion(hasItem(ModItems.SLIMESTEEL_INGOT), conditionsFromItem(ModItems.SLIMESTEEL_INGOT))
-                .offerTo(exporter, new Identifier(getRecipeName(result)));
-    }*/
 }

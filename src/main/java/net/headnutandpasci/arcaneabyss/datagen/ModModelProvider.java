@@ -44,6 +44,11 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.COOKED_SLIME_MEAT, Models.GENERATED);
         itemModelGenerator.register(ModItems.SLIME_STEEL_BALL, Models.GENERATED);
 
+        itemModelGenerator.register(ModItems.DEFENSE_RING, Models.GENERATED);
+        itemModelGenerator.register(ModItems.STOMP_RING, Models.GENERATED);
+        itemModelGenerator.register(ModItems.BULWARK_STOMP_RING, Models.GENERATED);
+        itemModelGenerator.register(ModItems.TELEPORT_BELT, Models.GENERATED);
+
         itemModelGenerator.register(ModItems.SLIME_SWORD, Models.HANDHELD);
     }
 }

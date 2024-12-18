@@ -3,7 +3,7 @@
     "item.arcaneabyss.ring_of_defense": "Ring of defense",
     "item.arcaneabyss.stomp_ring": "Stomp ring",
     "item.arcaneabyss.bulwark_stomp_ring": "Bulwark stomp ring",
-    "item.arcaneabyss.teleport_ring": "Teleportation ring",
+    "item.arcaneabyss.teleport_belt": "Teleportation belt",
     "item.arcaneabyss.obsidiansteel_ingot": "Obsidiansteel ingot",
     "item.arcaneabyss.slime_crystallisation": "Slime crystallisation",
     "item.arcaneabyss.slime_flesh": "Slime Flesh",
@@ -35,5 +35,7 @@
     "tooltip.arcaneabyss.slime_staff.upgrade_level": "Level: %s",
     "tooltip.arcaneabyss.slime_staff.description": "When used, applies the following effects:",
     "tooltip.arcaneabyss.slime_staff.cooldown": "Cooldown on use: %s",
-    "tooltip.arcaneabyss.slime_staff.radius": "Radius: %sm"
+    "tooltip.arcaneabyss.slime_staff.radius": "Radius: %sm",
+    "tooltip.arcaneabyss.slime_staff.saved_location": "Saved location: %s",
+    "tooltip.arcaneabyss.slime_staff.no_saved_location": "No saved location"
 }

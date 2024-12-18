@@ -5,10 +5,10 @@
     "spawn_overrides": {},
     "terrain_adaptation": "none",
     "start_pool": "arcaneabyss:dungeon/starts",
-    "size": 30,
+    "size": 1,
     "start_height": {
-        "absolute": -40
+        "absolute": 120
     },
-    "max_distance_from_center": 150,
+    "max_distance_from_center": 116,
     "use_expansion_hack": false
 }

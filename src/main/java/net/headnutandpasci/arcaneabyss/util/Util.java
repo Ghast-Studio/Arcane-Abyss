@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.MutableText;
@@ -36,6 +37,15 @@ public class Util {
         target.addVelocity(direction.x * powah, 1, direction.z * powah);
         target.velocityModified = true;
         target.damage(attacker.getDamageSources().mobAttack(attacker), baseDamage);
+
+        if (target.getWorld() instanceof ServerWorld world) {
+            for (int i = 0; i < 50; i++) {
+                double offsetX = (Math.random() - 0.5) * 2.0;
+                double offsetY = Math.random() * 2.0;
+                double offsetZ = (Math.random() - 0.5) * 2.0;
+                world.spawnParticles(ParticleTypes.END_ROD, target.getX() + offsetX, target.getY() + offsetY, target.getZ() + offsetZ, 3, 0.5, 0.5, 0.5, 0.1);
+            }
+        }
     }
 
     public static void spawnCircleParticles(ServerWorld world, Vec3d center, ParticleEffect particle, double radius, int particleCount, boolean spawnOnGround) {

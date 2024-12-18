@@ -25,4 +25,6 @@ public class DefenseRing extends TrinketItem implements RingAttackable {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 60, 0, false, true));
         }
     }
+
+
 }

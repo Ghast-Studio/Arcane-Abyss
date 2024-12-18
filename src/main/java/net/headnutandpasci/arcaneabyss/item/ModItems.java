@@ -4,17 +4,14 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
-
+import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
+import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
+import net.headnutandpasci.arcaneabyss.item.custom.belt.TeleportBelt;
 import net.headnutandpasci.arcaneabyss.item.custom.ring.BulwarkStompRing;
 import net.headnutandpasci.arcaneabyss.item.custom.ring.DefenseRing;
 import net.headnutandpasci.arcaneabyss.item.custom.ring.StompRing;
-import net.headnutandpasci.arcaneabyss.item.custom.ring.TeleportRing;
-
-import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
-import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
-
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -27,24 +24,20 @@ public class ModItems {
 
     public static final Item SLIME_CRYSTALLISATION = registerItem("slime_crystallisation", new Item(new FabricItemSettings()));
     public static final Item OBSIDIANSTEEL_INGOT = registerItem("obsidiansteel_ingot", new Item(new FabricItemSettings()));
+    public static final Item SLIME_STEEL_BALL = registerItem("slime_steel_ball", new Item(new FabricItemSettings().rarity(EPIC).maxCount(1)));
 
     public static final Item SLIME_FLESH = registerItem("slime_flesh", new Item(new FabricItemSettings()));
     public static final Item SLIME_JUICE = registerItem("slime_juice", new Item(new FabricItemSettings()));
     public static final Item COOKED_SLIME_MEAT = registerItem("cooked_slime_meat", new Item(new FabricItemSettings().food(ModFoodComponents.COOKED_SLIME_MEAT)));
 
-    public static final Item SLIME_STAFF = registerItem("slime_staff", new SlimeStaffItem(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item DEFENSE_RING = registerItem("ring_of_defense", new DefenseRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item STOMP_RING = registerItem("stomp_ring", new StompRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
-    public static final Item TELEPORT_RING = registerItem("teleport_ring", new TeleportRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
     public static final Item BULWARK_STOMP_RING = registerItem("bulwark_stomp_ring", new BulwarkStompRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
+
+    public static final Item TELEPORT_BELT = registerItem("teleport_belt", new TeleportBelt(new FabricItemSettings().rarity(EPIC).maxCount(1)));
+
     public static final Item SLIME_SWORD = registerItem("slime_sword", new SlimeSwordItem(new FabricItemSettings().rarity(EPIC)));
-
-    public static final Item SLIME_STEEL_BALL = registerItem("slime_steel_ball", new Item(new FabricItemSettings().rarity(EPIC).maxCount(1)));
-
-    /*public static final Item RUBY_HELMET = registerItem("ruby_helmet", new ModArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.HELMET, new FabricItemSettings()));
-    public static final Item RUBY_CHESTPLATE = registerItem("ruby_chestplate", new ArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()));
-    public static final Item RUBY_LEGGINGS = registerItem("ruby_leggings", new ArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.LEGGINGS, new FabricItemSettings()));
-    public static final Item RUBY_BOOTS = registerItem("ruby_boots", new ArmorItem(ModArmorMaterials.RUBY, ArmorItem.Type.BOOTS, new FabricItemSettings()));*/
+    public static final Item SLIME_STAFF = registerItem("slime_staff", new SlimeStaffItem(new FabricItemSettings().rarity(EPIC).maxCount(1)));
 
     private static void addItemsToIngredientTabItemGroup(FabricItemGroupEntries entries) {
         entries.add(SLIMESTEEL_INGOT);

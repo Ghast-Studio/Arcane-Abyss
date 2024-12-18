@@ -9,6 +9,7 @@ import net.headnutandpasci.arcaneabyss.entity.slime.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
+import net.headnutandpasci.arcaneabyss.entity.slime.grey.GreySlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
@@ -22,6 +23,7 @@ import net.minecraft.util.Identifier;
 
 public class ModEntities {
     public static EntityType<BlueSlimeEntity> BLUE_SLIME;
+    public static EntityType<GreySlimeEntity> GREY_SLIME;
     public static EntityType<SlimePillarEntity> SLIME_PILLAR;
     public static EntityType<RedSlimeEntity> RED_SLIME;
     public static EntityType<GreenSlimeEntity> GREEN_SLIME;
@@ -40,6 +42,8 @@ public class ModEntities {
     public static void registerModEntities() {
         BLUE_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "blue_slime");
+        GREY_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreySlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "grey_slime");
 
         SLIME_PILLAR = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SlimePillarEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "slime_pillar");

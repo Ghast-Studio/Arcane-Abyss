@@ -29,7 +29,7 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         return AnimalEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 1600.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0f)
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 40.0f)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 30.0f)
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 2.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_ARMOR, 40)
@@ -131,11 +131,11 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     protected void initAbilities() {
         this.registerAbility(State.PUSH, 200, bossSlime -> bossSlime.getWorld().getClosestPlayer(bossSlime, 3.0D) != null);
 
-        //this.registerAbility(State.SUMMON, 20);
-        //this.registerAbility(State.PILLAR_SUMMON, 20);
+        this.registerAbility(State.SUMMON, 20);
+        this.registerAbility(State.PILLAR_SUMMON, 20);
         this.registerAbility(State.SHOOT_SLIME_BULLET, 45);
-        //this.registerAbility(State.STRIKE_SUMMON, 35);
-        //this.registerAbility(State.CURSE, 25);
+        this.registerAbility(State.STRIKE_SUMMON, 35);
+        this.registerAbility(State.CURSE, 25);
     }
 
     @Override

@@ -31,6 +31,7 @@ public class ModItemGroups {
                         entries.add(ModItems.STOMP_RING);
                         entries.add(ModItems.BULWARK_STOMP_RING);
                         entries.add(ModItems.TELEPORT_BELT);
+                        entries.add(ModItems.DEFENSE_NECKLACE);
                     }).build());
 
     public static final ItemGroup DUNGEON_GROUP = Registry.register(Registries.ITEM_GROUP,

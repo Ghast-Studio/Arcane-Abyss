@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.item.custom.belt;
+package net.headnutandpasci.arcaneabyss.item.custom.legs;
 
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketItem;

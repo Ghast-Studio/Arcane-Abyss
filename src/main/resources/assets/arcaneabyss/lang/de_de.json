@@ -1,9 +1,14 @@
 {
-    "item.arcaneabyss.slimesteel_ingot": "Slimesteel Ingot",
+
     "item.arcaneabyss.ring_of_defense": "Ring of defense",
     "item.arcaneabyss.stomp_ring": "Stomp ring",
     "item.arcaneabyss.bulwark_stomp_ring": "Bulwark stomp ring",
+
     "item.arcaneabyss.teleport_belt": "Teleportation belt",
+
+    "item.arcaneabyss.defense_necklace": "Defense necklace",
+
+    "item.arcaneabyss.slimesteel_ingot": "Slimesteel Ingot",
     "item.arcaneabyss.obsidiansteel_ingot": "Obsidiansteel ingot",
     "item.arcaneabyss.slime_crystallisation": "Slime crystallisation",
     "item.arcaneabyss.slime_flesh": "Slime Flesh",
@@ -26,7 +31,6 @@
     "entity.arcaneabyss.slimeviathan": "Slimeviathan",
 
     "enchantment.arcaneabyss.slimy_strike": "Slimy Strike",
-    "enchantment.arcaneabyss.sticky_defense": "Sticky Defense",
 
     "tooltip.arcaneabyss.slime_sword.upgrade_level": "Level %s",
     "tooltip.arcaneabyss.slime_sword.slimy_strike": "+%s Attack Damage for Slimy Strike",

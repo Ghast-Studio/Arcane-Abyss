@@ -49,6 +49,8 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.register(ModItems.BULWARK_STOMP_RING, Models.GENERATED);
         itemModelGenerator.register(ModItems.TELEPORT_BELT, Models.GENERATED);
 
+        itemModelGenerator.register(ModItems.DEFENSE_NECKLACE, Models.GENERATED);
+
         itemModelGenerator.register(ModItems.SLIME_SWORD, Models.HANDHELD);
     }
 }

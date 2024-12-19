@@ -26,6 +26,7 @@ import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
 import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.screen.maschine.SlimeSteelMachineScreen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.recipebook.RecipeBookGroup;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
@@ -67,9 +68,10 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, MovementControlPacket::handle);
 
         ClientTickEvents.START_WORLD_TICK.register(world -> {
-            if (world.client.player == null) return;
-            ItemStack activeItem = world.client.player.getEquippedStack(EquipmentSlot.MAINHAND);
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client.player == null) return;
 
+            ItemStack activeItem = client.player.getEquippedStack(EquipmentSlot.MAINHAND);
             if (activeItem.isOf(ModItems.SLIME_STAFF)) {
                 long location = activeItem.getOrCreateNbt().getLong(SlimeStaffItem.NBT_SAVED_LOCATION);
                 BlockPos savedLocation = location != 0 ?

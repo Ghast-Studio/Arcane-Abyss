@@ -6,10 +6,11 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeSwordItem;
-import net.headnutandpasci.arcaneabyss.item.custom.belt.TeleportBelt;
-import net.headnutandpasci.arcaneabyss.item.custom.ring.BulwarkStompRing;
-import net.headnutandpasci.arcaneabyss.item.custom.ring.DefenseRing;
-import net.headnutandpasci.arcaneabyss.item.custom.ring.StompRing;
+import net.headnutandpasci.arcaneabyss.item.custom.chest.DefenseNecklace;
+import net.headnutandpasci.arcaneabyss.item.custom.hand.BulwarkStompRing;
+import net.headnutandpasci.arcaneabyss.item.custom.hand.DefenseRing;
+import net.headnutandpasci.arcaneabyss.item.custom.hand.StompRing;
+import net.headnutandpasci.arcaneabyss.item.custom.legs.TeleportBelt;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
@@ -35,6 +36,8 @@ public class ModItems {
     public static final Item BULWARK_STOMP_RING = registerItem("bulwark_stomp_ring", new BulwarkStompRing(new FabricItemSettings().rarity(EPIC).maxCount(1)));
 
     public static final Item TELEPORT_BELT = registerItem("teleport_belt", new TeleportBelt(new FabricItemSettings().rarity(EPIC).maxCount(1)));
+
+    public static final Item DEFENSE_NECKLACE = registerItem("defense_necklace", new DefenseNecklace(new FabricItemSettings().rarity(EPIC).maxCount(1)));
 
     public static final Item SLIME_SWORD = registerItem("slime_sword", new SlimeSwordItem(new FabricItemSettings().rarity(EPIC)));
     public static final Item SLIME_STAFF = registerItem("slime_staff", new SlimeStaffItem(new FabricItemSettings().rarity(EPIC).maxCount(1)));

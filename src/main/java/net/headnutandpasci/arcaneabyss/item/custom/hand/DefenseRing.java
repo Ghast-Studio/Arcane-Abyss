@@ -1,4 +1,4 @@
-package net.headnutandpasci.arcaneabyss.item.custom.ring;
+package net.headnutandpasci.arcaneabyss.item.custom.hand;
 
 import dev.emi.trinkets.api.TrinketItem;
 import net.headnutandpasci.arcaneabyss.util.interfaces.RingAttackable;

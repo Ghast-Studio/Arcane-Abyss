@@ -20,6 +20,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
@@ -48,9 +49,9 @@ public class Util {
         }
     }
 
-    public static void spawnCircleParticles(ServerWorld world, Vec3d center, ParticleEffect particle, double radius, int particleCount, boolean spawnOnGround) {
+    public static void spawnCircleParticles(World world, Vec3d center, ParticleEffect particle, double radius, int particleCount, boolean spawnOnGround) {
         double centerX = center.getX();
-        double centerY = center.getY();
+        double centerY = center.getY() + 0.1;
         double centerZ = center.getZ();
 
         for (int i = 0; i < particleCount; i++) {
@@ -59,7 +60,21 @@ public class Util {
             double z = centerZ + radius * Math.sin(angle);
             double y = spawnOnGround ? world.getTopY(Heightmap.Type.MOTION_BLOCKING, (int) x, (int) z) : centerY;
 
-            world.spawnParticles(particle, x, y, z, 1, 0, 0, 0, 0);
+            world.addParticle(particle, x, y, z, 0, -0.1, 0);
+        }
+    }
+
+    public static void damageParticles(World serverWorld, Vec3d pos, int count) {
+        for (int i = 0; i < count; i++) {
+            serverWorld.addParticle(
+                    ParticleTypes.DAMAGE_INDICATOR,
+                    pos.getX(),
+                    pos.getY(),
+                    pos.getZ(),
+                    0.5D,
+                    0.5D,
+                    0.5D
+            );
         }
     }
 

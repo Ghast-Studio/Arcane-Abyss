@@ -45,20 +45,18 @@ public class SlimeStaffItem extends ToolItem implements Vanishable {
         player.sendMessage(Text.literal("Location saved: " + pos.toShortString()), true);
         player.getItemCooldownManager().set(ModItems.SLIME_STAFF, 10 * 20);
 
-        if (world instanceof ServerWorld serverWorld) {
-            Vec3d savedPos = pos.toCenterPos();
-            serverWorld.playSound(null, savedPos.getX(), savedPos.getY() + 1, savedPos.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, player.getSoundCategory(), 0.75F, 1.0F);
-            for (int i = 0; i < 20; i++) {
-                serverWorld.spawnParticles(ParticleTypes.GLOW,
-                        savedPos.getX() + Math.random() * 0.5 - 0.25,
-                        savedPos.getY() + 1 + Math.random() * 0.5 - 0.25,
-                        savedPos.getZ() + Math.random() * 0.5 - 0.25,
-                        1,
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0);
-            }
+        Vec3d savedPos = pos.toCenterPos();
+        world.playSound(null, savedPos.getX(), savedPos.getY() + 1, savedPos.getZ(), SoundEvents.ENTITY_PLAYER_LEVELUP, player.getSoundCategory(), 0.75F, 1.0F);
+        for (int i = 0; i < 20; i++) {
+            world.spawnParticles(ParticleTypes.GLOW,
+                    savedPos.getX() + Math.random() * 0.5 - 0.25,
+                    savedPos.getY() + 1 + Math.random() * 0.5 - 0.25,
+                    savedPos.getZ() + Math.random() * 0.5 - 0.25,
+                    1,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0);
         }
     }
 
@@ -172,19 +170,17 @@ public class SlimeStaffItem extends ToolItem implements Vanishable {
                 // TODO: localize
                 player.sendMessage(Text.literal("Teleported to: " + savedLocation.toShortString()), true);
 
-                if (world instanceof ServerWorld serverWorld) {
-                    world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, player.getSoundCategory(), 0.75F, 1.0F);
-                    for (int i = 0; i < 40; i++) {
-                        serverWorld.spawnParticles(ParticleTypes.PORTAL,
-                                pos.getX() + Math.random() * 0.5 - 0.25,
-                                pos.getY() + 1 + Math.random() * 0.5 - 0.75,
-                                pos.getZ() + Math.random() * 0.5 - 0.25,
-                                10,
-                                0.0,
-                                0.0,
-                                0.0,
-                                1.0);
-                    }
+                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, player.getSoundCategory(), 0.75F, 1.0F);
+                for (int i = 0; i < 40; i++) {
+                    world.spawnParticles(ParticleTypes.PORTAL,
+                            pos.getX() + Math.random() * 0.5 - 0.25,
+                            pos.getY() + 1 + Math.random() * 0.5 - 0.75,
+                            pos.getZ() + Math.random() * 0.5 - 0.25,
+                            10,
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0);
                 }
             } else {
                 saveLocation(player, world, pos, compound);

@@ -33,6 +33,9 @@
     "depends": {
         "fabricloader": ">=0.15.11",
         "minecraft": "~1.20.1",
+        "cardinal-components": ">=5.2.2",
+        "trinkets": ">=3.7.2",
+        "dark-matter": "3.1.0-1.20",
         "java": ">=17",
         "fabric-api": "*"
     },

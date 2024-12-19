@@ -3,15 +3,15 @@ package net.headnutandpasci.arcaneabyss.entity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.misc.YallaEntity;
+import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeProjectile;
+import net.headnutandpasci.arcaneabyss.entity.slime.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.BlueSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.blue.DarkBlueSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.slime.SlimePillarEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.black.BlackSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan.SlimeviathanEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.green.GreenSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.grey.GreySlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.DarkRedSlimeEntity;
-import net.headnutandpasci.arcaneabyss.entity.projectile.SlimeProjectile;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeEntity;
 import net.headnutandpasci.arcaneabyss.entity.slime.red.RedSlimeStationaryEntity;
 import net.minecraft.entity.EntityDimensions;
@@ -42,8 +42,6 @@ public class ModEntities {
     public static void registerModEntities() {
         BLUE_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlueSlimeEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "blue_slime");
-        GREY_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreySlimeEntity::new)
-                .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "grey_slime");
 
         SLIME_PILLAR = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, SlimePillarEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "slime_pillar");
@@ -62,6 +60,9 @@ public class ModEntities {
 
         DARK_RED_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, DarkRedSlimeEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).build(), "dark_red_slime");
+
+        GREY_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, GreySlimeEntity::new)
+                .dimensions(EntityDimensions.fixed(1.5f, 1.5f)).build(), "grey_slime");
 
         BLACK_SLIME = register(FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, BlackSlimeEntity::new)
                 .dimensions(EntityDimensions.changing(2f, 2f)).build(), "black_slime");

@@ -9,11 +9,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +53,8 @@ public class SlimeCurseGoal extends Goal {
     public void tick() {
         if (!this.bossSlime.getPlayerNearby().isEmpty() && bossSlime.getWorld() instanceof ServerWorld serverWorld) {
             for (PlayerEntity targetPlayer : this.bossSlime.getPlayerNearby()) {
-                if (!hasLineOfSight(targetPlayer)) {
+                // TODO: test if this build in method works
+                if (!bossSlime.canSee(targetPlayer)) {
                     continue;
                 }
 
@@ -99,22 +96,6 @@ public class SlimeCurseGoal extends Goal {
                 hitPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 50, 1));
             }
         }
-    }
-
-    private boolean hasLineOfSight(PlayerEntity player) {
-        World world = bossSlime.getWorld();
-        Vec3d from = bossSlime.getEyePos();
-        Vec3d to = player.getEyePos();
-
-        BlockHitResult hitResult = world.raycast(new RaycastContext(
-                from,
-                to,
-                RaycastContext.ShapeType.COLLIDER,
-                RaycastContext.FluidHandling.NONE,
-                bossSlime
-        ));
-
-        return hitResult.getType() == HitResult.Type.MISS || hitResult.getPos().distanceTo(to) < 0.1;
     }
 
     @Override

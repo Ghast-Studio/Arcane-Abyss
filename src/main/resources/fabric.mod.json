@@ -3,11 +3,12 @@
     "id": "arcaneabyss",
     "version": "${version}",
     "name": "Arcane Abyss",
-    "description": "Mod made by Headnutti and Pasci and Luca",
+    "description": "Arcane Abyss is a Minecraft mod that enhances gameplay by introducing new items, entities, and mechanics.",
     "authors": [
         "Luca",
-        "Headnutti",
-        "Pasci"
+        "HeadnutAI",
+        "Giingerbread",
+        "Kabryhydra"
     ],
     "license": "MIT",
     "icon": "assets/arcaneabyss/icon.png",

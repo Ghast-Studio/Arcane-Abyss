@@ -9,7 +9,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/fallback/fallback"

@@ -9,7 +9,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/corridor/corridor_hallway"
@@ -22,7 +22,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/corridor/corridor_hallwayfork"
@@ -35,7 +35,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/corridor/corridor_hallwayleft"
@@ -48,7 +48,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/corridor/corridor_hallwayright"

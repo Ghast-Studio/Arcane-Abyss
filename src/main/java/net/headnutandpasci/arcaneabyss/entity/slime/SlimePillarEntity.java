@@ -1,11 +1,13 @@
 package net.headnutandpasci.arcaneabyss.entity.slime;
 
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -30,6 +32,11 @@ public class SlimePillarEntity extends ArcaneSlimeEntity {
                 .add(EntityAttributes.GENERIC_ATTACK_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, 1.0D);
+    }
+
+    @Override
+    protected ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x00FF00);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneRangedSlime;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -11,9 +12,9 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.LocalDifficulty;
@@ -44,6 +45,11 @@ public class RedSlimeStationaryEntity extends ArcaneRangedSlime {
             noMove.setDisabled(false);
         }
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    }
+
+    @Override
+    protected ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0xD64E4F);
     }
 
     @Override

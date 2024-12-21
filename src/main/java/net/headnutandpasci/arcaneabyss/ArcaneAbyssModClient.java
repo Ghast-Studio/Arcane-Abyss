@@ -7,6 +7,7 @@ import me.melontini.dark_matter.api.recipe_book.RecipeBookHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.headnutandpasci.arcaneabyss.entity.ModEntities;
 import net.headnutandpasci.arcaneabyss.entity.client.misc.YallaRenderer;
@@ -23,6 +24,8 @@ import net.headnutandpasci.arcaneabyss.entity.client.slime.red.RedSlimeStationar
 import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.headnutandpasci.arcaneabyss.item.custom.SlimeStaffItem;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
+import net.headnutandpasci.arcaneabyss.particle.ModParticles;
+import net.headnutandpasci.arcaneabyss.particle.client.SlimeParticle;
 import net.headnutandpasci.arcaneabyss.recipe.SlimeSteelRecipe;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.screen.maschine.SlimeSteelMachineScreen;
@@ -57,6 +60,8 @@ public class ArcaneAbyssModClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SLIMEVIATHAN, SlimeviathanRenderer::new);
         EntityRendererRegistry.register(ModEntities.SLIME_PROJECTILE, FlyingItemEntityRenderer::new);
         EntityRendererRegistry.register(ModEntities.YALLA, YallaRenderer::new);
+
+        ParticleFactoryRegistry.getInstance().register(ModParticles.SLIME, SlimeParticle.Factory::new);
 
         TrinketRendererRegistry.registerRenderer(ModItems.TELEPORT_BELT, (TrinketRenderer) ModItems.TELEPORT_BELT);
 

@@ -25,6 +25,7 @@ import net.headnutandpasci.arcaneabyss.item.ModEnchantments;
 import net.headnutandpasci.arcaneabyss.item.ModItemGroups;
 import net.headnutandpasci.arcaneabyss.item.ModItems;
 import net.headnutandpasci.arcaneabyss.networking.MovementControlPacket;
+import net.headnutandpasci.arcaneabyss.particle.ModParticles;
 import net.headnutandpasci.arcaneabyss.recipe.ModRecipes;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.world.structures.ModStructures;
@@ -45,6 +46,7 @@ public class ArcaneAbyss implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ModParticles.init();
         ModItemGroups.registerItemGroups();
 
         ModItems.registerModItems();

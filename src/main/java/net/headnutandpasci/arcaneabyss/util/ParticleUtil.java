@@ -1,7 +1,6 @@
 package net.headnutandpasci.arcaneabyss.util;
 
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 

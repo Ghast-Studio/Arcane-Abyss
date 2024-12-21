@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.red;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneRangedSlime;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -9,11 +10,17 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.world.World;
 
 public class DarkRedSlimeEntity extends ArcaneRangedSlime {
     public DarkRedSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Override
+    protected ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x6D0E0F);
     }
 
     public static DefaultAttributeContainer.Builder setAttributesDarkRedSlime() {

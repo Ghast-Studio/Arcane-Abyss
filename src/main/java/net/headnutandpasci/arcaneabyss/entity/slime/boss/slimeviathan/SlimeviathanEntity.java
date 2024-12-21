@@ -2,6 +2,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.slimeviathan;
 
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -10,6 +11,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.world.World;
 
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -23,6 +25,11 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
         super(entityType, world, 8);
         this.summonedMobIds = new CopyOnWriteArrayList<>();
         this.summonedPillarIds = new CopyOnWriteArrayList<>();
+    }
+
+    @Override
+    protected ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x631580);
     }
 
     public static DefaultAttributeContainer.Builder setAttributesSlimeviathan() {

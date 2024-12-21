@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.blue;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -14,6 +15,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -22,6 +24,11 @@ import org.jetbrains.annotations.Nullable;
 public class DarkBlueSlimeEntity extends ArcaneSlimeEntity {
     public DarkBlueSlimeEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Override
+    protected ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x6296C2);
     }
 
     public static DefaultAttributeContainer.Builder setAttributesDarkBlueSlime() {

@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.green;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -17,6 +18,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -62,6 +64,11 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
         this.dataTracker.startTracking(FUSE_SPEED, -1);
         this.dataTracker.startTracking(CHARGED, false);
         this.dataTracker.startTracking(IGNITED, false);
+    }
+
+    @Override
+    protected ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x004B00);
     }
 
     public void tick() {

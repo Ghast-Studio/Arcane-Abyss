@@ -9,7 +9,7 @@ public class ModParticles {
     public static ParticleType<SlimeParticleEffect> SLIME;
 
     public static void init() {
-        ArcaneAbyss.LOGGER.info("Registering particles test");
+        ArcaneAbyss.LOGGER.info("Registering particles");
         SLIME = ParticleTypes.register(new Identifier(ArcaneAbyss.MOD_ID, "slime").toString(),
                 false,
                 SlimeParticleEffect.PARAMETERS_FACTORY,

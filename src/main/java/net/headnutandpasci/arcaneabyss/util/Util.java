@@ -10,7 +10,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.ScreenTexts;
@@ -114,7 +113,7 @@ public class Util {
         return false;
     }
 
-    public static void spawnVerticalCircularParticlesFacingPlayer(ServerWorld world, double centerX, double centerY, double centerZ, LivingEntity target, DefaultParticleType particleType, double radius) {
+    public static void spawnVerticalCircularParticlesFacingPlayer(ServerWorld world, double centerX, double centerY, double centerZ, LivingEntity target, ParticleEffect effect, double radius) {
         int particleCount = 20;
 
         Vec3d directionToPlayer = target.getPos().subtract(centerX, centerY, centerZ).normalize();
@@ -129,7 +128,7 @@ public class Util {
             double offsetZ = radius * (Math.cos(angle) * right.z + Math.sin(angle) * vertical.z);
 
             world.spawnParticles(
-                    particleType,
+                    effect,
                     centerX + offsetX,
                     centerY + offsetY,
                     centerZ + offsetZ,

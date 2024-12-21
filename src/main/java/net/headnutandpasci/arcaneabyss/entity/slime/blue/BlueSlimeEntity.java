@@ -10,7 +10,6 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class BlueSlimeEntity extends ArcaneSlimeEntity {
@@ -29,7 +28,7 @@ public class BlueSlimeEntity extends ArcaneSlimeEntity {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0x6296C2);
     }
 

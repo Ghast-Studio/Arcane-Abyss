@@ -28,7 +28,7 @@ public class SlimeviathanEntity extends ArcaneBossSlime {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0x631580);
     }
 

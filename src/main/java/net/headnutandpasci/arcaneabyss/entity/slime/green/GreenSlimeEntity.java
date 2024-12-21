@@ -16,7 +16,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.sound.SoundEvents;
@@ -67,7 +66,7 @@ public class GreenSlimeEntity extends ArcaneSlimeEntity {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0x004B00);
     }
 

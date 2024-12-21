@@ -35,7 +35,7 @@ public class SlimePillarEntity extends ArcaneSlimeEntity {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0x00FF00);
     }
 

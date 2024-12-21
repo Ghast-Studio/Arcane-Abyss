@@ -3,7 +3,6 @@ package net.headnutandpasci.arcaneabyss.entity.slime.red;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneRangedSlime;
 import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -11,9 +10,6 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class RedSlimeEntity extends ArcaneRangedSlime {
@@ -24,7 +20,7 @@ public class RedSlimeEntity extends ArcaneRangedSlime {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0xD64E4F);
     }
 

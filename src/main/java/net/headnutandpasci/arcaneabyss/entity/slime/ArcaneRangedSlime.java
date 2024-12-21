@@ -8,7 +8,6 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -46,7 +45,7 @@ public abstract class ArcaneRangedSlime extends ArcaneSlimeEntity implements Ran
         this.getWorld().spawnEntity(projectile);
 
         if (this.getWorld() instanceof ServerWorld serverWorld) {
-            Util.spawnVerticalCircularParticlesFacingPlayer(serverWorld, startX, startY, startZ, target, ParticleTypes.ITEM_SLIME, 0.3);
+            Util.spawnVerticalCircularParticlesFacingPlayer(serverWorld, startX, startY, startZ, target, this.getParticles(), 0.3);
         }
     }
 

@@ -86,7 +86,9 @@ public class SlimeProjectile extends ExplosiveProjectileEntity implements Flying
 
     @Override
     protected ParticleEffect getParticleType() {
-        return this.getStack().isOf(Items.MAGMA_CREAM) ? ParticleTypes.FLAME : ParticleTypes.ITEM_SLIME;
+        if (this.getStack().isOf(Items.MAGMA_CREAM)) return ParticleTypes.FLAME;
+
+        return this.getOwner() instanceof ArcaneSlimeEntity ? ((ArcaneSlimeEntity) this.getOwner()).getParticles() : ParticleTypes.ITEM_SLIME;
     }
 
     @Override

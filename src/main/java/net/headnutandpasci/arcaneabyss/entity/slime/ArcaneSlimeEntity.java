@@ -64,7 +64,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
         this.dataTracker.startTracking(SLIME_SIZE, this.initialSize);
     }
 
-    protected abstract ParticleEffect getParticles();
+    public abstract ParticleEffect getParticles();
 
     @Override
     public void pushAwayFrom(Entity entity) {

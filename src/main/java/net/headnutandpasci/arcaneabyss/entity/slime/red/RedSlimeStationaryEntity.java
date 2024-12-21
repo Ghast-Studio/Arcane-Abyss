@@ -48,7 +48,7 @@ public class RedSlimeStationaryEntity extends ArcaneRangedSlime {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0xD64E4F);
     }
 

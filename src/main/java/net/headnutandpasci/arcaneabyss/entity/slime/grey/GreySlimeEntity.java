@@ -70,7 +70,7 @@ public class GreySlimeEntity extends ArcaneSlimeEntity {
     }
 
     @Override
-    protected ParticleEffect getParticles() {
+    public ParticleEffect getParticles() {
         return new SlimeParticleEffect(0x8B8B8B);
     }
 

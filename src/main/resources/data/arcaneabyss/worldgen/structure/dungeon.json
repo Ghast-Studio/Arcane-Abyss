@@ -1,14 +1,14 @@
 {
     "type": "arcaneabyss:arcane_jigsaw_structure",
     "biomes": "#arcaneabyss:has_structure/dungeon",
-    "step": "surface_structures",
+    "step": "underground_structures",
     "spawn_overrides": {},
-    "terrain_adaptation": "none",
+    "terrain_adaptation": "bury",
     "start_pool": "arcaneabyss:dungeon/starts",
-    "size": 1,
+    "size": 25,
     "start_height": {
-        "absolute": 120
+        "absolute": -40
     },
-    "max_distance_from_center": 116,
+    "max_distance_from_center": 150,
     "use_expansion_hack": false
 }

@@ -9,7 +9,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_crafter"
@@ -22,7 +22,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_supply"
@@ -35,7 +35,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_mine"
@@ -48,7 +48,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_puzzle"
@@ -61,7 +61,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_plus"
@@ -74,7 +74,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_maze"
@@ -87,7 +87,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_yalla"
@@ -100,7 +100,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_vertical"
@@ -113,7 +113,7 @@
                 "projection": "rigid",
                 "processors": [
                     {
-                        "processor_type": "minecraft:nop"
+                        "processor_type": "arcaneabyss:waterlogging_fix_processor"
                     }
                 ],
                 "location": "arcaneabyss:dungeon/room/room_peaceful"

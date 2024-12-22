@@ -15,7 +15,6 @@ import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -65,9 +64,7 @@ public abstract class ArcaneSlimeEntity extends HostileEntity {
         this.dataTracker.startTracking(SLIME_SIZE, this.initialSize);
     }
 
-    protected ParticleEffect getParticles() {
-        return ParticleTypes.ITEM_SLIME;
-    }
+    public abstract ParticleEffect getParticles();
 
     @Override
     public void pushAwayFrom(Entity entity) {

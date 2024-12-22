@@ -3,6 +3,7 @@ package net.headnutandpasci.arcaneabyss.entity.slime.boss.black;
 import net.headnutandpasci.arcaneabyss.ArcaneAbyss;
 import net.headnutandpasci.arcaneabyss.entity.ai.goal.*;
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneBossSlime;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
@@ -12,6 +13,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -34,6 +36,11 @@ public class BlackSlimeEntity extends ArcaneBossSlime {
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.0f)
                 .add(EntityAttributes.GENERIC_ARMOR, 20)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D);
+    }
+
+    @Override
+    public ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x631580);
     }
 
     @Override

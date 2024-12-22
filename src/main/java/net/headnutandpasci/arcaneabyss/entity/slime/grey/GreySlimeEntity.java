@@ -1,6 +1,7 @@
 package net.headnutandpasci.arcaneabyss.entity.slime.grey;
 
 import net.headnutandpasci.arcaneabyss.entity.slime.ArcaneSlimeEntity;
+import net.headnutandpasci.arcaneabyss.particle.SlimeParticleEffect;
 import net.headnutandpasci.arcaneabyss.util.ParticleUtil;
 import net.headnutandpasci.arcaneabyss.util.Util;
 import net.minecraft.entity.EntityType;
@@ -15,6 +16,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -65,6 +67,11 @@ public class GreySlimeEntity extends ArcaneSlimeEntity {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(PULSE_COOLDOWN, 60);
+    }
+
+    @Override
+    public ParticleEffect getParticles() {
+        return new SlimeParticleEffect(0x8B8B8B);
     }
 
     @Override

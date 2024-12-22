@@ -29,11 +29,15 @@ import net.headnutandpasci.arcaneabyss.particle.ModParticles;
 import net.headnutandpasci.arcaneabyss.recipe.ModRecipes;
 import net.headnutandpasci.arcaneabyss.screen.ModScreenHandlers;
 import net.headnutandpasci.arcaneabyss.world.structures.ModStructures;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -77,6 +81,21 @@ public class ArcaneAbyss implements ModInitializer {
         ServerPlayNetworking.registerGlobalReceiver(MovementControlPacket.ID, (server, player, handler, buf, responseSender) -> {
             // No-op, handled client-side
         });
+
+        List<BlockPos> temp = List.of(
+                new BlockPos(-1, -2, 7),
+                new BlockPos(-1, -2, 8),
+                new BlockPos(-1, -2, 9),
+
+                new BlockPos(0, -2, 7),
+
+                new BlockPos(1, -2, 7),
+                new BlockPos(1, -2, 8)
+        );
+
+        NbtCompound nbt = new NbtCompound();
+        nbt.putLongArray("target_blocks", temp.stream().mapToLong(BlockPos::asLong).toArray());
+        System.out.println(nbt);
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(literal("dungeonxp")

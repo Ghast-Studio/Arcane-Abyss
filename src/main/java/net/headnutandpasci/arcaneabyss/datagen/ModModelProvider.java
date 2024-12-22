@@ -28,6 +28,8 @@ public class ModModelProvider extends FabricModelProvider {
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_COBBLE_STAIR);
         blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_BRICK_WALL);
 
+        blockStateModelGenerator.registerSimpleCubeAll(ModBlocks.DUNGEON_LEVER);
+
         // Slimesteel Blocks
         blockStateModelGenerator.registerSimpleState(ModBlocks.SLIMESTEEL_MACHINE);
     }

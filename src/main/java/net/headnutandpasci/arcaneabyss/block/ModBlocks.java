@@ -28,12 +28,11 @@ public class ModBlocks {
     public static Block DUNGEON_COBBLE_STAIR;
     public static Block DUNGEON_COBBLE_SLAB;
     public static Block SLIMESTEEL_MACHINE;
+    public static Block DUNGEON_LEVER;
 
     private static Block registerBlock(String name, Block block) {
         registerBlockItem(name, block);
         return Registry.register(Registries.BLOCK, new Identifier(ArcaneAbyss.MOD_ID, name), block);
-
-
     }
 
 
@@ -80,15 +79,8 @@ public class ModBlocks {
         DUNGEON_BRICK_WALL = registerBlock("dungeon_brick_wall",
                 new DungeonBrickWall(FabricBlockSettings.copyOf(Blocks.DEEPSLATE).sounds(BlockSoundGroup.DEEPSLATE)));
 
-
-
-
-
-
-
-
-
-
+        DUNGEON_LEVER = registerBlock("dungeon_lever",
+                new DungeonLeverBlock(FabricBlockSettings.copyOf(Blocks.LEVER).sounds(BlockSoundGroup.WOOD)));
 
         ArcaneAbyss.LOGGER.info("Registering ModBlocks for" + ArcaneAbyss.MOD_ID);
     }
